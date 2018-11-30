@@ -10,4 +10,5 @@ extern "C" {
 	#include <libavfilter/avfilter.h>
 	#include <libavfilter/buffersink.h>
 	#include <libavfilter/buffersrc.h>
+	#include <libswresample/swresample.h>
 }

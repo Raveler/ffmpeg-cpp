@@ -188,6 +188,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Frame Sinks\AudioFrameSink.h" />
+    <ClInclude Include="Frame Sinks\AudioFormatConversionFilter.h" />
+    <ClInclude Include="Frame Sinks\AudioEncoder.h" />
+    <ClInclude Include="AudioOutputStream.h" />
+    <ClInclude Include="Codecs\AudioCodec.h" />
     <ClInclude Include="ffmpegcpp.h" />
     <ClInclude Include="Frame Sinks\VideoFilter.h" />
     <ClInclude Include="Codecs\JPGCodec.h" />
@@ -197,7 +202,7 @@
     <ClInclude Include="Sources\RawFileSource.h" />
     <ClInclude Include="Codecs\Codec.h" />
     <ClInclude Include="CodecDeducer.h" />
-    <ClInclude Include="Frame Sinks\Encoder.h" />
+    <ClInclude Include="Frame Sinks\VideoEncoder.h" />
     <ClInclude Include="ffmpeg.h" />
     <ClInclude Include="FFmpegException.h" />
     <ClInclude Include="Codecs\H264NVEncCodec.h" />
@@ -206,11 +211,16 @@
     <ClInclude Include="Muxer.h" />
     <ClInclude Include="OutputStream.h" />
     <ClInclude Include="std.h" />
-    <ClInclude Include="StreamConfig.h" />
     <ClInclude Include="Codecs\VideoCodec.h" />
     <ClInclude Include="Codecs\VP9Codec.h" />
+    <ClInclude Include="Frame Sinks\VideoFrameSink.h" />
+    <ClInclude Include="VideoOutputStream.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Frame Sinks\AudioFormatConversionFilter.cpp" />
+    <ClCompile Include="Frame Sinks\AudioEncoder.cpp" />
+    <ClCompile Include="AudioOutputStream.cpp" />
+    <ClCompile Include="Codecs\AudioCodec.cpp" />
     <ClCompile Include="Frame Sinks\VideoFilter.cpp" />
     <ClCompile Include="Codecs\JPGCodec.cpp" />
     <ClCompile Include="OpenCodec.cpp" />
@@ -219,7 +229,7 @@
     <ClCompile Include="Sources\RawFileSource.cpp" />
     <ClCompile Include="Codecs\Codec.cpp" />
     <ClCompile Include="CodecDeducer.cpp" />
-    <ClCompile Include="Frame Sinks\Encoder.cpp" />
+    <ClCompile Include="Frame Sinks\VideoEncoder.cpp" />
     <ClCompile Include="FFmpegException.cpp" />
     <ClCompile Include="Codecs\H264NVEncCodec.cpp" />
     <ClCompile Include="Codecs\H265NVEncCodec.cpp" />
@@ -227,6 +237,7 @@
     <ClCompile Include="OutputStream.cpp" />
     <ClCompile Include="Codecs\VideoCodec.cpp" />
     <ClCompile Include="Codecs\VP9Codec.cpp" />
+    <ClCompile Include="VideoOutputStream.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

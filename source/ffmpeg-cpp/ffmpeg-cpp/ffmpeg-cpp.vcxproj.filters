@@ -24,9 +24,6 @@
     <ClInclude Include="std.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="StreamConfig.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="FFmpegException.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -57,9 +54,6 @@
     <ClInclude Include="Sources\RawVideoSource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Frame Sinks\Encoder.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Frame Sinks\FrameSink.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -76,6 +70,30 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Codecs\JPGCodec.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Codecs\AudioCodec.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AudioOutputStream.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Frame Sinks\AudioEncoder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Frame Sinks\AudioFormatConversionFilter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Frame Sinks\AudioFrameSink.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Frame Sinks\VideoFrameSink.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Frame Sinks\VideoEncoder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="VideoOutputStream.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -110,9 +128,6 @@
     <ClCompile Include="Sources\RawVideoSource.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Frame Sinks\Encoder.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Codecs\VideoCodec.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -126,6 +141,24 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Codecs\JPGCodec.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Codecs\AudioCodec.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AudioOutputStream.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Frame Sinks\AudioEncoder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Frame Sinks\AudioFormatConversionFilter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Frame Sinks\VideoEncoder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="VideoOutputStream.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

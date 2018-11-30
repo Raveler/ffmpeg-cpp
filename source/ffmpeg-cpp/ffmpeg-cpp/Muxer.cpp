@@ -61,24 +61,6 @@ namespace ffmpegcpp
 		}
 	}
 
-	void Muxer::WriteFrame(const AVRational *time_base, AVStream *stream, AVPacket *pkt)
-	{
-		printf("Write frame %d", pkt->pts);
-		// rescale output packet timestamp values from codec to stream timebase
-		av_packet_rescale_ts(pkt, *time_base, stream->time_base);
-		pkt->stream_index = stream->index;
-
-		// We NEED to fill in the duration here, otherwise the frame rate is calculated wrong in the end for certain codecs/containers (ie h264/mp4).
-		pkt->duration = stream->time_base.den / stream->time_base.num / stream->avg_frame_rate.num * stream->avg_frame_rate.den;
-
-		/* Write the compressed frame to the media file. */
-		int ret = av_interleaved_write_frame(containerContext, pkt);
-		if (ret < 0)
-		{
-			throw FFmpegException("Error during encoding", ret);
-		}
-	}
-
 	void Muxer::Close()
 	{
 		/* Write the trailer, if any. The trailer must be written before you

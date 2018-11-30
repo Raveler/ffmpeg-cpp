@@ -11,18 +11,14 @@ namespace ffmpegcpp
 
 		OutputStream(OpenCodec* codec);
 
-		void OpenStream(AVFormatContext* containerContext);
+		virtual void OpenStream(AVFormatContext* containerContext) = 0;
 
-		void WritePacket(AVPacket* pkt);
+		virtual void WritePacket(AVPacket* pkt) = 0;
 
 		OpenCodec* GetCodec();
 
-	private:
+	protected:
 
 		OpenCodec* codec;
-
-		AVFormatContext* containerContext;
-
-		AVStream* stream;
 	};
 }

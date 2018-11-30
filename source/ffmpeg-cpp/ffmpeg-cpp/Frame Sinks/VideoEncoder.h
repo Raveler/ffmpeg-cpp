@@ -2,17 +2,17 @@
 
 #include "ffmpeg.h"
 
-#include "Frame Sinks/FrameSink.h"
+#include "Frame Sinks/VideoFrameSink.h"
 #include "Codecs/Codec.h"
 #include "OutputStream.h"
 
 namespace ffmpegcpp
 {
-	class Encoder : public FrameSink
+	class VideoEncoder : public VideoFrameSink
 	{
 	public:
-		Encoder(OutputStream* output);
-		~Encoder();
+		VideoEncoder(OutputStream* output);
+		~VideoEncoder();
 
 		void WriteFrame(AVFrame* frame, AVRational* timeBase);
 

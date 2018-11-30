@@ -1,4 +1,4 @@
-#include "Encoder.h"
+#include "VideoEncoder.h"
 
 #include "FFmpegException.h"
 
@@ -6,7 +6,7 @@
 namespace ffmpegcpp
 {
 
-	Encoder::Encoder(OutputStream* output)
+	VideoEncoder::VideoEncoder(OutputStream* output)
 	{
 		this->codec = output->GetCodec();
 		this->output = output;
@@ -19,14 +19,12 @@ namespace ffmpegcpp
 	}
 
 
-	Encoder::~Encoder()
+	VideoEncoder::~VideoEncoder()
 	{
 		av_packet_free(&pkt);
 	}
 
-	struct SwsContext* swsContext;
-
-	void Encoder::WriteFrame(AVFrame* frame, AVRational* timeBase)
+	void VideoEncoder::WriteFrame(AVFrame* frame, AVRational* timeBase)
 	{
 		frame->pts = frameNumber;
 		++frameNumber;
@@ -57,7 +55,7 @@ namespace ffmpegcpp
 		}
 	}
 
-	AVPixelFormat Encoder::GetRequiredPixelFormat()
+	AVPixelFormat VideoEncoder::GetRequiredPixelFormat()
 	{
 		return codec->GetContext()->pix_fmt;
 	}

@@ -1,14 +1,19 @@
 
 #include "Muxer.h"
 
+#include "VideoOutputStream.h"
+#include "AudioOutputStream.h"
 #include "OutputStream.h"
 
 #include "Sources/RawFileSource.h"
 #include "Sources/RawVideoSource.h"
 
-#include "Frame Sinks/Encoder.h"
+#include "Frame Sinks/VideoEncoder.h"
+#include "Frame Sinks/AudioEncoder.h"
 #include "Frame Sinks/VideoFilter.h"
 #include "Frame Sinks/FrameSink.h"
+
+#include "Codecs/AudioCodec.h"
 
 #include "Codecs/H265NVEncCodec.h"
 #include "Codecs/H264NVEncCodec.h"

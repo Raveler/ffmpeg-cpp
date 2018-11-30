@@ -1,15 +1,15 @@
 #pragma once
 
-#include "ffmpeg.h"
+#include "FrameSink.h"
 
 namespace ffmpegcpp
 {
-	class FrameSink
+	class VideoFrameSink : public FrameSink
 	{
 	public:
 
 		virtual void WriteFrame(AVFrame* frame, AVRational* timeBase) = 0;
+
+		virtual AVPixelFormat GetRequiredPixelFormat() = 0;
 	};
-
-
 }

@@ -81,7 +81,8 @@ uint8_t* generate_rgb(int width, int height, int pts, uint8_t *rgb)
 int main(int argc, char **argv)
 {
 	char* inFilename = argv[1];
-	char* outFilename = argv[2];
+	char* inAudioFilename = argv[2];
+	char* outFilename = argv[3];
 
 	// create the output stream
 	try
@@ -89,19 +90,31 @@ int main(int argc, char **argv)
 		int width = 352;
 		int height = 288;
 
+		// create an audio encoder
+		AudioCodec* audioCodec = new AudioCodec(AV_CODEC_ID_MP2);//AV_CODEC_ID_MP2
+
+		// audio output stream
+		OpenCodec* openAudioCodec = audioCodec->Open();
+		AudioOutputStream* audioStream = new AudioOutputStream(openAudioCodec);
+		AudioEncoder* audioEncoder = new AudioEncoder(audioStream);
+
+		// create an audio source
+		RawFileSource* audioSource = new RawFileSource(inAudioFilename, AV_CODEC_ID_MP3, audioEncoder);
+
 		H264NVEncCodec* codec = new H264NVEncCodec(width, height, 30, AV_PIX_FMT_YUV420P);
 		codec->SetPreset("hq");
 		//PNGCodec* codec = new PNGCodec(width, height, 30);
 
 		OpenCodec* openCodec = codec->Open();
-		OutputStream* stream = new OutputStream(openCodec);
+		VideoOutputStream* stream = new VideoOutputStream(openCodec);
 
 		// list of output streams for the muxer
 		vector<OutputStream*> streams;
-		streams.push_back(stream);
+		//streams.push_back(stream);
+		streams.push_back(audioStream);
 
 		// create the encoder that will link the source and muxer together
-		Encoder* encoder = new Encoder(stream);
+		VideoEncoder* encoder = new VideoEncoder(stream);
 
 		// create a filter
 		VideoFilter* filter = new VideoFilter("alphaextract", encoder);
@@ -116,12 +129,14 @@ int main(int argc, char **argv)
 		// create the output muxer
 		Muxer* muxer = new Muxer(outFilename, streams);
 
-		uint8_t *rgb = NULL;
+		/*uint8_t *rgb = NULL;
 		for (int i = 0; i < 100; ++i)
 		{
 			rgb = generate_rgb(width, height, i, rgb);
 			source->WriteFrame(rgb, 4 * width);
-		}
+		}*/
+
+		audioSource->Start();
 
 		muxer->Close();
 
@@ -134,7 +149,7 @@ int main(int argc, char **argv)
 		delete openCodec;
 		delete codec;
 	}
-	catch (FFmpegException e)
+	/*catch (FFmpegException e)
 	{
 		cerr << e.what() << endl;
 		throw e;
@@ -142,6 +157,10 @@ int main(int argc, char **argv)
 	catch (...)
 	{
 		cout << "OMG! an unexpected exception has been caught" << endl;
+	}*/
+	catch (const char *c)
+	{
+
 	}
 
 	cout << "Press any key to continue..." << endl;

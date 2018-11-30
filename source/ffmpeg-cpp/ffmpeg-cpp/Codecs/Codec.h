@@ -3,7 +3,6 @@
 #include "ffmpeg.h"
 #include "std.h"
 
-#include "StreamConfig.h"
 #include "OpenCodec.h"
 
 namespace ffmpegcpp

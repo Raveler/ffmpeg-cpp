@@ -2,16 +2,16 @@
 
 #include "ffmpeg.h"
 
-#include "FrameSink.h"
+#include "VideoFrameSink.h"
 
 namespace ffmpegcpp
 {
-	class VideoFilter : public FrameSink
+	class VideoFilter : public VideoFrameSink
 	{
 
 	public:
 
-		VideoFilter(const char* filterString, FrameSink* target);
+		VideoFilter(const char* filterString, VideoFrameSink* target);
 		~VideoFilter();
 
 		void WriteFrame(AVFrame* frame, AVRational* timeBase);
