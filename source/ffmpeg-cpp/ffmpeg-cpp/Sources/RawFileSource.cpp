@@ -2,6 +2,8 @@
 #include "FFmpegException.h"
 #include "CodecDeducer.h"
 
+using namespace std;
+
 namespace ffmpegcpp
 {
 	RawFileSource::RawFileSource(const char* inFileName, const char* codecName, FrameSink* output)

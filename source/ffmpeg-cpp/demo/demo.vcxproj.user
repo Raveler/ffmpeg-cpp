@@ -4,4 +4,7 @@
     <LocalDebuggerCommandArguments>"D:\WonderMedia\ffmpeg\samples\carphone_qcif.h264" "D:\WonderMedia\ffmpeg\samples\out.mp4"</LocalDebuggerCommandArguments>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
+  <PropertyGroup>
+    <ShowAllFiles>true</ShowAllFiles>
+  </PropertyGroup>
 </Project>

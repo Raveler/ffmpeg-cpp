@@ -3,6 +3,8 @@
 #include "OpenCodec.h"
 #include "FFmpegException.h"
 
+using namespace std;
+
 namespace ffmpegcpp
 {
 	OpenCodec::OpenCodec(AVCodecContext* context)

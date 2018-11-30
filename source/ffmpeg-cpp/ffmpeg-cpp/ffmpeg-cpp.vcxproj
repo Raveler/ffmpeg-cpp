@@ -91,7 +91,7 @@
       <SDLCheck>false</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>D:\WonderMedia\ffmpeg\ffmpeg-cpp\source\ffmpeg-cpp\ffmpeg-cpp;D:\WonderMedia\FFMPEG-LGPL-minimal\msvc\include;D:\WonderMedia\ffmpeg\ffmpeg-cpp\source\ffmpeg-cpp\ffmpeg-cpp\Sources;D:\WonderMedia\ffmpeg\ffmpeg-cpp\source\ffmpeg-cpp\ffmpeg-cpp\Frame Sinks;D:\WonderMedia\ffmpeg\ffmpeg-cpp\source\ffmpeg-cpp\ffmpeg-cpp\Codecs;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\WonderMedia\ffmpeg\ffmpeg-cpp\source\ffmpeg-cpp\ffmpeg-cpp;D:\WonderMedia\FFMPEG-LGPL-minimal\msvc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

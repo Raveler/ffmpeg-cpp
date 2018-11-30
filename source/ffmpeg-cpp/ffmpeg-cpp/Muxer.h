@@ -12,7 +12,7 @@ namespace ffmpegcpp {
 	{
 	public:
 
-		Muxer(const char* fileName, vector<OutputStream*> streams);
+		Muxer(const char* fileName, std::vector<OutputStream*> streams);
 
 		void WriteFrame(const AVRational *time_base, AVStream *stream, AVPacket *pkt);
 
@@ -24,11 +24,11 @@ namespace ffmpegcpp {
 
 		void Open();
 
-		vector<OutputStream*> streams;
+		std::vector<OutputStream*> streams;
 
 		AVFormatContext* containerContext;
 		AVOutputFormat* containerFormat;
 
-		string fileName;
+		std::string fileName;
 	};
 }

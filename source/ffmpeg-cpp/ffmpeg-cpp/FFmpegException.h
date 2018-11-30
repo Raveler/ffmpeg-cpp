@@ -6,18 +6,18 @@
 
 namespace ffmpegcpp
 {
-	class FFmpegException : exception
+	class FFmpegException : std::exception
 	{
 
 	public:
 
-		FFmpegException(string error);
+		FFmpegException(std::string error);
 
-		FFmpegException(string error, int returnValue);
+		FFmpegException(std::string error, int returnValue);
 
 		virtual char const* what() const
 		{
-			return exception::what();
+			return std::exception::what();
 		}
 
 

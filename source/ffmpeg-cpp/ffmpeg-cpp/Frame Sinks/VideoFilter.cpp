@@ -4,8 +4,9 @@
 namespace ffmpegcpp
 {
 
-	VideoFilter::VideoFilter(const char* filterString, AVPixelFormat outputFormat)
+	VideoFilter::VideoFilter(const char* filterString, AVPixelFormat outputFormat, FrameSink* target)
 	{
+		this->target = target;
 		this->filterString = filterString;
 		this->outputFormat = outputFormat;
 	}
@@ -133,6 +134,25 @@ namespace ffmpegcpp
 		{
 			InitDelayed(frame, timeBase);
 			initialized = true;
+		}
+
+		int ret = av_buffersrc_add_frame_flags(buffersrc_ctx, frame, AV_BUFFERSRC_FLAG_KEEP_REF);
+
+		while (ret >= 0)
+		{
+			ret = av_buffersink_get_frame(buffersink_ctx, filt_frame);
+			if (ret == AVERROR(EAGAIN) || ret == AVERROR_EOF)
+			{
+				return;
+			}
+			else if (ret < 0)
+			{
+				throw FFmpegException("Erorr during filtering", ret);
+			}
+
+			target->WriteFrame(filt_frame, timeBase);
+
+			av_frame_unref(filt_frame);
 		}
 	}
 }

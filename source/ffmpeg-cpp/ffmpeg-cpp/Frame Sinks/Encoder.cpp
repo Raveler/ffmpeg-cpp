@@ -46,7 +46,7 @@ namespace ffmpegcpp
 			}
 			else if (ret < 0)
 			{
-				throw FFmpegException("Erorr during encoding", ret);
+				throw FFmpegException("Error during encoding", ret);
 			}
 
 			//printf("Write packet %3 (size=%5d)\n", data->pkt->pts, data->pkt->size);

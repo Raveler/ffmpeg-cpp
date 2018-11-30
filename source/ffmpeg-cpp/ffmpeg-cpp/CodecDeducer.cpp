@@ -1,6 +1,8 @@
 #include "CodecDeducer.h"
 #include "FFmpegException.h"
 
+using namespace std;
+
 namespace ffmpegcpp
 {
 	AVCodec* CodecDeducer::DeduceEncoder(const char* codecName)

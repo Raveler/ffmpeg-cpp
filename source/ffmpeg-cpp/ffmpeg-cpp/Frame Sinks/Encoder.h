@@ -2,8 +2,8 @@
 
 #include "ffmpeg.h"
 
-#include "FrameSink.h"
-#include "Codec.h"
+#include "Frame Sinks/FrameSink.h"
+#include "Codecs/Codec.h"
 #include "OutputStream.h"
 
 namespace ffmpegcpp

@@ -11,7 +11,7 @@ namespace ffmpegcpp
 
 	public:
 
-		VideoFilter(const char* filterString, AVPixelFormat outputPixelFormat);
+		VideoFilter(const char* filterString, AVPixelFormat outputPixelFormat, FrameSink* target);
 		~VideoFilter();
 
 		void WriteFrame(AVFrame* frame, AVRational* timeBase);
@@ -19,6 +19,8 @@ namespace ffmpegcpp
 	private:
 
 		void InitDelayed(AVFrame* frame, AVRational* timeBase);
+
+		FrameSink* target;
 
 		const char* filterString;
 		AVPixelFormat outputFormat;

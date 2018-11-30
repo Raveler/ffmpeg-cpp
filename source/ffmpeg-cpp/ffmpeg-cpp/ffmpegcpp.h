@@ -3,15 +3,17 @@
 
 #include "OutputStream.h"
 
-#include "sources/RawFileSource.h"
-#include "sources/RawVideoSource.h"
+#include "Sources/RawFileSource.h"
+#include "Sources/RawVideoSource.h"
 
-#include "Encoder.h"
-#include "FrameSink.h"
+#include "Frame Sinks/Encoder.h"
+#include "Frame Sinks/VideoFilter.h"
+#include "Frame Sinks/FrameSink.h"
 
-#include "codecs/H265NVEncCodec.h"
-#include "codecs/H264NVEncCodec.h"
+#include "Codecs/H265NVEncCodec.h"
+#include "Codecs/H264NVEncCodec.h"
+#include "Codecs/VP9Codec.h"
+#include "Codecs/Codec.h"
 
-#include "Codec.h"
 
 #include "FFmpegException.h"

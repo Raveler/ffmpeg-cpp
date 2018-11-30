@@ -2,7 +2,7 @@
 
 #include "ffmpeg.h"
 #include "OutputStream.h"
-#include "FrameSink.h"
+#include "Frame Sinks/FrameSink.h"
 
 namespace ffmpegcpp
 {
@@ -11,15 +11,15 @@ namespace ffmpegcpp
 
 	public:
 
-		RawVideoSource(int width, int height, AVPixelFormat pixelFormat, int framesPerSecond, int bytesPerRow, FrameSink* output);
-		RawVideoSource(int width, int height, AVPixelFormat sourcePixelFormat, AVPixelFormat targetPixelFormat, int framesPerSecond, int bytesPerRow, FrameSink* output);
+		RawVideoSource(int width, int height, AVPixelFormat pixelFormat, int framesPerSecond, FrameSink* output);
+		RawVideoSource(int width, int height, AVPixelFormat sourcePixelFormat, AVPixelFormat targetPixelFormat, int framesPerSecond, FrameSink* output);
 		~RawVideoSource();
 
-		void WriteFrame(void* data);
+		void WriteFrame(void* data, int bytesPerRow);
 
 	private:
 
-		void Init(int width, int height, AVPixelFormat sourcePixelFormat, AVPixelFormat targetPixelFormat, int framesPerSecond, int bytesPerRow, FrameSink* output);
+		void Init(int width, int height, AVPixelFormat sourcePixelFormat, AVPixelFormat targetPixelFormat, int framesPerSecond, FrameSink* output);
 
 		AVPixelFormat sourcePixelFormat;
 		AVRational timeBase;
@@ -28,6 +28,6 @@ namespace ffmpegcpp
 
 		AVFrame* frame;
 
-		struct SwsContext* swsContext;
+		struct SwsContext* swsContext = NULL;
 	};
 }
