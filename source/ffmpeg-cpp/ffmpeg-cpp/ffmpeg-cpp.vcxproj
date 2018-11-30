@@ -190,7 +190,9 @@
   <ItemGroup>
     <ClInclude Include="ffmpegcpp.h" />
     <ClInclude Include="Frame Sinks\VideoFilter.h" />
+    <ClInclude Include="Codecs\JPGCodec.h" />
     <ClInclude Include="OpenCodec.h" />
+    <ClInclude Include="Codecs\PNGCodec.h" />
     <ClInclude Include="Sources\RawVideoSource.h" />
     <ClInclude Include="Sources\RawFileSource.h" />
     <ClInclude Include="Codecs\Codec.h" />
@@ -210,7 +212,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Frame Sinks\VideoFilter.cpp" />
+    <ClCompile Include="Codecs\JPGCodec.cpp" />
     <ClCompile Include="OpenCodec.cpp" />
+    <ClCompile Include="Codecs\PNGCodec.cpp" />
     <ClCompile Include="Sources\RawVideoSource.cpp" />
     <ClCompile Include="Sources\RawFileSource.cpp" />
     <ClCompile Include="Codecs\Codec.cpp" />

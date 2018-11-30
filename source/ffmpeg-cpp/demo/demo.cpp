@@ -91,6 +91,8 @@ int main(int argc, char **argv)
 
 		H264NVEncCodec* codec = new H264NVEncCodec(width, height, 30, AV_PIX_FMT_YUV420P);
 		codec->SetPreset("hq");
+		//PNGCodec* codec = new PNGCodec(width, height, 30);
+
 		OpenCodec* openCodec = codec->Open();
 		OutputStream* stream = new OutputStream(openCodec);
 
@@ -102,7 +104,7 @@ int main(int argc, char **argv)
 		Encoder* encoder = new Encoder(stream);
 
 		// create a filter
-		VideoFilter* filter = new VideoFilter("alphaextract", AV_PIX_FMT_YUV420P, encoder);
+		VideoFilter* filter = new VideoFilter("alphaextract", encoder);
 
 
 		// MP3: AV_CODEC_ID_MP3

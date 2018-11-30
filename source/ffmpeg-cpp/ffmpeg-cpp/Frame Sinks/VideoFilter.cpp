@@ -4,11 +4,11 @@
 namespace ffmpegcpp
 {
 
-	VideoFilter::VideoFilter(const char* filterString, AVPixelFormat outputFormat, FrameSink* target)
+	VideoFilter::VideoFilter(const char* filterString, FrameSink* target)
 	{
 		this->target = target;
 		this->filterString = filterString;
-		this->outputFormat = outputFormat;
+		this->outputFormat = target->GetRequiredPixelFormat();
 	}
 
 	VideoFilter::~VideoFilter()
@@ -154,5 +154,10 @@ namespace ffmpegcpp
 
 			av_frame_unref(filt_frame);
 		}
+	}
+
+	AVPixelFormat VideoFilter::GetRequiredPixelFormat()
+	{
+		return AV_PIX_FMT_NONE;
 	}
 }

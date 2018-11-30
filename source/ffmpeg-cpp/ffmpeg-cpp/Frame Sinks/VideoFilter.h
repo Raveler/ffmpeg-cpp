@@ -11,10 +11,12 @@ namespace ffmpegcpp
 
 	public:
 
-		VideoFilter(const char* filterString, AVPixelFormat outputPixelFormat, FrameSink* target);
+		VideoFilter(const char* filterString, FrameSink* target);
 		~VideoFilter();
 
 		void WriteFrame(AVFrame* frame, AVRational* timeBase);
+
+		virtual AVPixelFormat GetRequiredPixelFormat();
 
 	private:
 

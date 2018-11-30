@@ -57,5 +57,10 @@ namespace ffmpegcpp
 		}
 	}
 
+	AVPixelFormat Encoder::GetRequiredPixelFormat()
+	{
+		return codec->GetContext()->pix_fmt;
+	}
+
 }
 

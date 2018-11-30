@@ -13,6 +13,8 @@
 #include "Codecs/H265NVEncCodec.h"
 #include "Codecs/H264NVEncCodec.h"
 #include "Codecs/VP9Codec.h"
+#include "Codecs/PNGCodec.h"
+#include "Codecs/JPGCodec.h"
 #include "Codecs/Codec.h"
 
 

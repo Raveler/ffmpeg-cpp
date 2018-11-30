@@ -9,6 +9,8 @@ namespace ffmpegcpp
 	public:
 
 		virtual void WriteFrame(AVFrame* frame, AVRational* timeBase) = 0;
+
+		virtual AVPixelFormat GetRequiredPixelFormat() = 0;
 	};
 
 

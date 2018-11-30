@@ -72,6 +72,12 @@
     <ClInclude Include="Frame Sinks\VideoFilter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Codecs\PNGCodec.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Codecs\JPGCodec.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Muxer.cpp">
@@ -114,6 +120,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Frame Sinks\VideoFilter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Codecs\PNGCodec.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Codecs\JPGCodec.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

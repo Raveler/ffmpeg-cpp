@@ -16,6 +16,8 @@ namespace ffmpegcpp
 
 		void WriteFrame(AVFrame* frame, AVRational* timeBase);
 
+		AVPixelFormat GetRequiredPixelFormat();
+
 	private:
 
 		OpenCodec* codec;
