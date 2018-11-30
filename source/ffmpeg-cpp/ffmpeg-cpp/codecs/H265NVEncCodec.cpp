@@ -8,6 +8,7 @@ namespace ffmpegcpp
 	{
 
 	}
+
 	void H265NVEncCodec::SetPreset(const char* preset)
 	{
 		SetOption("preset", preset);

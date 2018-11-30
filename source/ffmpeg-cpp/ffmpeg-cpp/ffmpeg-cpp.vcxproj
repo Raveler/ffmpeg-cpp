@@ -91,7 +91,7 @@
       <SDLCheck>false</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>D:\WonderMedia\AnimationNow\ffmpeg-cpp;D:\WonderMedia\FFMPEG-LGPL-minimal\msvc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\WonderMedia\ffmpeg\ffmpeg-cpp\source\ffmpeg-cpp\ffmpeg-cpp;D:\WonderMedia\FFMPEG-LGPL-minimal\msvc\include;D:\WonderMedia\ffmpeg\ffmpeg-cpp\source\ffmpeg-cpp\ffmpeg-cpp\Sources;D:\WonderMedia\ffmpeg\ffmpeg-cpp\source\ffmpeg-cpp\ffmpeg-cpp\Frame Sinks;D:\WonderMedia\ffmpeg\ffmpeg-cpp\source\ffmpeg-cpp\ffmpeg-cpp\Codecs;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -189,36 +189,40 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ffmpegcpp.h" />
+    <ClInclude Include="Frame Sinks\VideoFilter.h" />
     <ClInclude Include="OpenCodec.h" />
-    <ClInclude Include="RawFileSource.h" />
-    <ClInclude Include="Codec.h" />
+    <ClInclude Include="Sources\RawVideoSource.h" />
+    <ClInclude Include="Sources\RawFileSource.h" />
+    <ClInclude Include="Codecs\Codec.h" />
     <ClInclude Include="CodecDeducer.h" />
-    <ClInclude Include="Encoder.h" />
+    <ClInclude Include="Frame Sinks\Encoder.h" />
     <ClInclude Include="ffmpeg.h" />
     <ClInclude Include="FFmpegException.h" />
-    <ClInclude Include="codecs\H264NVEncCodec.h" />
-    <ClInclude Include="codecs\H265NVEncCodec.h" />
-    <ClInclude Include="FileSource.h" />
-    <ClInclude Include="FrameSink.h" />
+    <ClInclude Include="Codecs\H264NVEncCodec.h" />
+    <ClInclude Include="Codecs\H265NVEncCodec.h" />
+    <ClInclude Include="Frame Sinks\FrameSink.h" />
     <ClInclude Include="Muxer.h" />
     <ClInclude Include="OutputStream.h" />
     <ClInclude Include="std.h" />
     <ClInclude Include="StreamConfig.h" />
-    <ClInclude Include="VideoCodec.h" />
+    <ClInclude Include="Codecs\VideoCodec.h" />
+    <ClInclude Include="Codecs\VP9Codec.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Frame Sinks\VideoFilter.cpp" />
     <ClCompile Include="OpenCodec.cpp" />
-    <ClCompile Include="RawFileSource.cpp" />
-    <ClCompile Include="Codec.cpp" />
+    <ClCompile Include="Sources\RawVideoSource.cpp" />
+    <ClCompile Include="Sources\RawFileSource.cpp" />
+    <ClCompile Include="Codecs\Codec.cpp" />
     <ClCompile Include="CodecDeducer.cpp" />
-    <ClCompile Include="Encoder.cpp" />
+    <ClCompile Include="Frame Sinks\Encoder.cpp" />
     <ClCompile Include="FFmpegException.cpp" />
-    <ClCompile Include="codecs\H264NVEncCodec.cpp" />
-    <ClCompile Include="codecs\H265NVEncCodec.cpp" />
-    <ClCompile Include="FileSource.cpp" />
+    <ClCompile Include="Codecs\H264NVEncCodec.cpp" />
+    <ClCompile Include="Codecs\H265NVEncCodec.cpp" />
     <ClCompile Include="Muxer.cpp" />
     <ClCompile Include="OutputStream.cpp" />
-    <ClCompile Include="VideoCodec.cpp" />
+    <ClCompile Include="Codecs\VideoCodec.cpp" />
+    <ClCompile Include="Codecs\VP9Codec.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

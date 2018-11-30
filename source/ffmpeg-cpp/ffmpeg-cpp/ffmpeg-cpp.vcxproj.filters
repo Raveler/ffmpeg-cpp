@@ -30,40 +30,46 @@
     <ClInclude Include="FFmpegException.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Codec.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="VideoCodec.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="codecs\H264NVEncCodec.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="codecs\H265NVEncCodec.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="OutputStream.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="FileSource.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="FrameSink.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Encoder.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="CodecDeducer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="RawFileSource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ffmpegcpp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="OpenCodec.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Codecs\H264NVEncCodec.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Codecs\H265NVEncCodec.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Codecs\VP9Codec.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\RawFileSource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\RawVideoSource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Frame Sinks\Encoder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Frame Sinks\FrameSink.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Codecs\VideoCodec.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Codecs\Codec.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Frame Sinks\VideoFilter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -74,34 +80,40 @@
     <ClCompile Include="FFmpegException.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Codec.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="VideoCodec.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="codecs\H264NVEncCodec.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="codecs\H265NVEncCodec.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="OutputStream.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="FileSource.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Encoder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CodecDeducer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="RawFileSource.cpp">
+    <ClCompile Include="OpenCodec.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="OpenCodec.cpp">
+    <ClCompile Include="Codecs\H264NVEncCodec.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Codecs\H265NVEncCodec.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Codecs\VP9Codec.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\RawFileSource.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\RawVideoSource.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Frame Sinks\Encoder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Codecs\VideoCodec.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Codecs\Codec.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Frame Sinks\VideoFilter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

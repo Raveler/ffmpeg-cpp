@@ -8,6 +8,7 @@ namespace ffmpegcpp
 	{
 
 	}
+
 	void H264NVEncCodec::SetPreset(const char* preset)
 	{
 		SetOption("preset", preset);

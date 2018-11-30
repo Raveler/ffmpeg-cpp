@@ -167,8 +167,10 @@ namespace ffmpegcpp
 				throw FFmpegException("Failed to calculate data size");
 			}
 
-			// push the frame to the next stage
-			output->WriteFrame(frame);
+			// push the frame to the next stage.
+			// The time_base is filled in in the codecContext after the first frame is decoded
+			// so we can fetch it from there.
+			output->WriteFrame(frame, &codecContext->time_base);
 		}
 	}
 
@@ -178,6 +180,5 @@ namespace ffmpegcpp
 
 		avcodec_free_context(&codecContext);
 		av_parser_close(parser);
-
 	}
 }

@@ -14,7 +14,7 @@ namespace ffmpegcpp
 		Encoder(OutputStream* output);
 		~Encoder();
 
-		void WriteFrame(AVFrame* frame);
+		void WriteFrame(AVFrame* frame, AVRational* timeBase);
 
 	private:
 

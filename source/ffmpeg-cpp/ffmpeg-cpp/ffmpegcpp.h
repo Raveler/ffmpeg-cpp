@@ -3,7 +3,8 @@
 
 #include "OutputStream.h"
 
-#include "RawFileSource.h"
+#include "sources/RawFileSource.h"
+#include "sources/RawVideoSource.h"
 
 #include "Encoder.h"
 #include "FrameSink.h"

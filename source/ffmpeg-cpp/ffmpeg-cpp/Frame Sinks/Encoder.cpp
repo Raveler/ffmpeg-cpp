@@ -26,7 +26,7 @@ namespace ffmpegcpp
 
 	struct SwsContext* swsContext;
 
-	void Encoder::WriteFrame(AVFrame* frame)
+	void Encoder::WriteFrame(AVFrame* frame, AVRational* timeBase)
 	{
 		frame->pts = frameNumber;
 		++frameNumber;

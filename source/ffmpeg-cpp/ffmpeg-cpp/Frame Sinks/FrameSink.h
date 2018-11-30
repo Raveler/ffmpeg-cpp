@@ -4,12 +4,11 @@
 
 namespace ffmpegcpp
 {
-
 	class FrameSink
 	{
 	public:
 
-		virtual void WriteFrame(AVFrame* frame) = 0;
+		virtual void WriteFrame(AVFrame* frame, AVRational* timeBase) = 0;
 	};
 
 
