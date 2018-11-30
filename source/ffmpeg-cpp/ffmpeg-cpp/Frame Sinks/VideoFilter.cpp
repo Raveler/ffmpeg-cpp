@@ -116,6 +116,12 @@ namespace ffmpegcpp
 				throw FFmpegException("Failed to configure filter graph", ret);
 			}
 
+			for (int i = 0; i < filter_graph->nb_filters; ++i)
+			{
+				AVFilterContext *filter = filter_graph->filters[i];
+				int x = 5;
+			}
+
 			avfilter_inout_free(&inputs);
 			avfilter_inout_free(&outputs);
 		}

@@ -10,6 +10,8 @@ namespace ffmpegcpp
 	public:
 
 		PNGCodec(int width, int height, int framesPerSecond);
+
+		void SetCompressionLevel(int compressionLevel);
 	};
 
 
