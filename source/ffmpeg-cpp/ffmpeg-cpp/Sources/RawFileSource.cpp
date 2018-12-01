@@ -143,7 +143,7 @@ namespace ffmpegcpp
 	void RawFileSource::Decode(AVPacket *pkt, AVFrame *frame)
 	{
 		int i, ch;
-		int ret, data_size;
+		int ret/*, data_size*/;
 
 		/* send the packet with the compressed data to the decoder */
 		ret = avcodec_send_packet(codecContext, pkt);
@@ -162,12 +162,12 @@ namespace ffmpegcpp
 			{
 				throw FFmpegException("Error during decoding", ret);
 			}
-			data_size = av_get_bytes_per_sample(codecContext->sample_fmt);
+			/*data_size = av_get_bytes_per_sample(codecContext->sample_fmt);
 			if (data_size < 0)
 			{
-				/* This should not occur, checking just for paranoia */
+				// This should not occur, checking just for paranoia
 				throw FFmpegException("Failed to calculate data size");
-			}
+			}*/
 
 			// push the frame to the next stage.
 			// The time_base is filled in in the codecContext after the first frame is decoded

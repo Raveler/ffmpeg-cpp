@@ -24,10 +24,12 @@ namespace ffmpegcpp
 
 		AVFrame* ConvertToDestinationFormat(AVFrame* frame, AVRational* timeBase);
 
+		void CreateConvertedFrame(int nb_samples);
+
 		OpenCodec* codec;
 		AudioOutputStream* output;
 
-		AVFrame* converted_frame;
+		AVFrame* converted_frame = NULL;
 
 		AVPacket* pkt;
 
