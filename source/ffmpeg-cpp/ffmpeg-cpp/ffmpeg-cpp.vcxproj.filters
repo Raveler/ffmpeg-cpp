@@ -81,9 +81,6 @@
     <ClInclude Include="Frame Sinks\AudioEncoder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Frame Sinks\AudioFormatConversionFilter.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Frame Sinks\AudioFrameSink.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -150,9 +147,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Frame Sinks\AudioEncoder.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Frame Sinks\AudioFormatConversionFilter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Frame Sinks\VideoEncoder.cpp">

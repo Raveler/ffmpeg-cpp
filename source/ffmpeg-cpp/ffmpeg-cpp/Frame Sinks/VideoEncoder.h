@@ -16,16 +16,18 @@ namespace ffmpegcpp
 
 		void WriteFrame(AVFrame* frame, AVRational* timeBase);
 
-		AVPixelFormat GetRequiredPixelFormat();
+		virtual AVPixelFormat GetRequiredPixelFormat();
 
 	private:
 
 		OpenCodec* codec;
 		OutputStream* output;
 
-		AVPacket* pkt;
+		AVPacket* pkt = nullptr;
 
 		int frameNumber = 0;
+
+		void CleanUp();
 	};
 }
 

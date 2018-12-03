@@ -2,6 +2,7 @@
 
 #include "FFmpegException.h"
 
+using namespace std;
 
 namespace ffmpegcpp
 {
@@ -14,6 +15,7 @@ namespace ffmpegcpp
 		pkt = av_packet_alloc();
 		if (!pkt)
 		{
+			CleanUp();
 			throw FFmpegException("Failed to allocate packet");
 		}
 
@@ -27,23 +29,21 @@ namespace ffmpegcpp
 
 		// the frame converted in the target sample format
 		CreateConvertedFrame(nb_samples);
-
 	}
 
 	void AudioEncoder::CreateConvertedFrame(int nb_samples)
 	{
-		if (converted_frame != NULL)
+		if (converted_frame != nullptr)
 		{
 			av_frame_free(&converted_frame);
-			converted_frame = NULL;
 		}
 
 		AVCodecContext* codecContext = codec->GetContext();
 		converted_frame = av_frame_alloc();
 		int ret;
-
 		if (!converted_frame)
 		{
+			CleanUp();
 			throw FFmpegException("Error allocating an audio frame");
 		}
 
@@ -58,6 +58,7 @@ namespace ffmpegcpp
 			ret = av_frame_get_buffer(converted_frame, 0);
 			if (ret < 0)
 			{
+				CleanUp();
 				throw FFmpegException("Error allocating an audio buffer", ret);
 			}
 		}
@@ -66,9 +67,23 @@ namespace ffmpegcpp
 
 	AudioEncoder::~AudioEncoder()
 	{
-		av_packet_free(&pkt);
-		swr_free(&swr_ctx);
-		av_frame_free(&converted_frame);
+		CleanUp();
+	}
+
+	void AudioEncoder::CleanUp()
+	{
+		if (pkt != nullptr)
+		{
+			av_packet_free(&pkt);
+		}
+		if (converted_frame != nullptr)
+		{
+			av_frame_free(&converted_frame);
+		}
+		if (swr_ctx != nullptr)
+		{
+			swr_free(&swr_ctx);
+		}
 	}
 
 	void AudioEncoder::InitDelayed(AVFrame* frame, AVRational* timeBase)
@@ -101,31 +116,11 @@ namespace ffmpegcpp
 
 	}
 
-	AVFrame* AudioEncoder::ConvertToDestinationFormat(AVFrame* frame, AVRational* timeBase)
+	void AudioEncoder::ConvertToDestinationFormat(AVFrame* frame, AVRational* timeBase)
 	{
 		AVCodecContext* codecContext = codec->GetContext();
 
 		// convert samples from native format to destination codec format, using the resampler
-		// compute destination number of samples
-
-
-
-		// the formula below is taken from:
-		// https://www.ffmpeg.org/doxygen/2.3/group__lswr.html
-		int delay = swr_get_delay(swr_ctx, in_sample_rate);
-		int dst_nb_samples = av_rescale_rnd(delay + frame->nb_samples,
-			out_sample_rate, in_sample_rate, AV_ROUND_UP);
-
-		/*if (dst_nb_samples != frame->nb_samples)
-		{
-			throw FFmpegException("nb_samples does not match our codec");
-		}*/
-
-		// make sure our buffer is large enough
-		/*if (dst_nb_samples > frame->nb_samples)
-		{
-			CreateConvertedFrame(dst_nb_samples);
-		}*/
 
 		// when we pass a frame to the encoder, it may keep a reference to it
 		// internally;
@@ -157,7 +152,45 @@ namespace ffmpegcpp
 		// we don't need the old frame anymore
 		av_frame_unref(frame);
 
-		return converted_frame;
+		// write the converted frame to the encoder
+		WriteConvertedFrame(converted_frame);
+
+		// re-calculate the delay and "catch up" with the resampler by requesting more frames as long as we can fill entire converted frames,
+		// since the codec will only accept full frames when encoding.
+		int64_t delay = swr_get_delay(swr_ctx, in_sample_rate);
+		int64_t dst_nb_samples = av_rescale_rnd(delay + frame->nb_samples,
+			out_sample_rate, in_sample_rate, AV_ROUND_UP);
+		while (dst_nb_samples >= converted_frame->nb_samples)
+		{
+			int ret = av_frame_make_writable(converted_frame);
+			if (ret < 0)
+			{
+				throw FFmpegException("Failed to make audio frame writable", ret);
+			}
+
+
+			ret = swr_convert(swr_ctx,
+				converted_frame->data, converted_frame->nb_samples,
+				NULL, 0);
+
+			if (ret < 0)
+			{
+				throw FFmpegException("Error while converting audio frame to destination format", ret);
+			}
+
+			AVRational inv_sample_rate;
+			inv_sample_rate.num = 1;
+			inv_sample_rate.den = codecContext->sample_rate;
+
+			converted_frame->pts = av_rescale_q(samples_count, inv_sample_rate, codecContext->time_base);
+			samples_count += converted_frame->nb_samples;
+
+			WriteConvertedFrame(converted_frame);
+
+			delay = swr_get_delay(swr_ctx, in_sample_rate);
+			dst_nb_samples = av_rescale_rnd(delay + frame->nb_samples,
+				out_sample_rate, in_sample_rate, AV_ROUND_UP);
+		}
 	}
 
 	void AudioEncoder::WriteFrame(AVFrame* frame, AVRational* timeBase)
@@ -174,8 +207,11 @@ namespace ffmpegcpp
 		frameNumber += frame->nb_samples;
 
 		// convert the frame to the destination format
-		frame = ConvertToDestinationFormat(frame, timeBase);
+		ConvertToDestinationFormat(frame, timeBase);
+	}
 
+	void AudioEncoder::WriteConvertedFrame(AVFrame* frame)
+	{
 		int ret = avcodec_send_frame(codec->GetContext(), frame);
 		if (ret < 0)
 		{

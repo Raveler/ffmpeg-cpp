@@ -24,9 +24,11 @@ namespace ffmpegcpp
 
 	protected:
 
-		AVCodecContext* codecContext;
+		AVCodecContext* codecContext = nullptr;
 
 	private:
+
+		void CleanUp();
 
 		AVCodecContext* LoadContext(AVCodec* codec);
 

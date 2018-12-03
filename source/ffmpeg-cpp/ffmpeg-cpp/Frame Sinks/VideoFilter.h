@@ -27,12 +27,14 @@ namespace ffmpegcpp
 		const char* filterString;
 		AVPixelFormat outputFormat;
 
-		AVFilterGraph *filter_graph;
-		AVFilterContext *buffersink_ctx;
-		AVFilterContext *buffersrc_ctx;
-		AVFrame* filt_frame;
+		AVFilterGraph *filter_graph = nullptr;
+		AVFilterContext *buffersink_ctx = nullptr;
+		AVFilterContext *buffersrc_ctx = nullptr;
+		AVFrame* filt_frame = nullptr;
 
 		bool initialized = false;
+
+		void CleanUp();
 	};
 
 

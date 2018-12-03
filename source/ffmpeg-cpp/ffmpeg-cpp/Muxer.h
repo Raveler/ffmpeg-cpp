@@ -12,6 +12,7 @@ namespace ffmpegcpp {
 	public:
 
 		Muxer(const char* fileName, std::vector<OutputStream*> streams);
+		~Muxer();
 
 		void Close();
 
@@ -21,9 +22,12 @@ namespace ffmpegcpp {
 
 		std::vector<OutputStream*> streams;
 
-		AVFormatContext* containerContext;
 		AVOutputFormat* containerFormat;
 
+		AVFormatContext* containerContext = nullptr;
+
 		std::string fileName;
+
+		void CleanUp();
 	};
 }

@@ -9,9 +9,19 @@ namespace ffmpegcpp
 		this->target = target;
 		this->filterString = filterString;
 		this->outputFormat = target->GetRequiredPixelFormat();
+		if (this->outputFormat == AV_PIX_FMT_NONE)
+		{
+			CleanUp();
+			throw FFmpegException("You must provide a frame sink with a specified pixel format, so that the VideoFilter can convert the frame to that format");
+		}
 	}
 
 	VideoFilter::~VideoFilter()
+	{
+		CleanUp();
+	}
+
+	void VideoFilter::CleanUp()
 	{
 		avfilter_graph_free(&filter_graph);
 		av_frame_free(&filt_frame);

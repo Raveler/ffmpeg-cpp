@@ -40,6 +40,7 @@ namespace ffmpegcpp
 		AVCodecContext* codecContext = avcodec_alloc_context3(codec);
 		if (!codecContext)
 		{
+			CleanUp();
 			throw FFmpegException("Could not allocate video codec context for codec " + string(codec->name));
 		}
 
@@ -47,6 +48,14 @@ namespace ffmpegcpp
 		codecContext->codec_type = codec->type;
 
 		return codecContext;
+	}
+
+	void Codec::CleanUp()
+	{
+		if (codecContext != nullptr && !opened)
+		{
+			avcodec_free_context(&codecContext);
+		}
 	}
 
 	OpenCodec* Codec::Open()
@@ -69,5 +78,6 @@ namespace ffmpegcpp
 
 	Codec::~Codec()
 	{
+		CleanUp();
 	}
 }

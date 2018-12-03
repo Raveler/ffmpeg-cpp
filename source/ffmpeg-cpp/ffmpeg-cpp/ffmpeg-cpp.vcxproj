@@ -189,7 +189,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Frame Sinks\AudioFrameSink.h" />
-    <ClInclude Include="Frame Sinks\AudioFormatConversionFilter.h" />
     <ClInclude Include="Frame Sinks\AudioEncoder.h" />
     <ClInclude Include="AudioOutputStream.h" />
     <ClInclude Include="Codecs\AudioCodec.h" />
@@ -217,7 +216,6 @@
     <ClInclude Include="VideoOutputStream.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Frame Sinks\AudioFormatConversionFilter.cpp" />
     <ClCompile Include="Frame Sinks\AudioEncoder.cpp" />
     <ClCompile Include="AudioOutputStream.cpp" />
     <ClCompile Include="Codecs\AudioCodec.cpp" />

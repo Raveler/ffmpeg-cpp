@@ -2,6 +2,7 @@
 
 #include "FFmpegException.h"
 
+using namespace std;
 
 namespace ffmpegcpp
 {
@@ -14,18 +15,31 @@ namespace ffmpegcpp
 		pkt = av_packet_alloc();
 		if (!pkt)
 		{
+			CleanUp();
 			throw FFmpegException("Failed to allocate packet");
 		}
 	}
 
-
 	VideoEncoder::~VideoEncoder()
 	{
-		av_packet_free(&pkt);
+		CleanUp();
+	}
+
+	void VideoEncoder::CleanUp()
+	{
+		if (pkt != nullptr)
+		{
+			av_packet_free(&pkt);
+		}
 	}
 
 	void VideoEncoder::WriteFrame(AVFrame* frame, AVRational* timeBase)
 	{
+		if (frame->format != codec->GetContext()->pix_fmt)
+		{
+			throw FFmpegException("Codec only accepts " + string(av_get_pix_fmt_name(codec->GetContext()->pix_fmt)) + " while frame is in format " + av_get_pix_fmt_name((AVPixelFormat)frame->format));
+		}
+
 		frame->pts = frameNumber;
 		++frameNumber;
 
@@ -59,6 +73,5 @@ namespace ffmpegcpp
 	{
 		return codec->GetContext()->pix_fmt;
 	}
-
 }
 

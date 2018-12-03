@@ -38,12 +38,26 @@ namespace ffmpegcpp
 		Open();
 	}
 
+	Muxer::~Muxer()
+	{
+		CleanUp();
+	}
+
+	void Muxer::CleanUp()
+	{
+		if (containerContext != nullptr)
+		{
+			avformat_free_context(containerContext);
+			containerContext = nullptr;
+		}
+	}
+
 	void Muxer::Open()
 	{
 		// print debug info about the final file format
 		av_dump_format(containerContext, 0, fileName.c_str(), 1);
 
-		/* open the output file, if needed */
+		// open the output file, if needed
 		if (!(containerFormat->flags & AVFMT_NOFILE))
 		{
 			int ret = avio_open(&containerContext->pb, fileName.c_str(), AVIO_FLAG_WRITE);
@@ -53,7 +67,7 @@ namespace ffmpegcpp
 			}
 		}
 
-		/* Write the stream header, if any. */
+		// Write the stream header, if any.
 		int ret = avformat_write_header(containerContext, NULL);
 		if (ret < 0)
 		{
@@ -70,10 +84,12 @@ namespace ffmpegcpp
 		av_write_trailer(containerContext);
 
 		if (!(containerFormat->flags & AVFMT_NOFILE))
-			/* Close the output file. */
+		{
+			//Close the output file.
 			avio_closep(&containerContext->pb);
+		}
 
-		/* free the stream */
-		avformat_free_context(containerContext);
+		// free the stream
+		CleanUp();
 	}
 }

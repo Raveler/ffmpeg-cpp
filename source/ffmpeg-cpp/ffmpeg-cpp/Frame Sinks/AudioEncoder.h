@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ffmpeg.h"
+#include "std.h"
 
 #include "Frame Sinks/AudioFrameSink.h"
 #include "Codecs/Codec.h"
@@ -20,20 +21,22 @@ namespace ffmpegcpp
 
 	private:
 
+		void CleanUp();
+
 		void InitDelayed(AVFrame* frame, AVRational* timeBase);
 
-		AVFrame* ConvertToDestinationFormat(AVFrame* frame, AVRational* timeBase);
+		void ConvertToDestinationFormat(AVFrame* frame, AVRational* timeBase);
 
 		void CreateConvertedFrame(int nb_samples);
+
+		void WriteConvertedFrame(AVFrame* frame);
 
 		OpenCodec* codec;
 		AudioOutputStream* output;
 
-		AVFrame* converted_frame = NULL;
-
-		AVPacket* pkt;
-
-		struct SwrContext *swr_ctx;
+		AVFrame* converted_frame = nullptr;
+		AVPacket* pkt = nullptr;
+		struct SwrContext* swr_ctx = nullptr;
 
 		int frameNumber = 0;
 

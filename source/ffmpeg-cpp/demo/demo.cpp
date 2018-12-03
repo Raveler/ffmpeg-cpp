@@ -110,7 +110,7 @@ int main(int argc, char **argv)
 
 		// list of output streams for the muxer
 		vector<OutputStream*> streams;
-		//streams.push_back(stream);
+		streams.push_back(stream);
 		streams.push_back(audioStream);
 
 		// create the encoder that will link the source and muxer together
@@ -129,12 +129,12 @@ int main(int argc, char **argv)
 		// create the output muxer
 		Muxer* muxer = new Muxer(outFilename, streams);
 
-		/*uint8_t *rgb = NULL;
+		uint8_t *rgb = NULL;
 		for (int i = 0; i < 100; ++i)
 		{
 			rgb = generate_rgb(width, height, i, rgb);
 			source->WriteFrame(rgb, 4 * width);
-		}*/
+		}
 
 		audioSource->Start();
 
@@ -146,14 +146,13 @@ int main(int argc, char **argv)
 		delete source;
 		delete encoder;
 		delete stream;
-		delete openCodec;
 		delete codec;
 	}
-	/*catch (FFmpegException e)
+	catch (FFmpegException e)
 	{
 		cerr << e.what() << endl;
 		throw e;
-	}
+	}/*
 	catch (...)
 	{
 		cout << "OMG! an unexpected exception has been caught" << endl;
