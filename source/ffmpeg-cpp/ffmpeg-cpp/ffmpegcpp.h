@@ -8,6 +8,8 @@
 #include "Sources/Demuxer.h"
 #include "Sources/InputSource.h"
 #include "Sources/RawAudioFileSource.h"
+#include "Sources/RawVideoFileSource.h"
+#include "Sources/RawAudioDataSource.h"
 #include "Sources/RawVideoDataSource.h"
 #include "Sources/EncodedFileSource.h"
 

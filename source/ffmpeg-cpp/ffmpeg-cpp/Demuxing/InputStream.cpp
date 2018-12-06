@@ -106,10 +106,22 @@ namespace ffmpegcpp
 				throw FFmpegException("Error during decoding", ret);
 			}
 
+			// put default settings from the stream into the frame
+			if (!frame->sample_aspect_ratio.num)
+			{
+				frame->sample_aspect_ratio = stream->sample_aspect_ratio;
+			}
+
+			AVRational* time_base = &codecContext->time_base;
+			if (stream->time_base.num)
+			{
+				time_base = &stream->time_base;
+			}
+
 			// push the frame to the next stage.
 			// The time_base is filled in in the codecContext after the first frame is decoded
 			// so we can fetch it from there.
-			output->WriteFrame(frame, &codecContext->time_base);
+			output->WriteFrame(frame, time_base);
 		}
 	}
 }

@@ -33,7 +33,6 @@ namespace ffmpegcpp
 		VideoFrameSink* output;
 
 		AVFrame* frame = nullptr;
-
-		struct SwsContext* swsContext = NULL;
+		struct SwsContext* swsContext = nullptr;
 	};
 }

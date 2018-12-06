@@ -2,6 +2,7 @@
 #include <iostream>
 
 #include "GeneratedVideoSource.h"
+#include "GeneratedAudioSource.h"
 
 #include <ffmpegcpp.h>
 
@@ -31,15 +32,15 @@ int main(int argc, char **argv)
 	const char* containerWithAudioFile = "samples/DesiJourney.wav";
 
 	// hard-code the settings here, but let them be overridden by the arguments
-	string inputAudioSource = "RAW"; // options are RAW, ENCODED, CONTAINER
-	string inputVideoSource = "GENERATED"; // options are RAW, ENCODED, CONTAINER, GENERATED
-	string outputAudioCodec = "MP2"; // options are MP2, AAC, NONE
-	string outputVideoCodec = "NONE"; // options are H264, H265, VP9, NONE
+	string inputAudioSource = "ENCODED"; // options are RAW, ENCODED, CONTAINER
+	string inputVideoSource = "RAW"; // options are RAW, ENCODED, CONTAINER, GENERATED
+	string outputAudioCodec = "NONE"; // options are MP2, AAC, NONE
+	string outputVideoCodec = "H264"; // options are H264, H265, VP9, NONE
 	string outputContainerName = "out.mp4"; // container format is deduced from extension so use a known one
 
 	// you can use any filter string that you can use in the ffmpeg command-line here
 	// set the filter to NULL to disable filtering.
-	const char* videoFilterConfig = "vignette";
+	const char* videoFilterConfig = "vignette";// for example: "vignette"
 
 	// create the different components that make this come together
 	try
@@ -152,7 +153,6 @@ int main(int argc, char **argv)
 		{
 			if (inputAudioSource == "RAW")
 			{
-				// TODO RENAME TO ENCODED AND WRITE AN ACTUAL RAW FILE SOURCE
 				audioInputSource = new RawAudioFileSource(rawAudioFile, rawAudioFormat, rawAudioSampleRate, rawAudioChannels, audioEncoder);
 			}
 			else if (inputAudioSource == "ENCODED")
@@ -165,6 +165,10 @@ int main(int argc, char **argv)
 				demuxer->EncodeBestAudioStream(audioEncoder);
 				audioInputSource = demuxer;
 			}
+			else if (inputAudioSource == "GENERATED")
+			{
+				audioInputSource = new GeneratedAudioSource(audioEncoder);
+			}
 		}
 
 		// CONFIGURE VIDEO FILTER IF IT IS USED
@@ -173,7 +177,7 @@ int main(int argc, char **argv)
 		// If a video filter was specified, we inject it into the pipeline here.
 		// Instead of feeding the video source directly to the encoder, we feed it to
 		// the video filter instead, which will pass it on to the encoder.
-		VideoFilter* videoFilter;
+		VideoFilter* videoFilter = nullptr;
 		if (videoFilterConfig != NULL && videoEncoder != nullptr)
 		{
 			videoFilter = new VideoFilter(videoFilterConfig, videoEncoder);
@@ -189,8 +193,7 @@ int main(int argc, char **argv)
 		{
 			if (inputVideoSource == "RAW")
 			{
-				// TODO RENAME TO ENCODED AND WRITE AN ACTUAL RAW FILE SOURCE
-				//RawFileSource* audioSource = new RawFileSource(rawAudioFile, AV_CODEC_ID_MP3, audioEncoder);
+				videoInputSource = new RawVideoFileSource(rawVideoFile, videoFrameSink);
 			}
 			else if (inputVideoSource == "ENCODED")
 			{

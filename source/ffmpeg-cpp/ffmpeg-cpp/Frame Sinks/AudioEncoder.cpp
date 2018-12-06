@@ -19,7 +19,15 @@ namespace ffmpegcpp
 			throw FFmpegException("Failed to allocate packet");
 		}
 
-		formatConverter = new AudioFormatConverter(this, codec->GetContext());
+		try
+		{
+			formatConverter = new AudioFormatConverter(this, codec->GetContext());
+		}
+		catch (FFmpegException e)
+		{
+			CleanUp();
+			throw e;
+		}
 	}
 
 	AudioEncoder::~AudioEncoder()

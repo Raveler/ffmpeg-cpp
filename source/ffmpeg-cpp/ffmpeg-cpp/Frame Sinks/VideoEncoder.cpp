@@ -18,6 +18,16 @@ namespace ffmpegcpp
 			CleanUp();
 			throw FFmpegException("Failed to allocate packet");
 		}
+
+		try
+		{
+			formatConverter = new VideoFormatConverter(codec->GetContext());
+		}
+		catch (FFmpegException e)
+		{
+			CleanUp();
+			throw e;
+		}
 	}
 
 	VideoEncoder::~VideoEncoder()
@@ -35,6 +45,9 @@ namespace ffmpegcpp
 
 	void VideoEncoder::WriteFrame(AVFrame* frame, AVRational* timeBase)
 	{
+		// convert the frame to a converted_frame
+		frame = formatConverter->ConvertFrame(frame);
+
 		if (frame->format != codec->GetContext()->pix_fmt)
 		{
 			throw FFmpegException("Codec only accepts " + string(av_get_pix_fmt_name(codec->GetContext()->pix_fmt)) + " while frame is in format " + av_get_pix_fmt_name((AVPixelFormat)frame->format));

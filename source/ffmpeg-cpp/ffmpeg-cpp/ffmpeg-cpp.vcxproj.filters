@@ -123,6 +123,9 @@
     <ClInclude Include="Sources\RawVideoFileSource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="VideoFormatConverter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Muxer.cpp">
@@ -207,6 +210,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Sources\RawVideoFileSource.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="VideoFormatConverter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

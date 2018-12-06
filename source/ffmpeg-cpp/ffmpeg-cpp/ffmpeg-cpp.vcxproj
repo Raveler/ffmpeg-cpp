@@ -223,6 +223,7 @@
     <ClInclude Include="Demuxing\VideoInputStream.h" />
     <ClInclude Include="AudioFormatConverter.h" />
     <ClInclude Include="ConvertedAudioProcessor.h" />
+    <ClInclude Include="VideoFormatConverter.h" />
     <ClInclude Include="VideoOutputStream.h" />
   </ItemGroup>
   <ItemGroup>
@@ -253,6 +254,7 @@
     <ClCompile Include="Codecs\VP9Codec.cpp" />
     <ClCompile Include="Demuxing\VideoInputStream.cpp" />
     <ClCompile Include="AudioFormatConverter.cpp" />
+    <ClCompile Include="VideoFormatConverter.cpp" />
     <ClCompile Include="VideoOutputStream.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

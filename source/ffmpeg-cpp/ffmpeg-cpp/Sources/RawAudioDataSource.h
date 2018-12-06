@@ -2,7 +2,7 @@
 
 #include "ffmpeg.h"
 #include "OutputStream.h"
-#include "Frame Sinks/VideoFrameSink.h"
+#include "Frame Sinks/AudioFrameSink.h"
 
 namespace ffmpegcpp
 {
@@ -13,17 +13,20 @@ namespace ffmpegcpp
 
 	public:
 
-		RawAudioDataSource(AVSampleFormat sampleFormat, int sampleRate, VideoFrameSink* output);
+		RawAudioDataSource(AVSampleFormat sampleFormat, int sampleRate, int channels, AudioFrameSink* output);
+		RawAudioDataSource(AVSampleFormat sampleFormat, int sampleRate, int channels, int64_t channelLayout, AudioFrameSink* output);
 		~RawAudioDataSource();
 
 		void WriteData(void* data, int sampleCount);
+		void Close();
 
 	private:
 
 		void CleanUp();
 
-		VideoFrameSink* output;
+		AudioFrameSink* output;
 
+		AVAudioFifo* fifo = nullptr;
 		AVFrame* frame = nullptr;
 	};
 }

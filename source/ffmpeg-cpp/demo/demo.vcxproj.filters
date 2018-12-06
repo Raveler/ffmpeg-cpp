@@ -21,9 +21,15 @@
     <ClCompile Include="GeneratedVideoSource.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="GeneratedAudioSource.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GeneratedVideoSource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneratedAudioSource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

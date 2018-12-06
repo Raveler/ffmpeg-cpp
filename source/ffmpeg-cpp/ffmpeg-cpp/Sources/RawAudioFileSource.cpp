@@ -23,8 +23,16 @@ namespace ffmpegcpp
 		av_dict_set_int(&format_opts, "channels", channels, 0);
 
 		// create the demuxer
-		demuxer = new Demuxer(fileName, file_iformat, format_opts);
-		demuxer->EncodeBestAudioStream(frameSink);
+		try
+		{
+			demuxer = new Demuxer(fileName, file_iformat, format_opts);
+			demuxer->EncodeBestAudioStream(frameSink);
+		}
+		catch (FFmpegException e)
+		{
+			CleanUp();
+			throw e;
+		}
 	}
 
 

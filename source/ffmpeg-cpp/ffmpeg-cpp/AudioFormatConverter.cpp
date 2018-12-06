@@ -8,11 +8,6 @@ namespace ffmpegcpp
 		this->output = writer;
 		this->codecContext = codecContext;
 
-		if (converted_frame != nullptr)
-		{
-			av_frame_free(&converted_frame);
-		}
-
 		converted_frame = av_frame_alloc();
 		int ret;
 		if (!converted_frame)
@@ -60,6 +55,7 @@ namespace ffmpegcpp
 		fifo = av_audio_fifo_alloc(codecContext->sample_fmt, codecContext->channels, nb_samples);
 		if (!fifo)
 		{
+			CleanUp();
 			throw FFmpegException("Failed to create FIFO queue for audio format converter");
 		}
 	}
@@ -162,65 +158,6 @@ namespace ffmpegcpp
 			 // encode it and write it to the output file. 
 			PullConvertedFrameFromFifo();
 		}
-
-
-
-		return;
-
-
-
-
-
-
-
-		ret = swr_convert_frame(swr_ctx, NULL, frame);
-		if (ret < 0)
-		{
-			throw FFmpegException("Error while converting audio frame to destination format", ret);
-		}
-
-		// we don't need the old frame anymore
-		//av_frame_unref(frame);
-
-		// Because the frames might not be aligned, we wait until there are enough samples,
-		// to fill a frame of the right size for the encoder. Because of differences in framerate,
-		// multiple converted_frames might come out of one input frame, or multiple input frames
-		// might fit into one converted_frame.
-
-		int64_t delay = swr_get_delay(swr_ctx, in_sample_rate);
-		int64_t dst_nb_samples = av_rescale_rnd(delay,
-			out_sample_rate, in_sample_rate, AV_ROUND_DOWN);
-
-		while (dst_nb_samples > converted_frame->nb_samples)
-		{
-			// when we pass a frame to the encoder, it may keep a reference to it
-			// internally;
-			// make sure we do not overwrite it here
-			ret = av_frame_make_writable(converted_frame);
-			if (ret < 0)
-			{
-				throw FFmpegException("Failed to make audio frame writable", ret);
-			}
-
-			int original_nb_samples = converted_frame->nb_samples;
-			ret = swr_convert_frame(swr_ctx, converted_frame, NULL);
-			if (original_nb_samples != converted_frame->nb_samples)
-			{
-				int x = 5;
-				return;
-			}
-			if (ret < 0)
-			{
-				throw FFmpegException("Error while converting audio frame to destination format", ret);
-			}
-
-			WriteCompleteConvertedFrame();
-
-			delay = swr_get_delay(swr_ctx, in_sample_rate);
-			dst_nb_samples = av_rescale_rnd(delay,
-				out_sample_rate, in_sample_rate, AV_ROUND_DOWN);
-		}
-		return;
 	}
 
 	void AudioFormatConverter::AddToFifo(AVFrame* frame)

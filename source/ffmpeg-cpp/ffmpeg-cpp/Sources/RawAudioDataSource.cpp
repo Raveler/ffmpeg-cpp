@@ -4,7 +4,12 @@
 namespace ffmpegcpp
 {
 
-	RawAudioDataSource::RawAudioDataSource(AVSampleFormat sampleFormat, int sampleRate, VideoFrameSink* output)
+	RawAudioDataSource::RawAudioDataSource(AVSampleFormat sampleFormat, int sampleRate, int channels, AudioFrameSink* output)
+		: RawAudioDataSource(sampleFormat, sampleRate, channels, av_get_default_channel_layout(channels), output)
+	{
+	}
+
+	RawAudioDataSource::RawAudioDataSource(AVSampleFormat sampleFormat, int sampleRate, int channels, int64_t channelLayout, AudioFrameSink* output)
 	{
 		this->output = output;
 
@@ -17,20 +22,29 @@ namespace ffmpegcpp
 			CleanUp();
 			throw FFmpegException("Could not allocate video frame");
 		}
-		/*
+
 		frame->format = sampleFormat;
 		frame->sample_rate = sampleRate;
-		frame->channels = ;
-		frame->channel_layout;
-		frame->nb_samples = 1024; // just some amount
-		*/
-		/* allocate the buffers for the frame data */
+		frame->channels = channels;
+		frame->channel_layout = channelLayout;
+		frame->nb_samples = 1024;
+
+		// allocate the buffers for the frame data
 		ret = av_frame_get_buffer(frame, 0);
 		if (ret < 0)
 		{
 			CleanUp();
 			throw FFmpegException("Could not allocate the video frame data", ret);
 		}
+
+		// allocate the fifo
+		fifo = av_audio_fifo_alloc(sampleFormat, channels, frame->nb_samples);
+		if (!fifo)
+		{
+			CleanUp();
+			throw FFmpegException("Failed to create FIFO queue for audio format converter");
+		}
+
 	}
 
 
@@ -50,25 +64,34 @@ namespace ffmpegcpp
 
 	void RawAudioDataSource::WriteData(void* data, int sampleCount)
 	{
-		// make sure the frame data is writable
-		/*int ret = av_frame_make_writable(frame);
-		if (ret < 0)
+		// make sure the FIFO queue can hold our data
+		/*int ret;
+		if ((ret = av_audio_fifo_realloc(fifo, av_audio_fifo_size(fifo) + frame->nb_samples)) < 0)
 		{
-			throw FFmpegException("Error making frame writable", ret);
+			throw FFmpegException("Could not reallocate FIFO", ret);
 		}
 
-		const int in_linesize[1] = { bytesPerRow };
+		// write to the FIFO queue and keep it there until we have a full frame
+		if (av_audio_fifo_write(fifo, (void **)frame->extended_data, frame->nb_samples) < frame->nb_samples)
+		{
+			throw FFmpegException("Could not write data to FIFO");
+		}*/
 
-		// if the source and target pixel format are the same, we don't do any conversions, we just copy
-		// but we use sws_scale anyway because we need to convert to the internal line_size format of frame
-		swsContext = sws_getCachedContext(swsContext,
-			frame->width, frame->height, sourcePixelFormat,
-			frame->width, frame->height, (AVPixelFormat)frame->format,
-			0, 0, 0, 0);
-		sws_scale(swsContext, (const uint8_t * const *)&data, in_linesize, 0,
-			frame->height, frame->data, frame->linesize);
+		// resize the frame to the input
+		frame->nb_samples = sampleCount;
 
-		// send to the output
-		output->WriteFrame(frame, &this->timeBase);*/
+		int ret = av_frame_make_writable(frame);
+		if (ret < 0)
+		{
+			throw FFmpegException("Failed to make audio frame writable", ret);
+		}
+
+		// copy the data to the frame buffer
+		int bytesPerSample = av_get_bytes_per_sample((AVSampleFormat)frame->format);
+		memcpy(*frame->data, data, frame->nb_samples * frame->channels * bytesPerSample);
+
+		// pass on to the sink
+		// we don't have a time_base so we pass NULL and hope that it gets handled later...
+		output->WriteFrame(frame, NULL);
 	}
 }

@@ -5,6 +5,7 @@
 #include "Frame Sinks/VideoFrameSink.h"
 #include "Codecs/Codec.h"
 #include "OutputStream.h"
+#include "VideoFormatConverter.h"
 
 namespace ffmpegcpp
 {
@@ -19,6 +20,8 @@ namespace ffmpegcpp
 		virtual AVPixelFormat GetRequiredPixelFormat();
 
 	private:
+
+		VideoFormatConverter* formatConverter;
 
 		OpenCodec* codec;
 		OutputStream* output;

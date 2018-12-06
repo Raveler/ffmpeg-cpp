@@ -154,6 +154,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="demo.cpp" />
+    <ClCompile Include="GeneratedAudioSource.cpp" />
     <ClCompile Include="GeneratedVideoSource.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -162,6 +163,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="GeneratedAudioSource.h" />
     <ClInclude Include="GeneratedVideoSource.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

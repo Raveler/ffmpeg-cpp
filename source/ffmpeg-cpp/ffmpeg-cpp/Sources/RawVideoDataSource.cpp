@@ -59,6 +59,11 @@ namespace ffmpegcpp
 			av_frame_free(&frame);
 			frame = nullptr;
 		}
+		if (swsContext != nullptr)
+		{
+			sws_freeContext(swsContext);
+			swsContext = nullptr;
+		}
 	}
 
 	void RawVideoDataSource::WriteFrame(void* data, int bytesPerRow)
