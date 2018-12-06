@@ -32,7 +32,7 @@ namespace ffmpegcpp
 	void AudioCodec::InitContextWithDefaults()
 	{
 		AVSampleFormat format = (codecContext->codec->sample_fmts ? codecContext->codec->sample_fmts[0] : AV_SAMPLE_FMT_FLTP);
-		int bitRate = 64000;
+		int bitRate = 0;
 		InitContext(bitRate, format);
 	}
 

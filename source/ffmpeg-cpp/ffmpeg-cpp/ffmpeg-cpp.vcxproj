@@ -217,6 +217,8 @@
     <ClInclude Include="Codecs\VP9Codec.h" />
     <ClInclude Include="Frame Sinks\VideoFrameSink.h" />
     <ClInclude Include="Sources\VideoInputStream.h" />
+    <ClInclude Include="AudioFormatConverter.h" />
+    <ClInclude Include="ConvertedAudioProcessor.h" />
     <ClInclude Include="VideoOutputStream.h" />
   </ItemGroup>
   <ItemGroup>
@@ -243,6 +245,7 @@
     <ClCompile Include="Codecs\VideoCodec.cpp" />
     <ClCompile Include="Codecs\VP9Codec.cpp" />
     <ClCompile Include="Sources\VideoInputStream.cpp" />
+    <ClCompile Include="AudioFormatConverter.cpp" />
     <ClCompile Include="VideoOutputStream.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
