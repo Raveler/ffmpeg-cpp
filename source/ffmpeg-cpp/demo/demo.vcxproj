@@ -154,11 +154,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="demo.cpp" />
+    <ClCompile Include="GeneratedVideoSource.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ffmpeg-cpp\ffmpeg-cpp.vcxproj">
       <Project>{babfd64d-9bf1-4328-b977-24bf81800620}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="GeneratedVideoSource.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

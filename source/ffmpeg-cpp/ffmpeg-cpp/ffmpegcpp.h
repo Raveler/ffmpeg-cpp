@@ -1,20 +1,19 @@
 
 #include "Muxer.h"
-#include "Demuxer.h"
 
 #include "VideoOutputStream.h"
 #include "AudioOutputStream.h"
 #include "OutputStream.h"
 
-#include "Sources/RawFileSource.h"
-#include "Sources/RawVideoSource.h"
-#include "Sources/AudioInputStream.h"
-#include "Sources/VideoInputStream.h"
+#include "Sources/Demuxer.h"
+#include "Sources/InputSource.h"
+#include "Sources/RawAudioFileSource.h"
+#include "Sources/RawVideoDataSource.h"
+#include "Sources/EncodedFileSource.h"
 
 #include "Frame Sinks/VideoEncoder.h"
 #include "Frame Sinks/AudioEncoder.h"
 #include "Frame Sinks/VideoFilter.h"
-#include "Frame Sinks/FrameSink.h"
 
 #include "Codecs/AudioCodec.h"
 

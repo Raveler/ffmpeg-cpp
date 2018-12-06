@@ -48,12 +48,6 @@
     <ClInclude Include="Codecs\VP9Codec.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Sources\RawFileSource.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Sources\RawVideoSource.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Frame Sinks\FrameSink.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -93,22 +87,40 @@
     <ClInclude Include="VideoOutputStream.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Demuxer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Sources\AudioInputStream.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Sources\VideoInputStream.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Sources\InputStream.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="AudioFormatConverter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ConvertedAudioProcessor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\InputSource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\EncodedFileSource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\RawVideoDataSource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Demuxing\InputStream.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Demuxing\AudioInputStream.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Demuxing\VideoInputStream.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\Demuxer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\RawAudioDataSource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\RawAudioFileSource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\RawVideoFileSource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -135,12 +147,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Codecs\VP9Codec.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Sources\RawFileSource.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Sources\RawVideoSource.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Codecs\VideoCodec.cpp">
@@ -173,19 +179,34 @@
     <ClCompile Include="VideoOutputStream.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Demuxer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Sources\AudioInputStream.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Sources\VideoInputStream.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Sources\InputStream.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="AudioFormatConverter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\EncodedFileSource.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\RawVideoDataSource.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Demuxing\InputStream.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Demuxing\AudioInputStream.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Demuxing\VideoInputStream.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\Demuxer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\RawAudioDataSource.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\RawAudioFileSource.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\RawVideoFileSource.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

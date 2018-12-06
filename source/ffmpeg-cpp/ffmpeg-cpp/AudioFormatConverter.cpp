@@ -101,6 +101,16 @@ namespace ffmpegcpp
 
 		int ret;
 
+		if (frame->pts == 6174)
+		{
+			int x = 3;
+		}
+
+
+		int64_t or_delay = swr_get_delay(swr_ctx, in_sample_rate);
+		int64_t or_dst_nb_samples = av_rescale_rnd(or_delay,
+			out_sample_rate, in_sample_rate, AV_ROUND_DOWN);
+
 		ret = swr_convert_frame(swr_ctx, NULL, frame);
 		if (ret < 0)
 		{
@@ -108,11 +118,16 @@ namespace ffmpegcpp
 		}
 
 		// we don't need the old frame anymore
-		av_frame_unref(frame);
+		//av_frame_unref(frame);
+
+		// Because the frames might not be aligned, we wait until there are enough samples,
+		// to fill a frame of the right size for the encoder. Because of differences in framerate,
+		// multiple converted_frames might come out of one input frame, or multiple input frames
+		// might fit into one converted_frame.
 
 		int64_t delay = swr_get_delay(swr_ctx, in_sample_rate);
 		int64_t dst_nb_samples = av_rescale_rnd(delay,
-			out_sample_rate, in_sample_rate, AV_ROUND_UP);
+			out_sample_rate, in_sample_rate, AV_ROUND_DOWN);
 
 		while (dst_nb_samples > converted_frame->nb_samples)
 		{
@@ -125,7 +140,13 @@ namespace ffmpegcpp
 				throw FFmpegException("Failed to make audio frame writable", ret);
 			}
 
+			int original_nb_samples = converted_frame->nb_samples;
 			ret = swr_convert_frame(swr_ctx, converted_frame, NULL);
+			if (original_nb_samples != converted_frame->nb_samples)
+			{
+				int x = 5;
+				return;
+			}
 			if (ret < 0)
 			{
 				throw FFmpegException("Error while converting audio frame to destination format", ret);
@@ -135,65 +156,9 @@ namespace ffmpegcpp
 
 			delay = swr_get_delay(swr_ctx, in_sample_rate);
 			dst_nb_samples = av_rescale_rnd(delay,
-				out_sample_rate, in_sample_rate, AV_ROUND_UP);
+				out_sample_rate, in_sample_rate, AV_ROUND_DOWN);
 		}
 		return;
-
-		// Because the frames might not be aligned, we fill the current frame until it is full,
-		// and then submit it. This means that multiple frames might fit into one converted_frame,
-		// or that multiple converted_frames might come out of one frame.
-		// Either way, only one call to swr_convert is necessary with frame, because internally
-		// the samples that do not fit in the converted_frame buffer are buffered.
-		// See: https://ffmpeg.org/doxygen/3.2/group__lswr.html
-		int remainingSamples = converted_frame->nb_samples - samplesInCurrentFrame;
-
-		// convert to destination format
-		ret = swr_convert(swr_ctx,
-			converted_frame->data + samplesInCurrentFrame, remainingSamples,
-			(const uint8_t **)frame->data, frame->nb_samples);
-		if (ret < 0)
-		{
-			throw FFmpegException("Error hile converting audio frame to destination format", ret);
-		}
-		int samplesWritten = ret;
-		samplesInCurrentFrame += samplesWritten;
-
-		// we don't need the old frame anymore
-		av_frame_unref(frame);
-
-		// if there are less samples written than there is room, this means the converted_frame is not full yet,
-		// and we stop for now.
-		if (samplesWritten < remainingSamples)
-		{
-			return;
-		}
-
-		// if we filled the converted_frame to the brim, we submit it and see if there are any other converted_frames
-		// waiting out there.
-		else
-		{
-			WriteCompleteConvertedFrame();
-
-			// now keep pumping data into new converted_frames until we are done
-			while (samplesWritten > 0)
-			{
-				int remainingSamples = converted_frame->nb_samples - samplesInCurrentFrame;
-				ret = swr_convert(swr_ctx,
-					converted_frame->data + samplesInCurrentFrame, remainingSamples,
-					NULL, 0);
-				if (ret < 0)
-				{
-					throw FFmpegException("Error hile converting audio frame to destination format", ret);
-				}
-				samplesWritten = ret;
-				samplesInCurrentFrame += samplesWritten;
-
-				if (samplesWritten >= remainingSamples)
-				{
-					WriteCompleteConvertedFrame();
-				}
-			}
-		}
 	}
 
 	void AudioFormatConverter::WriteCompleteConvertedFrame()

@@ -188,9 +188,13 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Sources\InputStream.h" />
-    <ClInclude Include="Sources\AudioInputStream.h" />
-    <ClInclude Include="Demuxer.h" />
+    <ClInclude Include="Sources\RawVideoFileSource.h" />
+    <ClInclude Include="Sources\RawAudioFileSource.h" />
+    <ClInclude Include="Sources\RawAudioDataSource.h" />
+    <ClInclude Include="Sources\InputSource.h" />
+    <ClInclude Include="Demuxing\InputStream.h" />
+    <ClInclude Include="Demuxing\AudioInputStream.h" />
+    <ClInclude Include="Sources\Demuxer.h" />
     <ClInclude Include="Frame Sinks\AudioFrameSink.h" />
     <ClInclude Include="Frame Sinks\AudioEncoder.h" />
     <ClInclude Include="AudioOutputStream.h" />
@@ -200,8 +204,8 @@
     <ClInclude Include="Codecs\JPGCodec.h" />
     <ClInclude Include="OpenCodec.h" />
     <ClInclude Include="Codecs\PNGCodec.h" />
-    <ClInclude Include="Sources\RawVideoSource.h" />
-    <ClInclude Include="Sources\RawFileSource.h" />
+    <ClInclude Include="Sources\RawVideoDataSource.h" />
+    <ClInclude Include="Sources\EncodedFileSource.h" />
     <ClInclude Include="Codecs\Codec.h" />
     <ClInclude Include="CodecDeducer.h" />
     <ClInclude Include="Frame Sinks\VideoEncoder.h" />
@@ -216,15 +220,18 @@
     <ClInclude Include="Codecs\VideoCodec.h" />
     <ClInclude Include="Codecs\VP9Codec.h" />
     <ClInclude Include="Frame Sinks\VideoFrameSink.h" />
-    <ClInclude Include="Sources\VideoInputStream.h" />
+    <ClInclude Include="Demuxing\VideoInputStream.h" />
     <ClInclude Include="AudioFormatConverter.h" />
     <ClInclude Include="ConvertedAudioProcessor.h" />
     <ClInclude Include="VideoOutputStream.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Sources\InputStream.cpp" />
-    <ClCompile Include="Sources\AudioInputStream.cpp" />
-    <ClCompile Include="Demuxer.cpp" />
+    <ClCompile Include="Demuxing\InputStream.cpp" />
+    <ClCompile Include="Demuxing\AudioInputStream.cpp" />
+    <ClCompile Include="Sources\RawVideoFileSource.cpp" />
+    <ClCompile Include="Sources\RawAudioFileSource.cpp" />
+    <ClCompile Include="Sources\RawAudioDataSource.cpp" />
+    <ClCompile Include="Sources\Demuxer.cpp" />
     <ClCompile Include="Frame Sinks\AudioEncoder.cpp" />
     <ClCompile Include="AudioOutputStream.cpp" />
     <ClCompile Include="Codecs\AudioCodec.cpp" />
@@ -232,8 +239,8 @@
     <ClCompile Include="Codecs\JPGCodec.cpp" />
     <ClCompile Include="OpenCodec.cpp" />
     <ClCompile Include="Codecs\PNGCodec.cpp" />
-    <ClCompile Include="Sources\RawVideoSource.cpp" />
-    <ClCompile Include="Sources\RawFileSource.cpp" />
+    <ClCompile Include="Sources\RawVideoDataSource.cpp" />
+    <ClCompile Include="Sources\EncodedFileSource.cpp" />
     <ClCompile Include="Codecs\Codec.cpp" />
     <ClCompile Include="CodecDeducer.cpp" />
     <ClCompile Include="Frame Sinks\VideoEncoder.cpp" />
@@ -244,7 +251,7 @@
     <ClCompile Include="OutputStream.cpp" />
     <ClCompile Include="Codecs\VideoCodec.cpp" />
     <ClCompile Include="Codecs\VP9Codec.cpp" />
-    <ClCompile Include="Sources\VideoInputStream.cpp" />
+    <ClCompile Include="Demuxing\VideoInputStream.cpp" />
     <ClCompile Include="AudioFormatConverter.cpp" />
     <ClCompile Include="VideoOutputStream.cpp" />
   </ItemGroup>
