@@ -6,7 +6,7 @@ using namespace std;
 
 namespace ffmpegcpp
 {
-	RawAudioFileSource::RawAudioFileSource(const char* fileName, const char* inputFormat, int sampleRate, AudioFrameSink* frameSink)
+	RawAudioFileSource::RawAudioFileSource(const char* fileName, const char* inputFormat, int sampleRate, int channels, AudioFrameSink* frameSink)
 	{
 
 		// try to deduce the input format from the input format name
@@ -20,6 +20,7 @@ namespace ffmpegcpp
 		AVDictionary* format_opts = NULL;
 
 		av_dict_set_int(&format_opts, "sample_rate", sampleRate, 0);
+		av_dict_set_int(&format_opts, "channels", channels, 0);
 
 		// create the demuxer
 		demuxer = new Demuxer(fileName, file_iformat, format_opts);

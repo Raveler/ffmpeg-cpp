@@ -22,6 +22,9 @@ namespace ffmpegcpp
 
 		void InitDelayed(AVFrame* frame);
 
+		void AddToFifo(AVFrame* frame);
+		void PullConvertedFrameFromFifo();
+
 		void WriteCompleteConvertedFrame();
 
 		ConvertedAudioProcessor* output;
@@ -30,6 +33,8 @@ namespace ffmpegcpp
 		
 		bool initialized = false;
 
+		AVAudioFifo* fifo = nullptr;
+		AVFrame* tmp_frame = nullptr;
 		AVFrame* converted_frame = nullptr;
 		struct SwrContext* swr_ctx = nullptr;
 

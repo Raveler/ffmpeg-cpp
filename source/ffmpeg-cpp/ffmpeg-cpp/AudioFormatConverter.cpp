@@ -42,6 +42,26 @@ namespace ffmpegcpp
 				throw FFmpegException("Error allocating an audio buffer", ret);
 			}
 		}
+
+		// create the temporary frame that will hold parts of the converted data
+		// this data will later be assembled in a complete converted_frame.
+		tmp_frame = av_frame_alloc();
+		if (!tmp_frame)
+		{
+			CleanUp();
+			throw FFmpegException("Error allocating an audio frame");
+		}
+		tmp_frame->format = codecContext->sample_fmt;
+		tmp_frame->channel_layout = codecContext->channel_layout;
+		tmp_frame->sample_rate = codecContext->sample_rate;
+		tmp_frame->nb_samples = 0;
+
+		// Create the FIFO buffer based on the specified output sample format
+		fifo = av_audio_fifo_alloc(codecContext->sample_fmt, codecContext->channels, nb_samples);
+		if (!fifo)
+		{
+			throw FFmpegException("Failed to create FIFO queue for audio format converter");
+		}
 	}
 
 	AudioFormatConverter::~AudioFormatConverter()
@@ -55,6 +75,11 @@ namespace ffmpegcpp
 		{
 			av_frame_free(&converted_frame);
 			converted_frame = nullptr;
+		}
+		if (tmp_frame != nullptr)
+		{
+			av_frame_free(&tmp_frame);
+			tmp_frame = nullptr;
 		}
 		if (swr_ctx != nullptr)
 		{
@@ -106,10 +131,47 @@ namespace ffmpegcpp
 			int x = 3;
 		}
 
+		ret = swr_convert_frame(swr_ctx, tmp_frame, frame);
+		if (ret < 0)
+		{
+			throw FFmpegException("Error while converting audio frame to destination format", ret);
+		}
 
-		int64_t or_delay = swr_get_delay(swr_ctx, in_sample_rate);
-		int64_t or_dst_nb_samples = av_rescale_rnd(or_delay,
-			out_sample_rate, in_sample_rate, AV_ROUND_DOWN);
+		while (tmp_frame->nb_samples > 0)
+		{
+			AddToFifo(tmp_frame);
+			ret = swr_convert_frame(swr_ctx, tmp_frame, NULL);
+			if (ret < 0)
+			{
+				throw FFmpegException("Error while converting audio frame to destination format", ret);
+			}
+		}
+
+		/* If we have enough samples for the encoder, we encode them.
+		* At the end of the file, we pass the remaining samples to
+		* the encoder. */
+		bool finished = (frame == NULL);
+		if (finished)
+		{
+			int x = 5;
+		}
+		while (av_audio_fifo_size(fifo) >= converted_frame->nb_samples ||
+			(finished && av_audio_fifo_size(fifo) > 0))
+		{
+			// Take one frame worth of audio samples from the FIFO buffer,
+			 // encode it and write it to the output file. 
+			PullConvertedFrameFromFifo();
+		}
+
+
+
+		return;
+
+
+
+
+
+
 
 		ret = swr_convert_frame(swr_ctx, NULL, frame);
 		if (ret < 0)
@@ -159,6 +221,42 @@ namespace ffmpegcpp
 				out_sample_rate, in_sample_rate, AV_ROUND_DOWN);
 		}
 		return;
+	}
+
+	void AudioFormatConverter::AddToFifo(AVFrame* frame)
+	{
+		// Make the FIFO as large as it needs to be to hold both, the old and the new samples.
+		int ret;
+		if ((ret = av_audio_fifo_realloc(fifo, av_audio_fifo_size(fifo) + frame->nb_samples)) < 0)
+		{
+			throw FFmpegException("Could not reallocate FIFO", ret);
+		}
+
+		/* Store the new samples in the FIFO buffer. */
+		if (av_audio_fifo_write(fifo, (void **)frame->extended_data, frame->nb_samples) < frame->nb_samples)
+		{
+			throw FFmpegException("Could not write data to FIFO");
+		}
+	}
+
+	void AudioFormatConverter::PullConvertedFrameFromFifo()
+	{
+		/* Use the maximum number of possible samples per frame.
+		 * If there is less than the maximum possible frame size in the FIFO
+		 * buffer use this number. Otherwise, use the maximum possible frame size. */
+		const int frame_size = FFMIN(av_audio_fifo_size(fifo), converted_frame->nb_samples);
+		int data_written;
+
+		/* Read as many samples from the FIFO buffer as required to fill the frame.
+		 * The samples are stored in the frame temporarily. */
+		int ret;
+		if ((ret = av_audio_fifo_read(fifo, (void **)converted_frame->data, frame_size)) < frame_size)
+		{
+			throw FFmpegException("Could not read data from FIFO", ret);
+		}
+
+		// send the frame to the encoder
+		WriteCompleteConvertedFrame();
 	}
 
 	void AudioFormatConverter::WriteCompleteConvertedFrame()

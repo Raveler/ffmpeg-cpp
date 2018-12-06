@@ -20,7 +20,7 @@ int main(int argc, char **argv)
 	const char* rawVideoFile = "samples/carphone_qcif.y4m";
 	int rawVideoWidth = 176; int rawVideoHeight = 162;
 	const char* rawAudioFile = "samples/Vivaldi_s16le_2_channels_samplerate_11025.dat";
-	const char* rawAudioFormat = "s16le"; int rawAudioSampleRate = 11025;
+	const char* rawAudioFormat = "s16le"; int rawAudioSampleRate = 11025; int rawAudioChannels = 2;
 
 	const char* encodedVideoFile = "samples/carphone.h264";
 	int encodedVideoWidth = 176; int encodedVideoHeight = 162;
@@ -34,7 +34,7 @@ int main(int argc, char **argv)
 	string inputAudioSource = "RAW"; // options are RAW, ENCODED, CONTAINER
 	string inputVideoSource = "GENERATED"; // options are RAW, ENCODED, CONTAINER, GENERATED
 	string outputAudioCodec = "MP2"; // options are MP2, AAC, NONE
-	string outputVideoCodec = "H264"; // options are H264, H265, VP9, NONE
+	string outputVideoCodec = "NONE"; // options are H264, H265, VP9, NONE
 	string outputContainerName = "out.mp4"; // container format is deduced from extension so use a known one
 
 	// you can use any filter string that you can use in the ffmpeg command-line here
@@ -153,7 +153,7 @@ int main(int argc, char **argv)
 			if (inputAudioSource == "RAW")
 			{
 				// TODO RENAME TO ENCODED AND WRITE AN ACTUAL RAW FILE SOURCE
-				audioInputSource = new RawAudioFileSource(rawAudioFile, rawAudioFormat, rawAudioSampleRate, audioEncoder);
+				audioInputSource = new RawAudioFileSource(rawAudioFile, rawAudioFormat, rawAudioSampleRate, rawAudioChannels, audioEncoder);
 			}
 			else if (inputAudioSource == "ENCODED")
 			{
