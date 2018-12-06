@@ -1,5 +1,6 @@
 
 #include "Muxer.h"
+#include "Demuxer.h"
 
 #include "VideoOutputStream.h"
 #include "AudioOutputStream.h"
@@ -7,6 +8,8 @@
 
 #include "Sources/RawFileSource.h"
 #include "Sources/RawVideoSource.h"
+#include "Sources/AudioInputStream.h"
+#include "Sources/VideoInputStream.h"
 
 #include "Frame Sinks/VideoEncoder.h"
 #include "Frame Sinks/AudioEncoder.h"

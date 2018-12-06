@@ -142,8 +142,7 @@ namespace ffmpegcpp
 
 	void RawFileSource::Decode(AVPacket *pkt, AVFrame *frame)
 	{
-		int i, ch;
-		int ret/*, data_size*/;
+		int ret;
 
 		/* send the packet with the compressed data to the decoder */
 		ret = avcodec_send_packet(codecContext, pkt);

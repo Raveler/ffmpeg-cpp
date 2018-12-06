@@ -188,6 +188,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Sources\InputStream.h" />
+    <ClInclude Include="Sources\AudioInputStream.h" />
+    <ClInclude Include="Demuxer.h" />
     <ClInclude Include="Frame Sinks\AudioFrameSink.h" />
     <ClInclude Include="Frame Sinks\AudioEncoder.h" />
     <ClInclude Include="AudioOutputStream.h" />
@@ -213,9 +216,13 @@
     <ClInclude Include="Codecs\VideoCodec.h" />
     <ClInclude Include="Codecs\VP9Codec.h" />
     <ClInclude Include="Frame Sinks\VideoFrameSink.h" />
+    <ClInclude Include="Sources\VideoInputStream.h" />
     <ClInclude Include="VideoOutputStream.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Sources\InputStream.cpp" />
+    <ClCompile Include="Sources\AudioInputStream.cpp" />
+    <ClCompile Include="Demuxer.cpp" />
     <ClCompile Include="Frame Sinks\AudioEncoder.cpp" />
     <ClCompile Include="AudioOutputStream.cpp" />
     <ClCompile Include="Codecs\AudioCodec.cpp" />
@@ -235,6 +242,7 @@
     <ClCompile Include="OutputStream.cpp" />
     <ClCompile Include="Codecs\VideoCodec.cpp" />
     <ClCompile Include="Codecs\VP9Codec.cpp" />
+    <ClCompile Include="Sources\VideoInputStream.cpp" />
     <ClCompile Include="VideoOutputStream.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

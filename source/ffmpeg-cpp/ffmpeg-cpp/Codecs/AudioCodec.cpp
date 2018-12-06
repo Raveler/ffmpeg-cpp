@@ -70,7 +70,7 @@ namespace ffmpegcpp
 	}
 
 	/* select layout with the highest channel count */
-	static int select_channel_layout(const AVCodec *codec)
+	static uint64_t select_channel_layout(const AVCodec *codec)
 	{
 		const uint64_t *p;
 		uint64_t best_ch_layout = 0;

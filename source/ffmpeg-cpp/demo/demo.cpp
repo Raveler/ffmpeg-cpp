@@ -99,7 +99,9 @@ int main(int argc, char **argv)
 		AudioEncoder* audioEncoder = new AudioEncoder(audioStream);
 
 		// create an audio source
-		RawFileSource* audioSource = new RawFileSource(inAudioFilename, AV_CODEC_ID_MP3, audioEncoder);
+		//RawFileSource* audioSource = new RawFileSource(inAudioFilename, AV_CODEC_ID_MP3, audioEncoder);
+		Demuxer* demuxer = new Demuxer(inAudioFilename);
+		AudioInputStream* audioSource = demuxer->GetBestAudioStream(audioEncoder);
 
 		H264NVEncCodec* codec = new H264NVEncCodec(width, height, 30, AV_PIX_FMT_YUV420P);
 		codec->SetPreset("hq");
@@ -110,7 +112,7 @@ int main(int argc, char **argv)
 
 		// list of output streams for the muxer
 		vector<OutputStream*> streams;
-		streams.push_back(stream);
+		//streams.push_back(stream);
 		streams.push_back(audioStream);
 
 		// create the encoder that will link the source and muxer together
@@ -129,14 +131,16 @@ int main(int argc, char **argv)
 		// create the output muxer
 		Muxer* muxer = new Muxer(outFilename, streams);
 
-		uint8_t *rgb = NULL;
+		/*uint8_t *rgb = NULL;
 		for (int i = 0; i < 100; ++i)
 		{
 			rgb = generate_rgb(width, height, i, rgb);
 			source->WriteFrame(rgb, 4 * width);
-		}
+		}*/
 
-		audioSource->Start();
+		//audioSource->Start();
+		demuxer->Start();
+
 
 		muxer->Close();
 

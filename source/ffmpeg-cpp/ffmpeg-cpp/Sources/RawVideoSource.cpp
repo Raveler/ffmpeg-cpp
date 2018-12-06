@@ -4,18 +4,18 @@
 namespace ffmpegcpp
 {
 
-	RawVideoSource::RawVideoSource(int width, int height, AVPixelFormat pixelFormat, int framesPerSecond, FrameSink* output)
+	RawVideoSource::RawVideoSource(int width, int height, AVPixelFormat pixelFormat, int framesPerSecond, VideoFrameSink* output)
 		: RawVideoSource(width, height, pixelFormat, pixelFormat, framesPerSecond, output)
 	{
 
 	}
 
-	RawVideoSource::RawVideoSource(int width, int height, AVPixelFormat sourcePixelFormat, AVPixelFormat targetPixelFormat, int framesPerSecond, FrameSink* output)
+	RawVideoSource::RawVideoSource(int width, int height, AVPixelFormat sourcePixelFormat, AVPixelFormat targetPixelFormat, int framesPerSecond, VideoFrameSink* output)
 	{
 		Init(width, height, sourcePixelFormat, targetPixelFormat, framesPerSecond, output);
 	}
 
-	void RawVideoSource::Init(int width, int height, AVPixelFormat sourcePixelFormat, AVPixelFormat targetPixelFormat, int framesPerSecond, FrameSink* output)
+	void RawVideoSource::Init(int width, int height, AVPixelFormat sourcePixelFormat, AVPixelFormat targetPixelFormat, int framesPerSecond, VideoFrameSink* output)
 	{
 		this->output = output;
 		this->sourcePixelFormat = sourcePixelFormat;
@@ -30,6 +30,7 @@ namespace ffmpegcpp
 		frame = av_frame_alloc();
 		if (!frame)
 		{
+			CleanUp();
 			throw FFmpegException("Could not allocate video frame");
 		}
 
@@ -41,13 +42,22 @@ namespace ffmpegcpp
 		ret = av_frame_get_buffer(frame, 32);
 		if (ret < 0)
 		{
+			CleanUp();
 			throw FFmpegException("Could not allocate the video frame data", ret);
 		}
 	}
 
 	RawVideoSource::~RawVideoSource()
 	{
-		av_frame_free(&frame);
+	}
+
+	void RawVideoSource::CleanUp()
+	{
+		if (frame != nullptr)
+		{
+			av_frame_free(&frame);
+			frame = nullptr;
+		}
 	}
 
 	void RawVideoSource::WriteFrame(void* data, int bytesPerRow)
