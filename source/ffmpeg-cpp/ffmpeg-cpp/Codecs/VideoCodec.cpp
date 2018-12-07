@@ -15,6 +15,10 @@ namespace ffmpegcpp
 	{
 	}
 
+	VideoCodec::~VideoCodec()
+	{
+	}
+
 	bool VideoCodec::IsPixelFormatSupported(AVPixelFormat format)
 	{
 		if (format == AV_PIX_FMT_NONE) return true; // let the codec deal with this

@@ -56,4 +56,9 @@ namespace ffmpegcpp
 		/* Write the compressed frame to the media file. */
 		muxer->WritePacket(pkt);
 	}
+
+	bool VideoOutputStream::IsPrimed()
+	{
+		return initialized;
+	}
 }

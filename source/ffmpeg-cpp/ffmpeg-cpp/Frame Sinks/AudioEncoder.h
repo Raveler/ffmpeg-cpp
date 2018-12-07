@@ -24,6 +24,8 @@ namespace ffmpegcpp
 
 		virtual void WriteConvertedFrame(AVFrame* frame);
 
+		bool IsPrimed();
+
 	private:
 
 		void OpenLazily(AVFrame* frame, AVRational* timeBase);

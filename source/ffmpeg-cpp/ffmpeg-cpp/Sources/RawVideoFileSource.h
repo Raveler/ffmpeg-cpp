@@ -15,7 +15,9 @@ namespace ffmpegcpp
 		RawVideoFileSource(const char* fileName, VideoFrameSink* frameSink);
 		virtual ~RawVideoFileSource();
 
-		void Start();
+		virtual void PreparePipeline();
+		virtual bool IsDone();
+		virtual void Step();
 
 	private:
 

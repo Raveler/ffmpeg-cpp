@@ -15,8 +15,9 @@ using namespace std;
 // this is just a list we support in this demo. You can use any codec that is
 // supported by ffmpeg, but you might have to write your own Codec-class wrapper
 // to make it work. Look at the examples in the Codecs-dir to see how it is done.
-int main(int argc, char **argv)
+void PlayDemo()
 {
+
 	// These are example video and audio sources used below.
 	const char* rawVideoFile = "samples/carphone_qcif.y4m";
 	int rawVideoWidth = 176; int rawVideoHeight = 162;
@@ -30,10 +31,10 @@ int main(int argc, char **argv)
 	const char* containerWithAudioFile = "samples/DesiJourney.wav";
 
 	// hard-code the settings here, but let them be overridden by the arguments
-	string inputAudioSource = "GENERATED"; // options are RAW, ENCODED, CONTAINER, GENERATED
-	string inputVideoSource = "ENCODED"; // options are RAW, ENCODED, CONTAINER, GENERATED
-	string outputAudioCodec = "MP2"; // options are MP2, AAC, NONE
-	string outputVideoCodec = "NONE"; // options are H264, H265, VP9, NONE
+	string inputAudioSource = "RAW"; // options are RAW, ENCODED, CONTAINER, GENERATED
+	string inputVideoSource = "GENERATED"; // options are RAW, ENCODED, CONTAINER, GENERATED
+	string outputAudioCodec = "AAC"; // options are MP2, AAC, NONE
+	string outputVideoCodec = "H264"; // options are H264, H265, VP9, NONE
 	string outputContainerName = "samples/out.mp4"; // container format is deduced from extension so use a known one
 
 	// you can use any filter string that you can use in the ffmpeg command-line here
@@ -47,15 +48,14 @@ int main(int argc, char **argv)
 	{
 
 		/**
-		 * CREATE THE OUTPUT CONTAINER
+			* CREATE THE OUTPUT CONTAINER
 		*/
 
 		// create the output muxer - we'll be adding encoders to it later
 		Muxer* muxer = new Muxer(outputContainerName.c_str());
 
-
 		/**
-		 * CONFIGURE AUDIO OUTPUT
+			* CONFIGURE AUDIO OUTPUT
 		*/
 
 		// create the output encoder based on our setting above
@@ -83,9 +83,8 @@ int main(int argc, char **argv)
 			audioEncoder = new AudioEncoder(audioCodec, muxer);
 		}
 
-
 		/**
-		 * CONFIGURE VIDEO OUTPUT
+			* CONFIGURE VIDEO OUTPUT
 		*/
 
 		// create the output encoder based on our setting above
@@ -121,9 +120,8 @@ int main(int argc, char **argv)
 			videoEncoder = new VideoEncoder(videoCodec, muxer);
 		}
 
-
 		/**
-		 * CONFIGURE AUDIO INPUT
+			* CONFIGURE AUDIO INPUT
 		*/
 
 		// only do this when there is an output - otherwise there is no point in reading audio
@@ -151,9 +149,8 @@ int main(int argc, char **argv)
 			}
 		}
 
-
 		/**
-		 * CONFIGURE VIDEO FILTER IF IT IS USED
+			* CONFIGURE VIDEO FILTER IF IT IS USED
 		*/
 
 		VideoFrameSink* videoFrameSink = videoEncoder;
@@ -167,11 +164,9 @@ int main(int argc, char **argv)
 			videoFilter = new VideoFilter(videoFilterConfig, videoEncoder);
 			videoFrameSink = videoFilter; // used to feed the source below
 		}
-		// 
-
 
 		/**
-		 * CONFIGURE VIDEO INPUT
+			* CONFIGURE VIDEO INPUT
 		*/
 
 		// only do this when there is video output
@@ -198,22 +193,55 @@ int main(int argc, char **argv)
 			}
 		}
 
+
 		/**
-		 * PROCESS THE DATA
+		* PROCESS THE DATA
 		*/
 
-		// finally, we can start writing data to our pipelines. Open the floodgates with Start()
+
+		// As an awkward but necessary first step, we need to prime each input source.
+		// This step decodes a part of the input data and from this, generates info
+		// about the stream and propagates it all the way to the output container,
+		// which needs to write this data to its header.
+		if (videoInputSource != nullptr) videoInputSource->PreparePipeline();
+
+
+		delete videoInputSource;
+		if (videoFilter) delete videoFilter;
+		delete audioInputSource;
+		delete videoEncoder;
+		delete audioEncoder;
+		delete videoCodec;
+		delete audioCodec;
+		delete muxer;
+		return;
+
+		if (audioInputSource != nullptr) audioInputSource->PreparePipeline();
+
+
+
+
+		// finally, we can start writing data to our pipelines. Open the floodgates
 		// to start reading frames from the input, decoding them, optionally filtering them,
 		// encoding them and writing them to the final container.
-		if (audioInputSource != nullptr) audioInputSource->Start();
-		if (videoInputSource != nullptr) videoInputSource->Start();
+		// This can be interweaved if you want to.
+		if (audioInputSource != nullptr)
+		{
+			while (!audioInputSource->IsDone()) audioInputSource->Step();
+		}
+		if (videoInputSource != nullptr)
+		{
+			while (!videoInputSource->IsDone()) videoInputSource->Step();
+		}
 
 		// Note: if you use a RawVideoDataSource directly, you can do this over time. You don't need
 		// to do it all at once. This can be useful if you want to encode frames that come from rendering.
+		//printf("Press to close muxer\n");  getchar();
 
 		// close the muxer and save the file to disk
 		muxer->Close();
 
+		//printf("Press to delete codecs\n");  getchar();
 
 		// all done
 		if (audioCodec != nullptr)
@@ -227,6 +255,7 @@ int main(int argc, char **argv)
 			delete videoEncoder;
 			if (videoFilter != nullptr) delete videoFilter;
 		}
+		//printf("Press to delete input sources\n");  getchar();
 
 		if (audioInputSource != nullptr)
 		{
@@ -238,6 +267,8 @@ int main(int argc, char **argv)
 			delete videoInputSource;
 		}
 
+		//printf("Press to delete muxer\n");  getchar();
+
 		delete muxer;
 	}
 	catch (FFmpegException e)
@@ -245,6 +276,13 @@ int main(int argc, char **argv)
 		cerr << e.what() << endl;
 		throw e;
 	}
+}
+
+int main(int argc, char **argv)
+{
+	PlayDemo();
+
+	_CrtDumpMemoryLeaks();
 
 	cout << "Press any key to continue..." << endl;
 

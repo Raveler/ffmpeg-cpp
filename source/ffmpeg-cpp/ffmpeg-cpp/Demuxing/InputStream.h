@@ -19,6 +19,8 @@ namespace ffmpegcpp
 		virtual void DecodePacket(AVPacket* pkt);
 		void Close();
 
+		bool IsPrimed();
+
 	protected:
 
 		AVCodecContext* codecContext = nullptr;

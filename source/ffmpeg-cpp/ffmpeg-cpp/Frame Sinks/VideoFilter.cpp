@@ -156,6 +156,8 @@ namespace ffmpegcpp
 
 	void VideoFilter::Close()
 	{
+		if (!initialized) return; // can't close if we were never opened
+
 		int ret = av_buffersrc_add_frame_flags(buffersrc_ctx, NULL, AV_BUFFERSRC_FLAG_KEEP_REF);
 		PollFilterGraphForFrames();
 
@@ -183,5 +185,11 @@ namespace ffmpegcpp
 
 			av_frame_unref(filt_frame);
 		}
+	}
+
+
+	bool VideoFilter::IsPrimed()
+	{
+		return target->IsPrimed();
 	}
 }

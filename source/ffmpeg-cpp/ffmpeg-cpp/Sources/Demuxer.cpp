@@ -67,6 +67,7 @@ namespace ffmpegcpp
 					delete inputStreams[i];
 				}
 			}
+			delete inputStreams;
 			inputStreams = nullptr;
 		}
 		if (containerContext != nullptr)
@@ -178,36 +179,68 @@ namespace ffmpegcpp
 		inputStreams[streamIndex] = inputStream;
 	}
 
-	void Demuxer::Start()
+	void Demuxer::PreparePipeline()
+	{
+		bool allPrimed = false;
+		do
+		{
+			Step();
+
+			// see if all input streams are primed
+			allPrimed = true;
+			for (int i = 0; i < containerContext->nb_streams; ++i)
+			{
+				InputStream* stream = inputStreams[i];
+				if (stream != nullptr)
+				{
+					if (!stream->IsPrimed()) allPrimed = false;
+				}
+			}
+			
+		} while (!allPrimed && !IsDone());
+	}
+
+	bool Demuxer::IsDone()
+	{
+		return done;
+	}
+
+	void Demuxer::Step()
 	{
 		// read frames from the file
-		int ret = 0;
-		while (ret >= 0)
+		int ret = av_read_frame(containerContext, pkt);
+
+		// EOF
+		if (ret == AVERROR_EOF)
 		{
-			ret = av_read_frame(containerContext, pkt);
-			if (ret == AVERROR(EAGAIN) || ret == AVERROR_EOF)
-				continue;
-			else if (ret < 0)
+			pkt->data = NULL;
+			pkt->size = 0;
+			for (int i = 0; i < containerContext->nb_streams; ++i)
 			{
-				throw FFmpegException("Error during demuxing", ret);
+				InputStream* stream = inputStreams[i];
+				if (stream != nullptr)
+				{
+					pkt->stream_index = i;
+					DecodePacket();
+					stream->Close();
+				}
 			}
 
-			DecodePacket();
+			done = true;
+			return;
 		}
 
-		// flush cached frames
-		pkt->data = NULL;
-		pkt->size = 0;
-		for (int i = 0; i < containerContext->nb_streams; ++i)
+		// not ready yet
+		if (ret == AVERROR(EAGAIN)) return;
+
+		// error
+		if (ret < 0)
 		{
-			InputStream* stream = inputStreams[i];
-			if (stream != nullptr)
-			{
-				pkt->stream_index = i;
-				DecodePacket();
-				stream->Close();
-			}
+			throw FFmpegException("Error during demuxing", ret);
 		}
+
+		// decode the finished packet
+		DecodePacket();
 	}
 
 	void Demuxer::DecodePacket()

@@ -82,6 +82,11 @@ namespace ffmpegcpp
 			swr_free(&swr_ctx);
 			swr_ctx = nullptr;
 		}
+		if (fifo != nullptr)
+		{
+			av_audio_fifo_free(fifo);
+			fifo = nullptr;
+		}
 	}
 
 	void AudioFormatConverter::InitDelayed(AVFrame* frame)

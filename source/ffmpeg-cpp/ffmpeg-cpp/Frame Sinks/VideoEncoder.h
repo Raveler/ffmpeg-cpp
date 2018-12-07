@@ -21,6 +21,8 @@ namespace ffmpegcpp
 		void WriteFrame(AVFrame* frame, AVRational* timeBase);
 		void Close();
 
+		bool IsPrimed();
+
 	private:
 
 		void OpenLazily(AVFrame* frame, AVRational* timeBase);

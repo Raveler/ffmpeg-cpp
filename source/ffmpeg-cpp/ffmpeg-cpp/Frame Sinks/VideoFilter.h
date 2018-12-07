@@ -17,6 +17,8 @@ namespace ffmpegcpp
 		void WriteFrame(AVFrame* frame, AVRational* timeBase);
 		void Close();
 
+		bool IsPrimed();
+
 	private:
 
 		void InitDelayed(AVFrame* frame, AVRational* timeBase);

@@ -10,21 +10,31 @@ GeneratedAudioSource::GeneratedAudioSource(AudioFrameSink* frameSink)
 	// or any other sink (might be a filter as well).
 	output = new RawAudioDataSource(format, this->sampleRate, this->channels, frameSink);
 
+	samples = new uint16_t[channels * 2 * sampleCount];
+
 }
 
 GeneratedAudioSource::~GeneratedAudioSource()
 {
 	delete output;
+	delete samples;
 }
 
-uint8_t* generate_rgb(int width, int height, int pts, uint8_t *rgb);
-
-void GeneratedAudioSource::Start()
+void GeneratedAudioSource::PreparePipeline()
 {
-	// 2 channels, 2 bytes per channel (16 bits)
-	int sampleCount = 735;
-	uint16_t* samples = new uint16_t[channels * 2 * sampleCount];
+	while (!output->IsPrimed() && !IsDone())
+	{
+		Step();
+	}
+}
 
+bool GeneratedAudioSource::IsDone()
+{
+	return frameNumber >= 120;
+}
+
+void GeneratedAudioSource::Step()
+{
 	/* encode a single tone sound */
 	float t = 0.0f;
 	float tincr = 2 * M_PI * 440.0 / sampleRate;
@@ -32,7 +42,7 @@ void GeneratedAudioSource::Start()
 	{
 		/* make sure the frame is writable -- makes a copy if the encoder
 		 * kept a reference internally */
-		
+
 		for (int j = 0; j < sampleCount; j++)
 		{
 			samples[2 * j] = (int)(sin(t) * 10000);
@@ -44,9 +54,11 @@ void GeneratedAudioSource::Start()
 
 		// submit to the sink
 		output->WriteData(samples, sampleCount);
+		++frameNumber;
 	}
 
-	output->Close();
-
-	delete samples;
+	if (IsDone())
+	{
+		output->Close();
+	}
 }

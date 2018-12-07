@@ -50,9 +50,19 @@ namespace ffmpegcpp
 		}
 	}
 
-	void RawAudioFileSource::Start()
+	void RawAudioFileSource::PreparePipeline()
 	{
-		demuxer->Start();
+		demuxer->PreparePipeline();
+	}
+
+	bool RawAudioFileSource::IsDone()
+	{
+		return demuxer->IsDone();
+	}
+
+	void RawAudioFileSource::Step()
+	{
+		demuxer->Step();
 	}
 }
 

@@ -14,7 +14,7 @@ namespace ffmpegcpp
 
 		Codec(const char* codecName);
 		Codec(AVCodecID codecId);
-		~Codec();
+		virtual ~Codec();
 
 		void SetOption(const char* name, const char* value);
 		void SetOption(const char* name, int value);

@@ -69,6 +69,7 @@ namespace ffmpegcpp
 	void RawVideoDataSource::WriteFrame(void* data, int bytesPerRow)
 	{
 		// make sure the frame data is writable
+		// we don't need to do this - it is the job of the sinks down the line to keep references to this frame if they need it
 		int ret = av_frame_make_writable(frame);
 		if (ret < 0)
 		{

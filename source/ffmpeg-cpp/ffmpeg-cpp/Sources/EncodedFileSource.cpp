@@ -8,15 +8,66 @@ namespace ffmpegcpp
 {
 	EncodedFileSource::EncodedFileSource(const char* inFileName, const char* codecName, FrameSink* output)
 	{
-		// deduce the codec from the filename
-		AVCodec* codec = CodecDeducer::DeduceDecoder(codecName);
-		Init(inFileName, codec, output);
+		try
+		{
+			AVCodec* codec = CodecDeducer::DeduceDecoder(codecName);
+			Init(inFileName, codec, output);
+		}
+		catch (FFmpegException e)
+		{
+			CleanUp();
+			throw e;
+		}
 	}
 
 	EncodedFileSource::EncodedFileSource(const char* inFileName, AVCodecID codecId, FrameSink* output)
 	{
-		AVCodec* codec = CodecDeducer::DeduceDecoder(codecId);
-		Init(inFileName, codec, output);
+		try
+		{
+			AVCodec* codec = CodecDeducer::DeduceDecoder(codecId);
+			Init(inFileName, codec, output);
+		}
+		catch (FFmpegException e)
+		{
+			CleanUp();
+			throw e;
+		}
+	}
+
+	EncodedFileSource::~EncodedFileSource()
+	{
+		CleanUp();
+	}
+
+	void EncodedFileSource::CleanUp()
+	{
+		if (decoded_frame != nullptr)
+		{
+			av_frame_free(&decoded_frame);
+			decoded_frame = nullptr;
+		}
+		if (pkt != nullptr)
+		{
+			av_packet_free(&pkt);
+			pkt = nullptr;
+		}
+		if (buffer != nullptr)
+		{
+			delete buffer;
+			buffer = nullptr;
+		}
+		if (codecContext != nullptr)
+		{
+			avcodec_free_context(&codecContext);
+			codecContext = nullptr;
+		}
+		if (parser != nullptr)
+		{
+			av_parser_close(parser);
+			parser = nullptr;
+		}
+
+		fclose(file);
 	}
 
 	void EncodedFileSource::Init(const char* inFileName, AVCodec* codec, FrameSink* output)
@@ -47,16 +98,6 @@ namespace ffmpegcpp
 		{
 			throw FFmpegException("Could not open file " + string(inFileName));
 		}
-	}
-
-	void EncodedFileSource::Start()
-	{
-		uint8_t *data;
-		size_t   data_size;
-		AVFrame *decoded_frame = NULL;
-		int ret;
-		AVPacket *pkt;
-		uint8_t* buffer;
 
 		decoded_frame = av_frame_alloc();
 		if (!decoded_frame)
@@ -64,8 +105,14 @@ namespace ffmpegcpp
 			throw FFmpegException("Could not allocate video frame");
 		}
 
+		pkt = av_packet_alloc();
+		if (!pkt)
+		{
+			throw FFmpegException("Failed to allocate packet");
+		}
+
 		// based on the codec, we use different buffer sizes
-		int bufferSize, refillThreshold;
+		int refillThreshold;
 		if (codecContext->codec->type == AVMEDIA_TYPE_VIDEO)
 		{
 			bufferSize = 4096;
@@ -85,61 +132,65 @@ namespace ffmpegcpp
 
 		/* set end of buffer to 0 (this ensures that no overreading happens for damaged MPEG streams) */
 		memset(buffer + (int)bufferSize, 0, AV_INPUT_BUFFER_PADDING_SIZE);
+	}
 
-
-		pkt = av_packet_alloc();
-		if (!pkt)
+	void EncodedFileSource::PreparePipeline()
+	{
+		while (!output->IsPrimed() && !IsDone())
 		{
-			throw FFmpegException("Failed to allocate packet");
+			Step();
 		}
+	}
 
-		while (!feof(file))
+	bool EncodedFileSource::IsDone()
+	{
+		return done;
+	}
+
+	void EncodedFileSource::Step()
+	{
+		// one step is one part of a buffer read, this might contain no, one or multiple packets
+
+		uint8_t *data;
+		size_t   data_size;
+		int ret;
+
+		/* read raw data from the input file */
+		data_size = fread(buffer, 1, bufferSize, file);
+		if (!data_size)	return;
+
+		/* use the parser to split the data into frames */
+		data = buffer;
+		while (data_size > 0)
 		{
-			/* read raw data from the input file */
-			data_size = fread(buffer, 1, bufferSize, file);
-			if (!data_size)
-				break;
-
-			/* use the parser to split the data into frames */
-			data = buffer;
-			while (data_size > 0)
+			ret = av_parser_parse2(parser, codecContext, &pkt->data, &pkt->size,
+				data, data_size, AV_NOPTS_VALUE, AV_NOPTS_VALUE, 0);
+			if (ret < 0)
 			{
-				ret = av_parser_parse2(parser, codecContext, &pkt->data, &pkt->size,
-					data, data_size, AV_NOPTS_VALUE, AV_NOPTS_VALUE, 0);
-				if (ret < 0)
-				{
-					throw FFmpegException("Error while parsing file", ret);
-				}
-				data += ret;
-				data_size -= ret;
+				throw FFmpegException("Error while parsing file", ret);
+			}
+			data += ret;
+			data_size -= ret;
 
-				if (pkt->size)
-				{
-					Decode(pkt, decoded_frame);
-				}
-
-				/*if (data_size < refillThreshold)
-				{
-					memmove(buffer, data, data_size);
-					data = buffer;
-					int len = fread(data + data_size, 1,
-						bufferSize - data_size, file);
-					if (len > 0) data_size += len;
-				}*/
+			if (pkt->size)
+			{
+				Decode(pkt, decoded_frame);
 			}
 		}
 
-		/* flush the decoder */
-		pkt->data = NULL;
-		pkt->size = 0;
-		Decode(pkt, decoded_frame);
+		// reached the end of the file - flush everything
+		if (feof(file))
+		{
 
-		output->Close();
+			/* flush the decoder */
+			pkt->data = NULL;
+			pkt->size = 0;
+			Decode(pkt, decoded_frame);
 
-		av_frame_free(&decoded_frame);
-		av_packet_free(&pkt);
+			output->Close();
 
-		delete buffer;
+			done = true;
+		}
 	}
 
 	void EncodedFileSource::Decode(AVPacket *pkt, AVFrame *frame)
@@ -175,13 +226,5 @@ namespace ffmpegcpp
 			// so we can fetch it from there.
 			output->WriteFrame(frame, &timeBaseCorrectedByTicksPerFrame);
 		}
-	}
-
-	EncodedFileSource::~EncodedFileSource()
-	{
-		fclose(file);
-
-		avcodec_free_context(&codecContext);
-		av_parser_close(parser);
 	}
 }

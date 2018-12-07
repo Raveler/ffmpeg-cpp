@@ -72,6 +72,11 @@ namespace ffmpegcpp
 			delete codec;
 			codec = nullptr;
 		}
+		if (output != nullptr)
+		{
+			delete output;
+			output = nullptr;
+		}
 	}
 
 	void AudioEncoder::WriteFrame(AVFrame* frame, AVRational* timeBase)
@@ -108,6 +113,8 @@ namespace ffmpegcpp
 
 	void AudioEncoder::Close()
 	{
+		if (codec == nullptr) return; // can't close if we were never opened
+
 		// First flush the converter and the FIFO queue in it
 		formatConverter->ProcessFrame(NULL);
 
@@ -136,6 +143,11 @@ namespace ffmpegcpp
 
 			av_packet_unref(pkt);
 		}
+	}
+
+	bool AudioEncoder::IsPrimed()
+	{
+		return output->IsPrimed();
 	}
 }
 

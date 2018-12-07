@@ -19,6 +19,8 @@ namespace ffmpegcpp
 		void WriteData(void* data, int sampleCount);
 		void Close();
 
+		bool IsPrimed();
+
 	private:
 
 		void CleanUp();

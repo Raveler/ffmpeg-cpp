@@ -17,6 +17,8 @@ namespace ffmpegcpp
 
 		virtual void WritePacket(AVPacket* pkt, OpenCodec* openCodec);
 
+		virtual bool IsPrimed();
+
 	private:
 
 		void LazilyInitialize(OpenCodec* openCodec);

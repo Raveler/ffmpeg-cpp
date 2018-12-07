@@ -25,8 +25,9 @@ namespace ffmpegcpp {
 	private:
 
 		void Open();
-
-		std::vector<OutputStream*> streams;
+		
+		std::vector<OutputStream*> outputStreams;
+		std::vector<AVPacket*> packetQueue;
 
 		AVOutputFormat* containerFormat;
 

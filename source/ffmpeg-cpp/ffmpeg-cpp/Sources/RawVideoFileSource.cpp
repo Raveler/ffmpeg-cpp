@@ -37,9 +37,19 @@ namespace ffmpegcpp
 		}
 	}
 
-	void RawVideoFileSource::Start()
+	void RawVideoFileSource::PreparePipeline()
 	{
-		demuxer->Start();
+		demuxer->PreparePipeline();
+	}
+
+	bool RawVideoFileSource::IsDone()
+	{
+		return demuxer->IsDone();
+	}
+
+	void RawVideoFileSource::Step()
+	{
+		demuxer->Step();
 	}
 }
 

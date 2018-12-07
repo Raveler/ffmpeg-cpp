@@ -59,6 +59,11 @@ namespace ffmpegcpp
 			delete formatConverter;
 			formatConverter = nullptr;
 		}
+		if (output != nullptr)
+		{
+			delete output;
+			output = nullptr;
+		}
 	}
 
 	void VideoEncoder::OpenLazily(AVFrame* frame, AVRational* timeBase)
@@ -126,6 +131,8 @@ namespace ffmpegcpp
 
 	void VideoEncoder::Close()
 	{
+		if (codec == nullptr) return; // can't close if we were never opened
+
 		int ret = avcodec_send_frame(codec->GetContext(), NULL);
 		if (ret < 0)
 		{
@@ -156,6 +163,11 @@ namespace ffmpegcpp
 
 			av_packet_unref(pkt);
 		}
+	}
+
+	bool VideoEncoder::IsPrimed()
+	{
+		return output->IsPrimed();
 	}
 }
 

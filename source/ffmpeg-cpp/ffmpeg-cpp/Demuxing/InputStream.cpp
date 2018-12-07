@@ -137,5 +137,10 @@ namespace ffmpegcpp
 	{
 		output->Close();
 	}
+
+	bool InputStream::IsPrimed()
+	{
+		return output->IsPrimed();
+	}
 }
 

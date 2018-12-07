@@ -12,6 +12,7 @@ namespace ffmpegcpp
 
 		VideoCodec(const char* codecName);
 		VideoCodec(AVCodecID codecId);
+		virtual ~VideoCodec();
 
 		OpenCodec* Open(int width, int height, AVRational* frameRate, AVPixelFormat format);
 

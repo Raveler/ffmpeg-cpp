@@ -22,6 +22,8 @@ namespace ffmpegcpp
 		int GetWidth();
 		int GetHeight();
 
+		bool IsPrimed();
+
 	private:
 
 		void Init(int width, int height, AVPixelFormat sourcePixelFormat, AVPixelFormat targetPixelFormat, int framesPerSecond, VideoFrameSink* output);

@@ -10,23 +10,35 @@ GeneratedVideoSource::GeneratedVideoSource(int width, int height, VideoFrameSink
 GeneratedVideoSource::~GeneratedVideoSource()
 {
 	delete output;
+	delete rgb;
 }
 
 uint8_t* generate_rgb(int width, int height, int pts, uint8_t *rgb);
 
-void GeneratedVideoSource::Start()
+void GeneratedVideoSource::PreparePipeline()
 {
-	uint8_t *rgb = NULL;
-	for (int i = 0; i < 100; ++i)
+	while (!output->IsPrimed() && !IsDone())
 	{
-		rgb = generate_rgb(output->GetWidth(), output->GetHeight(), i, rgb);
-		output->WriteFrame(rgb, 4 * output->GetWidth());
+		Step();
 	}
-	delete rgb;
-
-	output->Close();
 }
 
+void GeneratedVideoSource::Step()
+{
+	rgb = generate_rgb(output->GetWidth(), output->GetHeight(), frameNumber, rgb);
+	output->WriteFrame(rgb, 4 * output->GetWidth());
+	++frameNumber;
+
+	if (IsDone())
+	{
+		output->Close();
+	}
+}
+
+bool GeneratedVideoSource::IsDone()
+{
+	return frameNumber >= 100;
+}
 
 uint8_t* generate_rgb(int width, int height, int pts, uint8_t *rgb)
 {

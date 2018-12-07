@@ -8,7 +8,10 @@ namespace ffmpegcpp
 
 		virtual ~InputSource() {}
 
-		virtual void Start() = 0;
+		virtual void PreparePipeline() = 0;
+		virtual bool IsDone() = 0;
+		virtual void Step() = 0;
+
 	};
 }
 

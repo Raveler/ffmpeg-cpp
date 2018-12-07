@@ -59,6 +59,11 @@ namespace ffmpegcpp
 			av_frame_free(&frame);
 			frame = nullptr;
 		}
+		if (fifo != nullptr)
+		{
+			av_audio_fifo_free(fifo);
+			fifo = nullptr;
+		}
 	}
 
 	void RawAudioDataSource::WriteData(void* data, int sampleCount)
@@ -84,5 +89,10 @@ namespace ffmpegcpp
 	void RawAudioDataSource::Close()
 	{
 		output->Close();
+	}
+
+	bool RawAudioDataSource::IsPrimed()
+	{
+		return output->IsPrimed();
 	}
 }

@@ -15,6 +15,10 @@ namespace ffmpegcpp
 	{
 	}
 
+	AudioCodec::~AudioCodec()
+	{
+	}
+
 	/* check that a given sample format is supported by the encoder */
 	static int check_sample_fmt(const AVCodec *codec, enum AVSampleFormat sample_fmt)
 	{

@@ -12,7 +12,6 @@ namespace ffmpegcpp
 	Muxer::Muxer(const char* fileName)
 	{
 		this->fileName = fileName;
-		this->streams = streams;
 
 		/* allocate the output media context */
 		avformat_alloc_output_context2(&containerContext, NULL, NULL, fileName);
@@ -58,24 +57,73 @@ namespace ffmpegcpp
 		stream->id = containerContext->nb_streams - 1;
 
 		outputStream->OpenStream(stream, containerContext->oformat->flags);
+
+		outputStreams.push_back(outputStream);
 	}
 
 	void Muxer::WritePacket(AVPacket* pkt)
 	{
-
-		// not opened yet - open lazily now
+		// The muxer needs to buffer all the packets UNTIL all streams are primed
+		// at that moment, we can actually open ourselves!
+		// Because of this, we need to call PreparePipeline on all input sources BEFORE
+		// we start running the actual data through. This pipeline preparation step
+		// pushes one frame down the pipeline so that the output can be configured properly.
 		if (!opened)
 		{
-			Open();
-			opened = true;
+			// see if we can open the queue
+			bool allPrimed = true;
+			for (int i = 0; i < outputStreams.size(); ++i)
+			{
+				if (!outputStreams[i]->IsPrimed()) allPrimed = false;
+			}
+
+			// we CAN open now - all streams are primed and ready to go!
+			if (allPrimed)
+			{
+				Open();
+				opened = true;
+				printf("After %d cached packets, we can finally open the container", packetQueue.size());
+
+				// flush the queue
+				for (int i = 0; i < packetQueue.size(); ++i)
+				{
+					AVPacket* tmp_pkt = packetQueue[i];
+
+					// Write the compressed frame to the media file.
+					int ret = av_interleaved_write_frame(containerContext, tmp_pkt);
+					if (ret < 0)
+					{
+						throw FFmpegException("Error while writing frame to output container", ret);
+					}
+
+					av_packet_unref(tmp_pkt);
+					av_packet_free(&tmp_pkt);
+				}
+			}
+
+			// not ready - buffer the packet
+			else
+			{
+				AVPacket* tmp_pkt = av_packet_alloc();
+				if (!tmp_pkt)
+				{
+					throw FFmpegException("Failed to allocate packet");
+				}
+				av_packet_ref(tmp_pkt, pkt);
+				packetQueue.push_back(tmp_pkt);
+			}
 		}
 
-		// Write the compressed frame to the media file.
-		int ret = av_interleaved_write_frame(containerContext, pkt);
-		if (ret < 0)
+		// we are opened now - write this packet!
+		if (opened)
 		{
-			throw FFmpegException("Error while writing frame to output container", ret);
+			int ret = av_interleaved_write_frame(containerContext, pkt);
+			if (ret < 0)
+			{
+				throw FFmpegException("Error while writing frame to output container", ret);
+			}
 		}
+
 	}
 
 	void Muxer::Open()
