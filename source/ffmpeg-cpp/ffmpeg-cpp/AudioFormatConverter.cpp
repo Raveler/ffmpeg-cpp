@@ -121,12 +121,6 @@ namespace ffmpegcpp
 		}
 
 		int ret;
-
-		if (frame->pts == 6174)
-		{
-			int x = 3;
-		}
-
 		ret = swr_convert_frame(swr_ctx, tmp_frame, frame);
 		if (ret < 0)
 		{
@@ -147,16 +141,14 @@ namespace ffmpegcpp
 		* At the end of the file, we pass the remaining samples to
 		* the encoder. */
 		bool finished = (frame == NULL);
-		if (finished)
-		{
-			int x = 5;
-		}
-		while (av_audio_fifo_size(fifo) >= converted_frame->nb_samples ||
-			(finished && av_audio_fifo_size(fifo) > 0))
+		int fifoSize = av_audio_fifo_size(fifo);
+		while (fifoSize >= converted_frame->nb_samples ||
+			(finished && fifoSize > 0))
 		{
 			// Take one frame worth of audio samples from the FIFO buffer,
 			 // encode it and write it to the output file. 
 			PullConvertedFrameFromFifo();
+			fifoSize = av_audio_fifo_size(fifo);
 		}
 	}
 
@@ -183,6 +175,7 @@ namespace ffmpegcpp
 		 * buffer use this number. Otherwise, use the maximum possible frame size. */
 		const int frame_size = FFMIN(av_audio_fifo_size(fifo), converted_frame->nb_samples);
 		int data_written;
+		converted_frame->nb_samples = frame_size;
 
 		/* Read as many samples from the FIFO buffer as required to fill the frame.
 		 * The samples are stored in the frame temporarily. */

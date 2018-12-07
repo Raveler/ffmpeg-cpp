@@ -134,6 +134,8 @@ namespace ffmpegcpp
 		pkt->size = 0;
 		Decode(pkt, decoded_frame);
 
+		output->Close();
+
 		av_frame_free(&decoded_frame);
 		av_packet_free(&pkt);
 

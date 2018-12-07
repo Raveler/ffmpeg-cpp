@@ -40,7 +40,6 @@ namespace ffmpegcpp
 
 	VideoEncoder::~VideoEncoder()
 	{
-		printf("Encoded %d frames\n", frameNumber);
 		CleanUp();
 	}
 

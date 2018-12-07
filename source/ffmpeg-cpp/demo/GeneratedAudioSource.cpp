@@ -22,13 +22,13 @@ uint8_t* generate_rgb(int width, int height, int pts, uint8_t *rgb);
 void GeneratedAudioSource::Start()
 {
 	// 2 channels, 2 bytes per channel (16 bits)
-	int sampleCount = 512;
+	int sampleCount = 735;
 	uint16_t* samples = new uint16_t[channels * 2 * sampleCount];
 
 	/* encode a single tone sound */
 	float t = 0.0f;
 	float tincr = 2 * M_PI * 440.0 / sampleRate;
-	for (int i = 0; i < 200; i++)
+	for (int i = 0; i < 120; i++)
 	{
 		/* make sure the frame is writable -- makes a copy if the encoder
 		 * kept a reference internally */

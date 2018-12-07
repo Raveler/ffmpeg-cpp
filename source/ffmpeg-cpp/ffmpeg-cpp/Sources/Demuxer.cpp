@@ -53,13 +53,11 @@ namespace ffmpegcpp
 
 	Demuxer::~Demuxer()
 	{
-		printf("Delete demuxer...\n");
 		CleanUp();
 	}
 
 	void Demuxer::CleanUp()
 	{
-		printf("CLEAN UP\n");
 		if (inputStreams != nullptr)
 		{
 			for (int i = 0; i < containerContext->nb_streams; ++i)

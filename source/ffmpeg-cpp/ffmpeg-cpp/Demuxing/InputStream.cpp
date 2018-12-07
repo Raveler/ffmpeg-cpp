@@ -73,10 +73,8 @@ namespace ffmpegcpp
 		}
 	}
 
-	int frameCount = 0;
 	void InputStream::CleanUp()
 	{
-		printf("Decoded %d frames\n", frameCount);
 		if (codecContext != nullptr)
 		{
 			avcodec_free_context(&codecContext);
@@ -131,7 +129,6 @@ namespace ffmpegcpp
 			// push the frame to the next stage.
 			// The time_base is filled in in the codecContext after the first frame is decoded
 			// so we can fetch it from there.
-			++frameCount;
 			output->WriteFrame(frame, time_base);
 		}
 	}

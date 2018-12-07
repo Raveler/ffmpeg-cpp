@@ -27,7 +27,7 @@ namespace ffmpegcpp
 		frame->sample_rate = sampleRate;
 		frame->channels = channels;
 		frame->channel_layout = channelLayout;
-		frame->nb_samples = 1024;
+		frame->nb_samples = 735;
 
 		// allocate the buffers for the frame data
 		ret = av_frame_get_buffer(frame, 0);

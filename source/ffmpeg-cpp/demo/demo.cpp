@@ -235,12 +235,10 @@ int main(int argc, char **argv)
 
 		if (videoInputSource != nullptr)
 		{
-			printf("Delete video input...\n");
 			delete videoInputSource;
 		}
 
 		delete muxer;
-		printf("ALL DONE\n");
 	}
 	catch (FFmpegException e)
 	{

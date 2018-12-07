@@ -108,6 +108,10 @@ namespace ffmpegcpp
 
 	void AudioEncoder::Close()
 	{
+		// First flush the converter and the FIFO queue in it
+		formatConverter->ProcessFrame(NULL);
+
+		// then flush our encoder
 		WriteConvertedFrame(NULL);
 	}
 
