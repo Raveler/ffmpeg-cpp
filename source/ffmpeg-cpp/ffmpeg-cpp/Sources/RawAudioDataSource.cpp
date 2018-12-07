@@ -47,7 +47,6 @@ namespace ffmpegcpp
 
 	}
 
-
 	RawAudioDataSource::~RawAudioDataSource()
 	{
 		CleanUp();
@@ -64,19 +63,6 @@ namespace ffmpegcpp
 
 	void RawAudioDataSource::WriteData(void* data, int sampleCount)
 	{
-		// make sure the FIFO queue can hold our data
-		/*int ret;
-		if ((ret = av_audio_fifo_realloc(fifo, av_audio_fifo_size(fifo) + frame->nb_samples)) < 0)
-		{
-			throw FFmpegException("Could not reallocate FIFO", ret);
-		}
-
-		// write to the FIFO queue and keep it there until we have a full frame
-		if (av_audio_fifo_write(fifo, (void **)frame->extended_data, frame->nb_samples) < frame->nb_samples)
-		{
-			throw FFmpegException("Could not write data to FIFO");
-		}*/
-
 		// resize the frame to the input
 		frame->nb_samples = sampleCount;
 
@@ -93,5 +79,10 @@ namespace ffmpegcpp
 		// pass on to the sink
 		// we don't have a time_base so we pass NULL and hope that it gets handled later...
 		output->WriteFrame(frame, NULL);
+	}
+
+	void RawAudioDataSource::Close()
+	{
+		output->Close();
 	}
 }

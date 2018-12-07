@@ -13,7 +13,7 @@ namespace ffmpegcpp
 	public:
 
 		RawVideoFileSource(const char* fileName, VideoFrameSink* frameSink);
-		~RawVideoFileSource();
+		virtual ~RawVideoFileSource();
 
 		void Start();
 

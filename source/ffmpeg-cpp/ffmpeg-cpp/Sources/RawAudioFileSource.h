@@ -13,7 +13,7 @@ namespace ffmpegcpp
 	public:
 
 		RawAudioFileSource(const char* fileName, const char* inputFormat, int sampleRate, int channels, AudioFrameSink* frameSink);
-		~RawAudioFileSource();
+		virtual ~RawAudioFileSource();
 
 		void Start();
 

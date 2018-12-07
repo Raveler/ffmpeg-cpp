@@ -90,6 +90,11 @@ namespace ffmpegcpp
 		output->WriteFrame(frame, &this->timeBase);
 	}
 
+	void RawVideoDataSource::Close()
+	{
+		output->Close();
+	}
+
 	int RawVideoDataSource::GetWidth()
 	{
 		return frame->width;

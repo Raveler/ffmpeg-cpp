@@ -23,6 +23,8 @@ void GeneratedVideoSource::Start()
 		output->WriteFrame(rgb, 4 * output->GetWidth());
 	}
 	delete rgb;
+
+	output->Close();
 }
 
 

@@ -103,7 +103,17 @@ namespace ffmpegcpp
 		{
 			throw FFmpegException("Error sending a frame for encoding", ret);
 		}
+		PollCodecForPackets();
+	}
 
+	void AudioEncoder::Close()
+	{
+		WriteConvertedFrame(NULL);
+	}
+
+	void AudioEncoder::PollCodecForPackets()
+	{
+		int ret = 0;
 		while (ret >= 0)
 		{
 			ret = avcodec_receive_packet(codec->GetContext(), pkt);

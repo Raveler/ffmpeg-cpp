@@ -12,13 +12,15 @@ namespace ffmpegcpp
 	public:
 
 		VideoFilter(const char* filterString, VideoFrameSink* target);
-		~VideoFilter();
+		virtual ~VideoFilter();
 
 		void WriteFrame(AVFrame* frame, AVRational* timeBase);
+		void Close();
 
 	private:
 
 		void InitDelayed(AVFrame* frame, AVRational* timeBase);
+		void PollFilterGraphForFrames();
 
 		VideoFrameSink* target;
 
@@ -31,6 +33,8 @@ namespace ffmpegcpp
 		AVFrame* filt_frame = nullptr;
 
 		bool initialized = false;
+
+		AVRational* timeBase;
 
 		void CleanUp();
 	};

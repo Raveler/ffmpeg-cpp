@@ -14,9 +14,10 @@ namespace ffmpegcpp
 
 		RawVideoDataSource(int width, int height, AVPixelFormat pixelFormat, int framesPerSecond, VideoFrameSink* output);
 		RawVideoDataSource(int width, int height, AVPixelFormat sourcePixelFormat, AVPixelFormat targetPixelFormat, int framesPerSecond, VideoFrameSink* output);
-		~RawVideoDataSource();
+		virtual ~RawVideoDataSource();
 
 		void WriteFrame(void* data, int bytesPerRow);
+		void Close();
 
 		int GetWidth();
 		int GetHeight();

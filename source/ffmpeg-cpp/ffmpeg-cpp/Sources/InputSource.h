@@ -6,6 +6,8 @@ namespace ffmpegcpp
 	{
 	public:
 
+		virtual ~InputSource() {}
+
 		virtual void Start() = 0;
 	};
 }

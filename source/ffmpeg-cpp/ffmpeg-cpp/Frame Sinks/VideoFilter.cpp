@@ -146,8 +146,27 @@ namespace ffmpegcpp
 			initialized = true;
 		}
 
+		// this only works because timeBase never changes, otherwise we pass the wrong timeBase to frames later
+		this->timeBase = timeBase;
+
 		int ret = av_buffersrc_add_frame_flags(buffersrc_ctx, frame, AV_BUFFERSRC_FLAG_KEEP_REF);
 
+		PollFilterGraphForFrames();
+	}
+
+	void VideoFilter::Close()
+	{
+		int ret = av_buffersrc_add_frame_flags(buffersrc_ctx, NULL, AV_BUFFERSRC_FLAG_KEEP_REF);
+		PollFilterGraphForFrames();
+
+		// close our target as well
+		target->Close();
+
+	}
+
+	void VideoFilter::PollFilterGraphForFrames()
+	{
+		int ret = 0;
 		while (ret >= 0)
 		{
 			ret = av_buffersink_get_frame(buffersink_ctx, filt_frame);

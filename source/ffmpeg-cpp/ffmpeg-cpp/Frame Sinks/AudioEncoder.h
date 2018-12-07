@@ -17,9 +17,10 @@ namespace ffmpegcpp
 	public:
 		AudioEncoder(AudioCodec* codec, Muxer* muxer);
 		AudioEncoder(AudioCodec* codec, Muxer* muxer, int bitRate);
-		~AudioEncoder();
+		virtual ~AudioEncoder();
 
 		void WriteFrame(AVFrame* frame, AVRational* timeBase);
+		void Close();
 
 		virtual void WriteConvertedFrame(AVFrame* frame);
 
@@ -28,6 +29,8 @@ namespace ffmpegcpp
 		void OpenLazily(AVFrame* frame, AVRational* timeBase);
 
 		void CleanUp();
+
+		void PollCodecForPackets();
 
 		OutputStream* output;
 

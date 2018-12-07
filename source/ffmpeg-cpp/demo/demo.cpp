@@ -32,8 +32,8 @@ int main(int argc, char **argv)
 	// hard-code the settings here, but let them be overridden by the arguments
 	string inputAudioSource = "GENERATED"; // options are RAW, ENCODED, CONTAINER, GENERATED
 	string inputVideoSource = "ENCODED"; // options are RAW, ENCODED, CONTAINER, GENERATED
-	string outputAudioCodec = "NONE"; // options are MP2, AAC, NONE
-	string outputVideoCodec = "H264"; // options are H264, H265, VP9, NONE
+	string outputAudioCodec = "MP2"; // options are MP2, AAC, NONE
+	string outputVideoCodec = "NONE"; // options are H264, H265, VP9, NONE
 	string outputContainerName = "samples/out.mp4"; // container format is deduced from extension so use a known one
 
 	// you can use any filter string that you can use in the ffmpeg command-line here
@@ -184,7 +184,7 @@ int main(int argc, char **argv)
 			}
 			else if (inputVideoSource == "ENCODED")
 			{
-				videoInputSource = new EncodedFileSource(encodedVideoFile, AV_CODEC_ID_H264, videoFrameSink);
+				videoInputSource = new RawVideoFileSource(encodedVideoFile, videoFrameSink);
 			}
 			else if (inputVideoSource == "CONTAINER")
 			{
@@ -235,10 +235,12 @@ int main(int argc, char **argv)
 
 		if (videoInputSource != nullptr)
 		{
+			printf("Delete video input...\n");
 			delete videoInputSource;
 		}
 
 		delete muxer;
+		printf("ALL DONE\n");
 	}
 	catch (FFmpegException e)
 	{

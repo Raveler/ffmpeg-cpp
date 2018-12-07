@@ -17,6 +17,7 @@ namespace ffmpegcpp
 		void Open();
 
 		virtual void DecodePacket(AVPacket* pkt);
+		void Close();
 
 	protected:
 

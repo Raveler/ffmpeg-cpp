@@ -188,6 +188,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Sources\EncodedFileSource.h" />
     <ClInclude Include="Sources\RawVideoFileSource.h" />
     <ClInclude Include="Sources\RawAudioFileSource.h" />
     <ClInclude Include="Sources\RawAudioDataSource.h" />
@@ -205,7 +206,6 @@
     <ClInclude Include="OpenCodec.h" />
     <ClInclude Include="Codecs\PNGCodec.h" />
     <ClInclude Include="Sources\RawVideoDataSource.h" />
-    <ClInclude Include="Sources\EncodedFileSource.h" />
     <ClInclude Include="Codecs\Codec.h" />
     <ClInclude Include="CodecDeducer.h" />
     <ClInclude Include="Frame Sinks\VideoEncoder.h" />
@@ -229,6 +229,7 @@
   <ItemGroup>
     <ClCompile Include="Demuxing\InputStream.cpp" />
     <ClCompile Include="Demuxing\AudioInputStream.cpp" />
+    <ClCompile Include="Sources\EncodedFileSource.cpp" />
     <ClCompile Include="Sources\RawVideoFileSource.cpp" />
     <ClCompile Include="Sources\RawAudioFileSource.cpp" />
     <ClCompile Include="Sources\RawAudioDataSource.cpp" />
@@ -241,7 +242,6 @@
     <ClCompile Include="OpenCodec.cpp" />
     <ClCompile Include="Codecs\PNGCodec.cpp" />
     <ClCompile Include="Sources\RawVideoDataSource.cpp" />
-    <ClCompile Include="Sources\EncodedFileSource.cpp" />
     <ClCompile Include="Codecs\Codec.cpp" />
     <ClCompile Include="CodecDeducer.cpp" />
     <ClCompile Include="Frame Sinks\VideoEncoder.cpp" />

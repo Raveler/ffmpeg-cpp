@@ -73,9 +73,6 @@ namespace ffmpegcpp
 
 		av_frame_copy_props(converted_frame, frame); // remember all the other data
 
-		// don't need the old frame anymore
-		av_frame_unref(frame);
-
 		return converted_frame;
 	}
 }

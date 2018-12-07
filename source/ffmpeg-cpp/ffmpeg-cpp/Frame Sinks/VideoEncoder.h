@@ -16,14 +16,15 @@ namespace ffmpegcpp
 		VideoEncoder(VideoCodec* codec, Muxer* muxer, AVPixelFormat format);
 		VideoEncoder(VideoCodec* codec, Muxer* muxer, AVRational frameRate);
 		VideoEncoder(VideoCodec* codec, Muxer* muxer, AVRational frameRate, AVPixelFormat format);
-		~VideoEncoder();
+		virtual ~VideoEncoder();
 
 		void WriteFrame(AVFrame* frame, AVRational* timeBase);
+		void Close();
 
 	private:
 
 		void OpenLazily(AVFrame* frame, AVRational* timeBase);
-
+		void PollCodecForPackets();
 
 		VideoCodec* closedCodec;
 		OutputStream* output;

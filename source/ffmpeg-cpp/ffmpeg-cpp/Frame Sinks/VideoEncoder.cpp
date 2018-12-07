@@ -40,6 +40,7 @@ namespace ffmpegcpp
 
 	VideoEncoder::~VideoEncoder()
 	{
+		printf("Encoded %d frames\n", frameNumber);
 		CleanUp();
 	}
 
@@ -121,6 +122,23 @@ namespace ffmpegcpp
 			throw FFmpegException("Error sending a frame for encoding", ret);
 		}
 
+		PollCodecForPackets();
+	}
+
+	void VideoEncoder::Close()
+	{
+		int ret = avcodec_send_frame(codec->GetContext(), NULL);
+		if (ret < 0)
+		{
+			throw FFmpegException("Error flushing codec after encoding", ret);
+		}
+
+		PollCodecForPackets();
+	}
+
+	void VideoEncoder::PollCodecForPackets()
+	{
+		int ret = 0;
 		while (ret >= 0)
 		{
 			ret = avcodec_receive_packet(codec->GetContext(), pkt);

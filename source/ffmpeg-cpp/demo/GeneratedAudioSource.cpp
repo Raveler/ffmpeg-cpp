@@ -46,5 +46,7 @@ void GeneratedAudioSource::Start()
 		output->WriteData(samples, sampleCount);
 	}
 
+	output->Close();
+
 	delete samples;
 }
