@@ -32,8 +32,8 @@ void PlayDemo()
 
 	// hard-code the settings here, but let them be overridden by the arguments
 	string inputAudioSource = "GENERATED"; // options are RAW, ENCODED, CONTAINER, GENERATED
-	string inputVideoSource = "GENERATED"; // options are RAW, ENCODED, CONTAINER, GENERATED
-	string outputAudioCodec = "AAC"; // options are MP2, AAC, NONE
+	string inputVideoSource = "CONTAINER"; // options are RAW, ENCODED, CONTAINER, GENERATED
+	string outputAudioCodec = "MP2"; // options are MP2, AAC, NONE
 	string outputVideoCodec = "H264"; // options are H264, H265, VP9, NONE
 	string outputContainerName = "samples/out.mp4"; // container format is deduced from extension so use a known one
 
@@ -203,8 +203,8 @@ void PlayDemo()
 		// This step decodes a part of the input data and from this, generates info
 		// about the stream and propagates it all the way to the output container,
 		// which needs to write this data to its header.
-		if (audioInputSource != nullptr) audioInputSource->PreparePipeline();
 		if (videoInputSource != nullptr) videoInputSource->PreparePipeline();
+		if (audioInputSource != nullptr) audioInputSource->PreparePipeline();
 
 
 
@@ -220,6 +220,18 @@ void PlayDemo()
 		{
 			while (!videoInputSource->IsDone()) videoInputSource->Step();
 		}
+
+		/*printf("Primed: %d\n", (muxer->IsPrimed() ? 1 : 0));
+		delete videoInputSource;
+		if (videoFilter) delete videoFilter;
+		delete audioInputSource;
+		delete videoEncoder;
+		delete audioEncoder;
+		delete videoCodec;
+		delete audioCodec;
+		delete muxer;
+		return;*/
+
 
 		// Note: if you use a RawVideoDataSource directly, you can do this over time. You don't need
 		// to do it all at once. This can be useful if you want to encode frames that come from rendering.

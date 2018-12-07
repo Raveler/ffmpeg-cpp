@@ -252,5 +252,9 @@ namespace ffmpegcpp
 		{
 			inputStream->DecodePacket(pkt);
 		}
+
+		// We need to unref the packet here because packets might pass by here
+		// that don't have a stream attached to them. We want to dismiss them!
+		av_packet_unref(pkt);
 	}
 }
