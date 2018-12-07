@@ -8,12 +8,6 @@ namespace ffmpegcpp
 	{
 		this->target = target;
 		this->filterString = filterString;
-		this->outputFormat = target->GetRequiredPixelFormat();
-		if (this->outputFormat == AV_PIX_FMT_NONE)
-		{
-			CleanUp();
-			throw FFmpegException("You must provide a frame sink with a specified pixel format, so that the VideoFilter can convert the frame to that format");
-		}
 	}
 
 	VideoFilter::~VideoFilter()
@@ -29,6 +23,12 @@ namespace ffmpegcpp
 
 	void VideoFilter::InitDelayed(AVFrame* frame, AVRational* timeBase)
 	{
+		outputFormat = (AVPixelFormat)frame->format;
+		if (outputFormat == AV_PIX_FMT_NONE)
+		{
+			throw FFmpegException("You must provide a frame sink with a specified pixel format, so that the VideoFilter can convert the frame to that format");
+		}
+
 		int ret;
 		char args[512];
 
@@ -164,10 +164,5 @@ namespace ffmpegcpp
 
 			av_frame_unref(filt_frame);
 		}
-	}
-
-	AVPixelFormat VideoFilter::GetRequiredPixelFormat()
-	{
-		return AV_PIX_FMT_NONE;
 	}
 }

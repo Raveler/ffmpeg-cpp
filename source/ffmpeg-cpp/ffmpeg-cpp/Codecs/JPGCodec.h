@@ -9,7 +9,7 @@ namespace ffmpegcpp
 
 	public:
 
-		JPGCodec(int width, int height, int framesPerSecond);
+		JPGCodec();
 
 		void SetCompressionLevel(int compressionLevel);
 	};

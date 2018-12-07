@@ -28,6 +28,8 @@ namespace ffmpegcpp
 
 	private:
 
+		AVRational timeBaseCorrectedByTicksPerFrame;
+
 		AVStream* stream;
 
 		FrameSink* output;

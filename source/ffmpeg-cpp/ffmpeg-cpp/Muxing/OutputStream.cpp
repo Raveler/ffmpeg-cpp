@@ -5,13 +5,9 @@ using namespace std;
 
 namespace ffmpegcpp
 {
-	OutputStream::OutputStream(OpenCodec* codec)
+	OutputStream::OutputStream(Muxer* muxer, Codec* codec)
 	{
+		this->muxer = muxer;
 		this->codec = codec;
-	}
-
-	OpenCodec* OutputStream::GetCodec()
-	{
-		return codec;
 	}
 }

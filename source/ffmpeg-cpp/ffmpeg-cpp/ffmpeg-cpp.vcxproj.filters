@@ -15,9 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Muxer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ffmpeg.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -25,9 +22,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="FFmpegException.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="OutputStream.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CodecDeducer.h">
@@ -69,9 +63,6 @@
     <ClInclude Include="Codecs\AudioCodec.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="AudioOutputStream.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Frame Sinks\AudioEncoder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -82,9 +73,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Frame Sinks\VideoEncoder.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="VideoOutputStream.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="AudioFormatConverter.h">
@@ -126,15 +114,21 @@
     <ClInclude Include="VideoFormatConverter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Muxing\AudioOutputStream.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Muxing\VideoOutputStream.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Muxing\OutputStream.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Muxing\Muxer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Muxer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="FFmpegException.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="OutputStream.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CodecDeducer.cpp">
@@ -170,16 +164,10 @@
     <ClCompile Include="Codecs\AudioCodec.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="AudioOutputStream.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Frame Sinks\AudioEncoder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Frame Sinks\VideoEncoder.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="VideoOutputStream.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="AudioFormatConverter.cpp">
@@ -213,6 +201,18 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="VideoFormatConverter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Muxing\AudioOutputStream.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Muxing\VideoOutputStream.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Muxing\OutputStream.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Muxing\Muxer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

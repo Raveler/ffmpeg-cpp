@@ -25,6 +25,8 @@ namespace ffmpegcpp
 			CleanUp();
 			throw FFmpegException("Failed to allocate the codec context for " + string(codec->name));
 		}
+
+		codecContext->framerate = stream->avg_frame_rate;
 	}
 
 	InputStream::~InputStream()
@@ -56,6 +58,12 @@ namespace ffmpegcpp
 		{
 			throw FFmpegException("Failed to open codec " + string(codec->name), ret);
 		}
+
+		// calculate the "correct" time_base
+		// TODO this is definitely an ugly hack but right now I have no idea on how to fix this properly.
+		timeBaseCorrectedByTicksPerFrame.num = codecContext->time_base.num;
+		timeBaseCorrectedByTicksPerFrame.den = codecContext->time_base.den;
+		timeBaseCorrectedByTicksPerFrame.num *= codecContext->ticks_per_frame;
 
 		// assign the frame that will be read from the container
 		frame = av_frame_alloc();
@@ -112,8 +120,8 @@ namespace ffmpegcpp
 				frame->sample_aspect_ratio = stream->sample_aspect_ratio;
 			}
 
-			AVRational* time_base = &codecContext->time_base;
-			if (stream->time_base.num)
+			AVRational* time_base = &timeBaseCorrectedByTicksPerFrame;
+			if (!timeBaseCorrectedByTicksPerFrame.num)
 			{
 				time_base = &stream->time_base;
 			}

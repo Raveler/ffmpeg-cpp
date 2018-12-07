@@ -16,13 +16,11 @@ namespace ffmpegcpp
 
 		void WriteFrame(AVFrame* frame, AVRational* timeBase);
 
-		virtual AVPixelFormat GetRequiredPixelFormat();
-
 	private:
 
 		void InitDelayed(AVFrame* frame, AVRational* timeBase);
 
-		FrameSink* target;
+		VideoFrameSink* target;
 
 		const char* filterString;
 		AVPixelFormat outputFormat;

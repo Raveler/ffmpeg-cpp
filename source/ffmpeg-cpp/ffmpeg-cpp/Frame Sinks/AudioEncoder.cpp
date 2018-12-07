@@ -1,4 +1,5 @@
 #include "AudioEncoder.h"
+#include "Muxing/AudioOutputStream.h"
 
 #include "FFmpegException.h"
 
@@ -7,10 +8,30 @@ using namespace std;
 namespace ffmpegcpp
 {
 
-	AudioEncoder::AudioEncoder(AudioOutputStream* output)
+	AudioEncoder::AudioEncoder(AudioCodec* codec, Muxer* muxer)
 	{
-		this->codec = output->GetCodec();
-		this->output = output;
+		this->closedCodec = codec;
+
+		// create an output stream
+		output = new AudioOutputStream(muxer, codec);
+		muxer->AddOutputStream(output);
+	}
+
+	AudioEncoder::AudioEncoder(AudioCodec* codec, Muxer* muxer, int bitRate)
+		: AudioEncoder(codec, muxer)
+	{
+		finalBitRate = bitRate;
+	}
+
+	void AudioEncoder::OpenLazily(AVFrame* frame, AVRational* timeBase) 
+	{
+		// configure the parameters for the codec based on the frame, our settings & defaults
+		int bitRate = finalBitRate;
+		if (bitRate == -1) bitRate = 0; // default by the codecContext
+		int sampleRate = closedCodec->GetDefaultSampleRate();
+		AVSampleFormat format = closedCodec->GetDefaultSampleFormat();
+
+		codec = closedCodec->Open(bitRate, format, sampleRate);
 
 		pkt = av_packet_alloc();
 		if (!pkt)
@@ -46,10 +67,21 @@ namespace ffmpegcpp
 			delete formatConverter;
 			formatConverter = nullptr;
 		}
+		if (codec != nullptr)
+		{
+			delete codec;
+			codec = nullptr;
+		}
 	}
 
 	void AudioEncoder::WriteFrame(AVFrame* frame, AVRational* timeBase)
 	{
+		// if we haven't opened the codec yet, we do it now!
+		if (codec == nullptr)
+		{
+			OpenLazily(frame, timeBase);
+		}
+
 		// set the PTS properly
 		frame->pts = frameNumber;
 		frameNumber += frame->nb_samples;
@@ -86,16 +118,10 @@ namespace ffmpegcpp
 
 			//printf("Write packet %3 (size=%5d)\n", data->pkt->pts, data->pkt->size);
 			//fwrite(data->pkt->data, 1, data->pkt->size, data->f);
-			output->WritePacket(pkt);
+			output->WritePacket(pkt, codec);
 
 			av_packet_unref(pkt);
 		}
 	}
-
-	AVSampleFormat AudioEncoder::GetRequiredSampleFormat()
-	{
-		return codec->GetContext()->sample_fmt;
-	}
-
 }
 

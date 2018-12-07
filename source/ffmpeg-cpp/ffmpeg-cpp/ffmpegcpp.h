@@ -1,9 +1,5 @@
 
-#include "Muxer.h"
-
-#include "VideoOutputStream.h"
-#include "AudioOutputStream.h"
-#include "OutputStream.h"
+#include "Muxing/Muxer.h"
 
 #include "Sources/Demuxer.h"
 #include "Sources/InputSource.h"

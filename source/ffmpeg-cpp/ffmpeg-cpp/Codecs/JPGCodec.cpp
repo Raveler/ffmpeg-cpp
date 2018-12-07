@@ -3,8 +3,8 @@
 namespace ffmpegcpp
 {
 
-	JPGCodec::JPGCodec(int width, int height, int framesPerSecond)
-		: VideoCodec(AV_CODEC_ID_MJPEG, width, height, framesPerSecond, AV_PIX_FMT_NONE)
+	JPGCodec::JPGCodec()
+		: VideoCodec(AV_CODEC_ID_MJPEG)
 	{
 
 		// we take the default image format of the codec

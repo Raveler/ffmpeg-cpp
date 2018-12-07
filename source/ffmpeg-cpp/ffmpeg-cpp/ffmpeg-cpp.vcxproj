@@ -197,7 +197,7 @@
     <ClInclude Include="Sources\Demuxer.h" />
     <ClInclude Include="Frame Sinks\AudioFrameSink.h" />
     <ClInclude Include="Frame Sinks\AudioEncoder.h" />
-    <ClInclude Include="AudioOutputStream.h" />
+    <ClInclude Include="Muxing\AudioOutputStream.h" />
     <ClInclude Include="Codecs\AudioCodec.h" />
     <ClInclude Include="ffmpegcpp.h" />
     <ClInclude Include="Frame Sinks\VideoFilter.h" />
@@ -214,8 +214,8 @@
     <ClInclude Include="Codecs\H264NVEncCodec.h" />
     <ClInclude Include="Codecs\H265NVEncCodec.h" />
     <ClInclude Include="Frame Sinks\FrameSink.h" />
-    <ClInclude Include="Muxer.h" />
-    <ClInclude Include="OutputStream.h" />
+    <ClInclude Include="Muxing\Muxer.h" />
+    <ClInclude Include="Muxing\OutputStream.h" />
     <ClInclude Include="std.h" />
     <ClInclude Include="Codecs\VideoCodec.h" />
     <ClInclude Include="Codecs\VP9Codec.h" />
@@ -224,7 +224,7 @@
     <ClInclude Include="AudioFormatConverter.h" />
     <ClInclude Include="ConvertedAudioProcessor.h" />
     <ClInclude Include="VideoFormatConverter.h" />
-    <ClInclude Include="VideoOutputStream.h" />
+    <ClInclude Include="Muxing\VideoOutputStream.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Demuxing\InputStream.cpp" />
@@ -234,7 +234,7 @@
     <ClCompile Include="Sources\RawAudioDataSource.cpp" />
     <ClCompile Include="Sources\Demuxer.cpp" />
     <ClCompile Include="Frame Sinks\AudioEncoder.cpp" />
-    <ClCompile Include="AudioOutputStream.cpp" />
+    <ClCompile Include="Muxing\AudioOutputStream.cpp" />
     <ClCompile Include="Codecs\AudioCodec.cpp" />
     <ClCompile Include="Frame Sinks\VideoFilter.cpp" />
     <ClCompile Include="Codecs\JPGCodec.cpp" />
@@ -248,14 +248,14 @@
     <ClCompile Include="FFmpegException.cpp" />
     <ClCompile Include="Codecs\H264NVEncCodec.cpp" />
     <ClCompile Include="Codecs\H265NVEncCodec.cpp" />
-    <ClCompile Include="Muxer.cpp" />
-    <ClCompile Include="OutputStream.cpp" />
+    <ClCompile Include="Muxing\Muxer.cpp" />
+    <ClCompile Include="Muxing\OutputStream.cpp" />
     <ClCompile Include="Codecs\VideoCodec.cpp" />
     <ClCompile Include="Codecs\VP9Codec.cpp" />
     <ClCompile Include="Demuxing\VideoInputStream.cpp" />
     <ClCompile Include="AudioFormatConverter.cpp" />
     <ClCompile Include="VideoFormatConverter.cpp" />
-    <ClCompile Include="VideoOutputStream.cpp" />
+    <ClCompile Include="Muxing\VideoOutputStream.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

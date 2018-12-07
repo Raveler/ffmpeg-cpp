@@ -3,18 +3,24 @@
 #include "ffmpeg.h"
 #include "std.h"
 
-#include "OutputStream.h"
 
 namespace ffmpegcpp {
+
+	class OutputStream;
 
 	class Muxer
 	{
 	public:
 
-		Muxer(const char* fileName, std::vector<OutputStream*> streams);
+		Muxer(const char* fileName);
 		~Muxer();
 
+		void AddOutputStream(OutputStream* stream);
+
+		void WritePacket(AVPacket* pkt);
+
 		void Close();
+
 
 	private:
 
@@ -29,5 +35,7 @@ namespace ffmpegcpp {
 		std::string fileName;
 
 		void CleanUp();
+
+		bool opened = false;
 	};
 }

@@ -1,7 +1,6 @@
 #pragma once
 
 #include "ffmpeg.h"
-#include "OutputStream.h"
 #include "Frame Sinks/FrameSink.h"
 #include "InputSource.h"
 
@@ -34,5 +33,7 @@ namespace ffmpegcpp
 		void Init(const char* inFileName, AVCodec* codec, FrameSink* output);
 
 		void Decode(AVPacket *packet, AVFrame* targetFrame);
+
+		AVRational timeBaseCorrectedByTicksPerFrame;
 	};
 }

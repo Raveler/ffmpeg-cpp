@@ -20,11 +20,13 @@ namespace ffmpegcpp
 		void SetOption(const char* name, int value);
 		void SetOption(const char* name, double value);
 
-		OpenCodec* Open();
+		void SetGlobalContainerHeader(); // used by the Muxer for configuration purposes
 
 	protected:
 
 		AVCodecContext* codecContext = nullptr;
+
+		OpenCodec* Open();
 
 	private:
 

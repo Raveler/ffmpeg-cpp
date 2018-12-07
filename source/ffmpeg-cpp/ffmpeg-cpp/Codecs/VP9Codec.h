@@ -9,7 +9,7 @@ namespace ffmpegcpp
 
 	public:
 
-		VP9Codec(int width, int height, int framesPerSecond, AVPixelFormat format);
+		VP9Codec();
 
 		void SetDeadline(const char* deadline);
 		void SetCpuUsed(int cpuUsed);

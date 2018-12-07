@@ -1,5 +1,7 @@
 #pragma once
+
 #include "Codec.h"
+#include "OpenCodec.h"
 
 namespace ffmpegcpp
 {
@@ -8,16 +10,18 @@ namespace ffmpegcpp
 	{
 	public:
 
-		AudioCodec(const char* codecName, int bitRate, AVSampleFormat format);
-		AudioCodec(AVCodecID codecId, int bitRate, AVSampleFormat format);
 		AudioCodec(const char* codecName);
 		AudioCodec(AVCodecID codecId);
 
-	private:
+		OpenCodec* Open(int bitRate, AVSampleFormat format, int sampleRate);
 
-		void InitContextWithDefaults();
+		bool IsFormatSupported(AVSampleFormat format);
+		bool IsChannelsSupported(int channels);
+		bool IsSampleRateSupported(int sampleRate);
 
-		void InitContext(int bitRate, AVSampleFormat format);
+		AVSampleFormat GetDefaultSampleFormat();
+		int GetDefaultSampleRate();
+
 	};
 
 

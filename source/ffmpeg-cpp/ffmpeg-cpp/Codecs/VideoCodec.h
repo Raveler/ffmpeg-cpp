@@ -1,5 +1,7 @@
 #pragma once
+
 #include "Codec.h"
+#include "OpenCodec.h"
 
 namespace ffmpegcpp
 {
@@ -8,12 +10,16 @@ namespace ffmpegcpp
 	{
 	public:
 
-		VideoCodec(const char* codecName, int width, int height, int framesPerSecond, AVPixelFormat format);
-		VideoCodec(AVCodecID codecId, int width, int height, int framesPerSecond, AVPixelFormat format);
+		VideoCodec(const char* codecName);
+		VideoCodec(AVCodecID codecId);
 
-	private:
+		OpenCodec* Open(int width, int height, AVRational* frameRate, AVPixelFormat format);
 
-		void InitContext(int width, int height, int framesPerSecond, AVPixelFormat format);
+		bool IsPixelFormatSupported(AVPixelFormat format);
+		bool IsFrameRateSupported(AVRational* frameRate);
+
+		AVPixelFormat GetDefaultPixelFormat();
+
 	};
 
 

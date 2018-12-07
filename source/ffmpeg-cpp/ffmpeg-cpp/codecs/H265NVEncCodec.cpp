@@ -3,8 +3,8 @@
 namespace ffmpegcpp
 {
 
-	H265NVEncCodec::H265NVEncCodec(int width, int height, int framesPerSecond, AVPixelFormat format)
-		: VideoCodec("hevc_nvenc", width, height, framesPerSecond, format)
+	H265NVEncCodec::H265NVEncCodec()
+		: VideoCodec("hevc_nvenc")
 	{
 
 	}

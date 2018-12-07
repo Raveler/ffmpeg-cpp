@@ -161,17 +161,17 @@ namespace ffmpegcpp
 			{
 				throw FFmpegException("Error during decoding", ret);
 			}
-			/*data_size = av_get_bytes_per_sample(codecContext->sample_fmt);
-			if (data_size < 0)
-			{
-				// This should not occur, checking just for paranoia
-				throw FFmpegException("Failed to calculate data size");
-			}*/
+
+			// calculate the "correct" time_base
+			// TODO this is definitely an ugly hack but right now I have no idea on how to fix this properly.
+			timeBaseCorrectedByTicksPerFrame.num = codecContext->time_base.num;
+			timeBaseCorrectedByTicksPerFrame.den = codecContext->time_base.den;
+			timeBaseCorrectedByTicksPerFrame.num *= codecContext->ticks_per_frame;
 
 			// push the frame to the next stage.
 			// The time_base is filled in in the codecContext after the first frame is decoded
 			// so we can fetch it from there.
-			output->WriteFrame(frame, &codecContext->time_base);
+			output->WriteFrame(frame, &timeBaseCorrectedByTicksPerFrame);
 		}
 	}
 

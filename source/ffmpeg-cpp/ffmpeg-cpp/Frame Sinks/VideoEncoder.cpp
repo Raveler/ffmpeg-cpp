@@ -1,33 +1,41 @@
 #include "VideoEncoder.h"
 
 #include "FFmpegException.h"
+#include "Muxing/VideoOutputStream.h"
 
 using namespace std;
 
 namespace ffmpegcpp
 {
 
-	VideoEncoder::VideoEncoder(OutputStream* output)
+	VideoEncoder::VideoEncoder(VideoCodec* codec, Muxer* muxer)
 	{
-		this->codec = output->GetCodec();
-		this->output = output;
+		this->closedCodec = codec;
 
-		pkt = av_packet_alloc();
-		if (!pkt)
-		{
-			CleanUp();
-			throw FFmpegException("Failed to allocate packet");
-		}
+		// create an output stream
+		this->output = new VideoOutputStream(muxer, codec);
+		muxer->AddOutputStream(output);
+	}
 
-		try
-		{
-			formatConverter = new VideoFormatConverter(codec->GetContext());
-		}
-		catch (FFmpegException e)
-		{
-			CleanUp();
-			throw e;
-		}
+	VideoEncoder::VideoEncoder(VideoCodec* codec, Muxer* muxer, AVPixelFormat format)
+		: VideoEncoder(codec, muxer)
+	{
+		finalPixelFormat = format;
+	}
+
+	VideoEncoder::VideoEncoder(VideoCodec* codec, Muxer* muxer, AVRational frameRate)
+		: VideoEncoder(codec, muxer)
+	{
+		finalFrameRate = frameRate;
+		finalFrameRateSet = true;
+	}
+
+	VideoEncoder::VideoEncoder(VideoCodec* codec, Muxer* muxer, AVRational frameRate, AVPixelFormat format)
+		: VideoEncoder(codec, muxer)
+	{
+		finalPixelFormat = format;
+		finalFrameRate = frameRate;
+		finalFrameRateSet = true;
 	}
 
 	VideoEncoder::~VideoEncoder()
@@ -41,10 +49,61 @@ namespace ffmpegcpp
 		{
 			av_packet_free(&pkt);
 		}
+		if (codec != nullptr)
+		{
+			delete codec;
+			codec = nullptr;
+		}
+		if (formatConverter != nullptr)
+		{
+			delete formatConverter;
+			formatConverter = nullptr;
+		}
+	}
+
+	void VideoEncoder::OpenLazily(AVFrame* frame, AVRational* timeBase)
+	{
+		// configure the parameters for the codec based on the frame and our preferences
+		int width = frame->width;
+		int height = frame->height;
+		AVPixelFormat format = finalPixelFormat;
+		if (format == AV_PIX_FMT_NONE) format = closedCodec->GetDefaultPixelFormat();
+		AVRational frameRate;
+		frameRate.num = timeBase->den;
+		frameRate.den = timeBase->num;
+		if (finalFrameRateSet) frameRate = finalFrameRate;
+
+		// open the codec
+		codec = closedCodec->Open(width, height, &frameRate, format);
+
+		// allocate the packet we'll be using
+		pkt = av_packet_alloc();
+		if (!pkt)
+		{
+			CleanUp();
+			throw FFmpegException("Failed to allocate packet");
+		}
+
+		// set up the format converter
+		try
+		{
+			formatConverter = new VideoFormatConverter(codec->GetContext());
+		}
+		catch (FFmpegException e)
+		{
+			CleanUp();
+			throw e;
+		}
 	}
 
 	void VideoEncoder::WriteFrame(AVFrame* frame, AVRational* timeBase)
 	{
+		// if we haven't opened the codec yet, we do it now!
+		if (codec == nullptr)
+		{
+			OpenLazily(frame, timeBase);
+		}
+
 		// convert the frame to a converted_frame
 		frame = formatConverter->ConvertFrame(frame);
 
@@ -76,15 +135,10 @@ namespace ffmpegcpp
 
 			//printf("Write packet %3 (size=%5d)\n", data->pkt->pts, data->pkt->size);
 			//fwrite(data->pkt->data, 1, data->pkt->size, data->f);
-			output->WritePacket(pkt);
+			output->WritePacket(pkt, codec);
 
 			av_packet_unref(pkt);
 		}
-	}
-
-	AVPixelFormat VideoEncoder::GetRequiredPixelFormat()
-	{
-		return codec->GetContext()->pix_fmt;
 	}
 }
 

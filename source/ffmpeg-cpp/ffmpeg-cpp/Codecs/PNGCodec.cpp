@@ -3,8 +3,8 @@
 namespace ffmpegcpp
 {
 
-	PNGCodec::PNGCodec(int width, int height, int framesPerSecond)
-		: VideoCodec(AV_CODEC_ID_PNG, width, height, framesPerSecond, AV_PIX_FMT_NONE)
+	PNGCodec::PNGCodec()
+		: VideoCodec(AV_CODEC_ID_PNG)
 	{
 
 		// we take the default image format of the codec

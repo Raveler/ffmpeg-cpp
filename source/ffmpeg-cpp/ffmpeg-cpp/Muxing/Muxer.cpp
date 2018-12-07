@@ -1,5 +1,6 @@
 #include "Muxer.h"
 #include "FFmpegException.h"
+#include "OutputStream.h"
 
 #include <string>
 
@@ -8,7 +9,7 @@ using namespace std;
 namespace ffmpegcpp
 {
 
-	Muxer::Muxer(const char* fileName, vector<OutputStream*> streams)
+	Muxer::Muxer(const char* fileName)
 	{
 		this->fileName = fileName;
 		this->streams = streams;
@@ -27,15 +28,6 @@ namespace ffmpegcpp
 
 		// the format of the container - not necessarily the same as the fileName suggests, see above
 		containerFormat = containerContext->oformat;
-
-		// create the streams
-		for (int i = 0; i < streams.size(); ++i)
-		{
-			streams[i]->OpenStream(containerContext);
-		}
-
-		// open the container
-		Open();
 	}
 
 	Muxer::~Muxer()
@@ -49,6 +41,40 @@ namespace ffmpegcpp
 		{
 			avformat_free_context(containerContext);
 			containerContext = nullptr;
+		}
+	}
+
+	void Muxer::AddOutputStream(OutputStream* outputStream)
+	{
+		if (opened) throw FFmpegException("You cannot open a new stream after something was written to the muxer");
+
+		// create an internal stream and pass it on
+		AVStream* stream = avformat_new_stream(containerContext, NULL);
+		if (!stream)
+		{
+			throw FFmpegException("Could not allocate stream for container " + string(containerContext->oformat->name));
+		}
+
+		stream->id = containerContext->nb_streams - 1;
+
+		outputStream->OpenStream(stream, containerContext->oformat->flags);
+	}
+
+	void Muxer::WritePacket(AVPacket* pkt)
+	{
+
+		// not opened yet - open lazily now
+		if (!opened)
+		{
+			Open();
+			opened = true;
+		}
+
+		// Write the compressed frame to the media file.
+		int ret = av_interleaved_write_frame(containerContext, pkt);
+		if (ret < 0)
+		{
+			throw FFmpegException("Error while writing frame to output container", ret);
 		}
 	}
 

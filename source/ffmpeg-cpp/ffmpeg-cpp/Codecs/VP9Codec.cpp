@@ -3,8 +3,8 @@
 namespace ffmpegcpp
 {
 
-	VP9Codec::VP9Codec(int width, int height, int framesPerSecond, AVPixelFormat format)
-		: VideoCodec("libvpx-vp9", width, height, framesPerSecond, format)
+	VP9Codec::VP9Codec()
+		: VideoCodec("libvpx-vp9")
 	{
 
 	}

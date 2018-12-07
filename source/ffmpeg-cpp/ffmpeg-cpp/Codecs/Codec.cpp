@@ -68,7 +68,7 @@ namespace ffmpegcpp
 		int ret = avcodec_open2(codecContext, codecContext->codec, NULL);
 		if (ret < 0)
 		{
-			throw FFmpegException("Could not open codecContext for codec " + string(codecContext->codec->name), ret);
+			throw FFmpegException("Could not open codecContext for codec", ret);
 		}
 
 		opened = true;
@@ -79,5 +79,11 @@ namespace ffmpegcpp
 	Codec::~Codec()
 	{
 		CleanUp();
+	}
+
+	void Codec::SetGlobalContainerHeader()
+	{
+		if (opened) throw FFmpegException("This flag should be set before opening the codec");
+		codecContext->flags |= AV_CODEC_FLAG_GLOBAL_HEADER;
 	}
 }

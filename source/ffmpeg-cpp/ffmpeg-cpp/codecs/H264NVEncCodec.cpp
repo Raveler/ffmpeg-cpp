@@ -3,8 +3,8 @@
 namespace ffmpegcpp
 {
 
-	H264NVEncCodec::H264NVEncCodec(int width, int height, int framesPerSecond, AVPixelFormat format)
-		: VideoCodec("h264_nvenc", width, height, framesPerSecond, format)
+	H264NVEncCodec::H264NVEncCodec()
+		: VideoCodec("h264_nvenc")
 	{
 
 	}

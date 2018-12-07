@@ -9,7 +9,7 @@ namespace ffmpegcpp
 
 	public:
 
-		H265NVEncCodec(int width, int height, int framesPerSecond, AVPixelFormat format);
+		H265NVEncCodec();
 
 		void SetPreset(const char* preset);
 	};
