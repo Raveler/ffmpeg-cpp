@@ -20,6 +20,8 @@ namespace ffmpegcpp {
 		void WritePacket(AVPacket* pkt);
 
 		void Close();
+		
+		bool IsPrimed();
 
 
 	private:

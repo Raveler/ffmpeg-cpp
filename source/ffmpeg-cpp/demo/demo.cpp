@@ -31,7 +31,7 @@ void PlayDemo()
 	const char* containerWithAudioFile = "samples/DesiJourney.wav";
 
 	// hard-code the settings here, but let them be overridden by the arguments
-	string inputAudioSource = "RAW"; // options are RAW, ENCODED, CONTAINER, GENERATED
+	string inputAudioSource = "GENERATED"; // options are RAW, ENCODED, CONTAINER, GENERATED
 	string inputVideoSource = "GENERATED"; // options are RAW, ENCODED, CONTAINER, GENERATED
 	string outputAudioCodec = "AAC"; // options are MP2, AAC, NONE
 	string outputVideoCodec = "H264"; // options are H264, H265, VP9, NONE
@@ -203,21 +203,8 @@ void PlayDemo()
 		// This step decodes a part of the input data and from this, generates info
 		// about the stream and propagates it all the way to the output container,
 		// which needs to write this data to its header.
-		if (videoInputSource != nullptr) videoInputSource->PreparePipeline();
-
-
-		delete videoInputSource;
-		if (videoFilter) delete videoFilter;
-		delete audioInputSource;
-		delete videoEncoder;
-		delete audioEncoder;
-		delete videoCodec;
-		delete audioCodec;
-		delete muxer;
-		return;
-
 		if (audioInputSource != nullptr) audioInputSource->PreparePipeline();
-
+		if (videoInputSource != nullptr) videoInputSource->PreparePipeline();
 
 
 

@@ -38,8 +38,27 @@ namespace ffmpegcpp
 	{
 		if (containerContext != nullptr)
 		{
+			/* Write the trailer, if any. The trailer must be written before you
+			* close the CodecContexts open when you wrote the header; otherwise
+			* av_write_trailer() may try to use memory that was freed on
+			* av_codec_close(). */
+			// If we don't ALWAYS do this, we leak memory!
+			av_write_trailer(containerContext);
+
+			if (!(containerFormat->flags & AVFMT_NOFILE))
+				/* Close the output file. */
+				avio_closep(&containerContext->pb);
+
+
 			avformat_free_context(containerContext);
 			containerContext = nullptr;
+		}
+
+		// clean up the queue
+		for (int i = 0; i < packetQueue.size(); ++i)
+		{
+			AVPacket* tmp_pkt = packetQueue[i];
+			av_packet_free(&tmp_pkt);
 		}
 	}
 
@@ -61,6 +80,16 @@ namespace ffmpegcpp
 		outputStreams.push_back(outputStream);
 	}
 
+	bool Muxer::IsPrimed()
+	{
+		bool allPrimed = true;
+		for (int i = 0; i < outputStreams.size(); ++i)
+		{
+			if (!outputStreams[i]->IsPrimed()) allPrimed = false;
+		}
+		return allPrimed;
+	}
+
 	void Muxer::WritePacket(AVPacket* pkt)
 	{
 		// The muxer needs to buffer all the packets UNTIL all streams are primed
@@ -70,15 +99,8 @@ namespace ffmpegcpp
 		// pushes one frame down the pipeline so that the output can be configured properly.
 		if (!opened)
 		{
-			// see if we can open the queue
-			bool allPrimed = true;
-			for (int i = 0; i < outputStreams.size(); ++i)
-			{
-				if (!outputStreams[i]->IsPrimed()) allPrimed = false;
-			}
-
 			// we CAN open now - all streams are primed and ready to go!
-			if (allPrimed)
+			if (IsPrimed())
 			{
 				Open();
 				opened = true;
@@ -99,6 +121,7 @@ namespace ffmpegcpp
 					av_packet_unref(tmp_pkt);
 					av_packet_free(&tmp_pkt);
 				}
+				packetQueue.clear();
 			}
 
 			// not ready - buffer the packet
@@ -128,9 +151,6 @@ namespace ffmpegcpp
 
 	void Muxer::Open()
 	{
-		// print debug info about the final file format
-		av_dump_format(containerContext, 0, fileName.c_str(), 1);
-
 		// open the output file, if needed
 		if (!(containerFormat->flags & AVFMT_NOFILE))
 		{
@@ -151,18 +171,6 @@ namespace ffmpegcpp
 
 	void Muxer::Close()
 	{
-		/* Write the trailer, if any. The trailer must be written before you
-		* close the CodecContexts open when you wrote the header; otherwise
-		* av_write_trailer() may try to use memory that was freed on
-		* av_codec_close(). */
-		av_write_trailer(containerContext);
-
-		if (!(containerFormat->flags & AVFMT_NOFILE))
-		{
-			//Close the output file.
-			avio_closep(&containerContext->pb);
-		}
-
 		// free the stream
 		CleanUp();
 	}

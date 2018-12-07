@@ -37,14 +37,6 @@ namespace ffmpegcpp
 			throw FFmpegException("Could not allocate the video frame data", ret);
 		}
 
-		// allocate the fifo
-		fifo = av_audio_fifo_alloc(sampleFormat, channels, frame->nb_samples);
-		if (!fifo)
-		{
-			CleanUp();
-			throw FFmpegException("Failed to create FIFO queue for audio format converter");
-		}
-
 	}
 
 	RawAudioDataSource::~RawAudioDataSource()
@@ -58,11 +50,6 @@ namespace ffmpegcpp
 		{
 			av_frame_free(&frame);
 			frame = nullptr;
-		}
-		if (fifo != nullptr)
-		{
-			av_audio_fifo_free(fifo);
-			fifo = nullptr;
 		}
 	}
 

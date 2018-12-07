@@ -27,7 +27,6 @@ namespace ffmpegcpp
 
 		AudioFrameSink* output;
 
-		AVAudioFifo* fifo = nullptr;
 		AVFrame* frame = nullptr;
 	};
 }
