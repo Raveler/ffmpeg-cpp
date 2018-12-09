@@ -104,7 +104,7 @@ namespace ffmpegcpp
 			{
 				Open();
 				opened = true;
-				printf("After %d cached packets, we can finally open the container", packetQueue.size());
+				printf("After %d cached packets, we can finally open the container\n", packetQueue.size());
 
 				// flush the queue
 				for (int i = 0; i < packetQueue.size(); ++i)

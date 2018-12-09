@@ -31,9 +31,9 @@ void PlayDemo()
 	const char* containerWithAudioFile = "samples/DesiJourney.wav";
 
 	// hard-code the settings here, but let them be overridden by the arguments
-	string inputAudioSource = "GENERATED"; // options are RAW, ENCODED, CONTAINER, GENERATED
-	string inputVideoSource = "CONTAINER"; // options are RAW, ENCODED, CONTAINER, GENERATED
-	string outputAudioCodec = "MP2"; // options are MP2, AAC, NONE
+	string inputAudioSource = "CONTAINER"; // options are RAW, ENCODED, CONTAINER, GENERATED
+	string inputVideoSource = "ENCODED"; // options are RAW, ENCODED, CONTAINER, GENERATED
+	string outputAudioCodec = "AAC"; // options are MP2, AAC, NONE
 	string outputVideoCodec = "H264"; // options are H264, H265, VP9, NONE
 	string outputContainerName = "samples/out.mp4"; // container format is deduced from extension so use a known one
 
