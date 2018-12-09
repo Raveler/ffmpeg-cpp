@@ -14,10 +14,10 @@
 /bin
 /lib
 
-/source/ffmpeg-cpp/examples/decode_audio/obj
-/source/ffmpeg-cpp/examples/encode_audio/obj
-/source/ffmpeg-cpp/examples/encode_video/obj
-/source/ffmpeg-cpp/examples/decode_video/obj
-/source/ffmpeg-cpp/examples/filter_video/obj
+/source/ffmpeg-cpp/decode_audio/obj
+/source/ffmpeg-cpp/encode_audio/obj
+/source/ffmpeg-cpp/encode_video/obj
+/source/ffmpeg-cpp/decode_video/obj
+/source/ffmpeg-cpp/filter_video/obj
 /include
 

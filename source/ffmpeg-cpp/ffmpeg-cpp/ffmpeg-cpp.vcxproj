@@ -115,7 +115,7 @@
       <AdditionalDependencies>$(FFmpegLibraryDir)lib\avcodec.lib;$(FFmpegLibraryDir)lib\avfilter.lib;$(FFmpegLibraryDir)lib\avformat.lib;$(FFmpegLibraryDir)lib\avutil.lib;$(FFmpegLibraryDir)lib\swresample.lib;$(FFmpegLibraryDir)lib\swscale.lib</AdditionalDependencies>
     </Lib>
     <PostBuildEvent>
-      <Command>xcopy $(ProjectDir)*.h $(ProjectDir)..\..\..\include /y /s</Command>
+      <Command>xcopy $(ProjectDir)*.h $(ProjectDir)..\..\..\include /y /s /i</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">

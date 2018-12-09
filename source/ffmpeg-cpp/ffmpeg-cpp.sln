@@ -7,15 +7,15 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "demo", "demo\demo.vcxproj",
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ffmpeg-cpp", "ffmpeg-cpp\ffmpeg-cpp.vcxproj", "{BABFD64D-9BF1-4328-B977-24BF81800620}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Use Cases", "Use Cases", "{3B1FE419-D7D2-4406-9C24-5A6F6ED63E73}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Examples", "Examples", "{3B1FE419-D7D2-4406-9C24-5A6F6ED63E73}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "decode_audio", "examples\decode_audio\decode_audio.vcxproj", "{C6101E18-D73B-430C-A79C-084E1236EA94}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "decode_audio", "decode_audio\decode_audio.vcxproj", "{C6101E18-D73B-430C-A79C-084E1236EA94}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "decode_video", "examples\decode_video\decode_video.vcxproj", "{AAD3AB93-F831-4339-8AAD-DC956B9B9233}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "decode_video", "decode_video\decode_video.vcxproj", "{AAD3AB93-F831-4339-8AAD-DC956B9B9233}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "encode_audio", "examples\encode_audio\encode_audio.vcxproj", "{9D936BE4-46AA-489F-82E7-D2CFEB157FB6}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "encode_audio", "encode_audio\encode_audio.vcxproj", "{9D936BE4-46AA-489F-82E7-D2CFEB157FB6}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "encode_video", "examples\encode_video\encode_video.vcxproj", "{597D5EF8-04DB-48F9-A8F3-4B593B81C7C3}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "encode_video", "encode_video\encode_video.vcxproj", "{597D5EF8-04DB-48F9-A8F3-4B593B81C7C3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
