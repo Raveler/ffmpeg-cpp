@@ -123,7 +123,7 @@ namespace ffmpegcpp
 		return info;
 	}
 
-	void Demuxer::EncodeBestAudioStream(AudioFrameSink* frameSink)
+	void Demuxer::DecodeBestAudioStream(AudioFrameSink* frameSink)
 	{
 		int ret = av_find_best_stream(containerContext, AVMEDIA_TYPE_AUDIO, -1, -1, NULL, 0);
 		if (ret < 0)
@@ -131,10 +131,10 @@ namespace ffmpegcpp
 			throw FFmpegException("Could not find " + string(av_get_media_type_string(AVMEDIA_TYPE_AUDIO)) + " stream in input file " + fileName, ret);
 		}
 		int streamIndex = ret;
-		return EncodeAudioStream(streamIndex, frameSink);
+		return DecodeAudioStream(streamIndex, frameSink);
 	}
 
-	void Demuxer::EncodeBestVideoStream(VideoFrameSink* frameSink)
+	void Demuxer::DecodeBestVideoStream(VideoFrameSink* frameSink)
 	{
 		int ret = av_find_best_stream(containerContext, AVMEDIA_TYPE_VIDEO, -1, -1, NULL, 0);
 		if (ret < 0)
@@ -142,10 +142,10 @@ namespace ffmpegcpp
 			throw FFmpegException("Could not find " + string(av_get_media_type_string(AVMEDIA_TYPE_VIDEO)) + " stream in input file " + fileName, ret);
 		}
 		int streamIndex = ret;
-		return EncodeVideoStream(streamIndex, frameSink);
+		return DecodeVideoStream(streamIndex, frameSink);
 	}
 
-	void Demuxer::EncodeAudioStream(int streamIndex, AudioFrameSink* frameSink)
+	void Demuxer::DecodeAudioStream(int streamIndex, AudioFrameSink* frameSink)
 	{
 		// each input stream can only be used once
 		if (inputStreams[streamIndex] != nullptr)
@@ -162,7 +162,7 @@ namespace ffmpegcpp
 		inputStreams[streamIndex] = inputStream;
 	}
 
-	void Demuxer::EncodeVideoStream(int streamIndex, VideoFrameSink* frameSink)
+	void Demuxer::DecodeVideoStream(int streamIndex, VideoFrameSink* frameSink)
 	{
 		// each input stream can only be used once
 		if (inputStreams[streamIndex] != nullptr)

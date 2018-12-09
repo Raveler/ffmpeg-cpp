@@ -92,6 +92,8 @@ namespace ffmpegcpp
 		output = frameSink;
 	}
 
+	int inputSampleCount = 0;
+
 	void InputStream::DecodePacket(AVPacket *pkt)
 	{
 		int ret;

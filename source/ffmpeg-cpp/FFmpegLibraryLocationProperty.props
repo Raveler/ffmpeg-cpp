@@ -2,13 +2,18 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros">
-    <FFmpegLibraryDir>..\..\..\ffmpeg\</FFmpegLibraryDir>
+    <FFmpegLibraryDir>$(SolutionDir)..\..\ffmpeg\</FFmpegLibraryDir>
+    <SamplesDir>$(SolutionDir)..\..\samples</SamplesDir>
   </PropertyGroup>
   <PropertyGroup />
   <ItemDefinitionGroup />
   <ItemGroup>
     <BuildMacro Include="FFmpegLibraryDir">
       <Value>$(FFmpegLibraryDir)</Value>
+      <EnvironmentVariable>true</EnvironmentVariable>
+    </BuildMacro>
+    <BuildMacro Include="SamplesDir">
+      <Value>$(SamplesDir)</Value>
       <EnvironmentVariable>true</EnvironmentVariable>
     </BuildMacro>
   </ItemGroup>

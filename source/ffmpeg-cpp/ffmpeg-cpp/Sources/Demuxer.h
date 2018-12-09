@@ -25,11 +25,11 @@ namespace ffmpegcpp
 		Demuxer(const char* fileName, AVInputFormat* inputFormat, AVDictionary *inputFormatOptions);
 		~Demuxer();
 
-		void EncodeBestAudioStream(AudioFrameSink* frameSink);
-		void EncodeBestVideoStream(VideoFrameSink* frameSink);
+		void DecodeBestAudioStream(AudioFrameSink* frameSink);
+		void DecodeBestVideoStream(VideoFrameSink* frameSink);
 
-		void EncodeAudioStream(int streamId, AudioFrameSink* frameSink);
-		void EncodeVideoStream(int streamId, VideoFrameSink* frameSink);
+		void DecodeAudioStream(int streamId, AudioFrameSink* frameSink);
+		void DecodeVideoStream(int streamId, VideoFrameSink* frameSink);
 
 		std::vector<StreamInfo> GetAudioStreamInfo();
 		std::vector<StreamInfo> GetVideoStreamInfo();

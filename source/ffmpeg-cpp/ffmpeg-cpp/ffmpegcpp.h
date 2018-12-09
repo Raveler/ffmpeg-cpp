@@ -1,4 +1,6 @@
 
+#include "ffmpeg.h"
+
 #include "Muxing/Muxer.h"
 
 #include "Sources/Demuxer.h"

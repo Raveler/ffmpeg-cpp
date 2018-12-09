@@ -31,11 +31,11 @@ void PlayDemo(int argc, char** argv)
 	const char* containerWithAudioFile = "samples/DesiJourney.wav";
 
 	// hard-code the settings here, but let them be overridden by the arguments
-	string inputAudioSource = "CONTAINER"; // options are RAW, ENCODED, CONTAINER, GENERATED
+	string inputAudioSource = "GENERATED"; // options are RAW, ENCODED, CONTAINER, GENERATED
 	string inputVideoSource = "ENCODED"; // options are RAW, ENCODED, CONTAINER, GENERATED
-	string outputAudioCodec = "AAC"; // options are MP2, AAC, NONE
-	string outputVideoCodec = "H264"; // options are H264, H265, VP9, NONE (H264 and H265 only work on Nvidia hardware)
-	string outputContainerName = "samples/out.mp4"; // container format is deduced from extension so use a known one
+	string outputAudioCodec = "MP2"; // options are MP2, AAC, NONE
+	string outputVideoCodec = "NONE"; // options are H264, H265, VP9, NONE (H264 and H265 only work on Nvidia hardware)
+	string outputContainerName = "out.mp4"; // container format is deduced from extension so use a known one
 
 	// you can use any filter string that you can use in the ffmpeg command-line here
 	// set the filter to NULL to disable filtering.
@@ -159,7 +159,7 @@ void PlayDemo(int argc, char** argv)
 				// if the input comes from a container, we use the demuxer class - it is just an input source like any other
 				printf("Pulling audio from %s...\n", containerWithAudioFile);
 				Demuxer* demuxer = new Demuxer(containerWithAudioFile);
-				demuxer->EncodeBestAudioStream(audioEncoder);
+				demuxer->DecodeBestAudioStream(audioEncoder);
 				audioInputSource = demuxer;
 			}
 			else if (inputAudioSource == "GENERATED")
@@ -208,7 +208,7 @@ void PlayDemo(int argc, char** argv)
 			{
 				printf("Pulling video from %s...\n", containerWithVideoAndAudioFile);
 				Demuxer* demuxer = new Demuxer(containerWithVideoAndAudioFile);
-				demuxer->EncodeBestVideoStream(videoFrameSink);
+				demuxer->DecodeBestVideoStream(videoFrameSink);
 				videoInputSource = demuxer;
 			}
 			else if (inputVideoSource == "GENERATED")

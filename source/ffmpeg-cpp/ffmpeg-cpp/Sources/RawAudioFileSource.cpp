@@ -26,7 +26,7 @@ namespace ffmpegcpp
 		try
 		{
 			demuxer = new Demuxer(fileName, file_iformat, format_opts);
-			demuxer->EncodeBestAudioStream(frameSink);
+			demuxer->DecodeBestAudioStream(frameSink);
 		}
 		catch (FFmpegException e)
 		{

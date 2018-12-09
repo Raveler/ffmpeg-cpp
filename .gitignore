@@ -3,9 +3,8 @@
 ################################################################################
 
 /source/ffmpeg-cpp/.vs/ffmpeg-cpp/v15
-/source/ffmpeg-cpp/ffmpeg-cpp/x64/Debug
-/source/ffmpeg-cpp/ffmpeg-cpp/Debug
-/source/ffmpeg-cpp/demo/x64/Debug
+/source/ffmpeg-cpp/ffmpeg-cpp/obj
+/source/ffmpeg-cpp/demo/obj
 /source/ffmpeg-cpp/x64/Debug
 /source/ffmpeg-cpp/obj/Debug
 /source/ffmpeg-cpp/demo/samples/out.mp4
@@ -15,3 +14,9 @@
 /bin
 /lib
 
+/source/ffmpeg-cpp/examples/decode_audio/obj
+/source/ffmpeg-cpp/examples/encode_audio/obj
+/source/ffmpeg-cpp/examples/encode_video/obj
+/source/ffmpeg-cpp/examples/decode_video/obj
+/source/ffmpeg-cpp/examples/filter_video/obj
+/include
