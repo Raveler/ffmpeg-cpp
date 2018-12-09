@@ -15,7 +15,7 @@ using namespace std;
 // this is just a list we support in this demo. You can use any codec that is
 // supported by ffmpeg, but you might have to write your own Codec-class wrapper
 // to make it work. Look at the examples in the Codecs-dir to see how it is done.
-void PlayDemo()
+void PlayDemo(int argc, char** argv)
 {
 
 	// These are example video and audio sources used below.
@@ -34,7 +34,7 @@ void PlayDemo()
 	string inputAudioSource = "CONTAINER"; // options are RAW, ENCODED, CONTAINER, GENERATED
 	string inputVideoSource = "ENCODED"; // options are RAW, ENCODED, CONTAINER, GENERATED
 	string outputAudioCodec = "AAC"; // options are MP2, AAC, NONE
-	string outputVideoCodec = "H264"; // options are H264, H265, VP9, NONE
+	string outputVideoCodec = "H264"; // options are H264, H265, VP9, NONE (H264 and H265 only work on Nvidia hardware)
 	string outputContainerName = "samples/out.mp4"; // container format is deduced from extension so use a known one
 
 	// you can use any filter string that you can use in the ffmpeg command-line here
@@ -42,6 +42,17 @@ void PlayDemo()
 	// See https://trac.ffmpeg.org/wiki/FilteringGuide for more info
 	// This example rotates the entire video and then puts a vignette on top of it.
 	const char* videoFilterConfig = NULL;//"transpose=cclock[middle];[middle]vignette"
+
+	// if command line is specified, we overwrite our hard-coded settings
+	if (argc >= 6)
+	{
+		inputAudioSource = string(argv[1]);
+		inputVideoSource = string(argv[2]);
+		outputAudioCodec = string(argv[3]);
+		outputVideoCodec = string(argv[4]);
+		videoFilterConfig = argv[5];
+	}
+
 
 	// create the different components that make this come together
 	try
@@ -62,11 +73,13 @@ void PlayDemo()
 		AudioCodec* audioCodec = nullptr;
 		if (outputAudioCodec == "MP2")
 		{
+			printf("Encoding audio as MP2...\n");
 			audioCodec = new AudioCodec(AV_CODEC_ID_MP2);
 
 		}
 		else if (outputAudioCodec == "AAC")
 		{
+			printf("Encoding audio as AAC...\n");
 			audioCodec = new AudioCodec(AV_CODEC_ID_AAC);
 
 		}
@@ -91,18 +104,21 @@ void PlayDemo()
 		VideoCodec* videoCodec = nullptr;
 		if (outputVideoCodec == "H264")
 		{
+			printf("Encoding video as H264 on Nvidia GPU...\n");
 			H264NVEncCodec* h264Codec = new H264NVEncCodec();
 			h264Codec->SetPreset("hq");
 			videoCodec = h264Codec;
 		}
 		else if (outputVideoCodec == "H265")
 		{
+			printf("Encoding video as H265 on Nvidia GPU...\n");
 			H265NVEncCodec* h265Codec = new H265NVEncCodec();
 			h265Codec->SetPreset("hq");
 			videoCodec = h265Codec;
 		}
 		else if (outputVideoCodec == "VP9")
 		{
+			printf("Encoding video as VP9...\n");
 			VP9Codec* vp9Codec = new VP9Codec();
 			vp9Codec->SetLossless(true);
 			videoCodec = vp9Codec;
@@ -130,21 +146,25 @@ void PlayDemo()
 		{
 			if (inputAudioSource == "RAW")
 			{
+				printf("Pulling audio from %s...\n", rawAudioFile);
 				audioInputSource = new RawAudioFileSource(rawAudioFile, rawAudioFormat, rawAudioSampleRate, rawAudioChannels, audioEncoder);
 			}
 			else if (inputAudioSource == "ENCODED")
 			{
+				printf("Pulling audio from %s...\n", encodedAudioFile);
 				audioInputSource = new EncodedFileSource(encodedAudioFile, AV_CODEC_ID_MP3, audioEncoder);
 			}
 			else if (inputAudioSource == "CONTAINER")
 			{
 				// if the input comes from a container, we use the demuxer class - it is just an input source like any other
+				printf("Pulling audio from %s...\n", containerWithAudioFile);
 				Demuxer* demuxer = new Demuxer(containerWithAudioFile);
 				demuxer->EncodeBestAudioStream(audioEncoder);
 				audioInputSource = demuxer;
 			}
 			else if (inputAudioSource == "GENERATED")
 			{
+				printf("Generating 440Hz audio tone...\n");
 				audioInputSource = new GeneratedAudioSource(audioEncoder);
 			}
 		}
@@ -161,6 +181,7 @@ void PlayDemo()
 		VideoFilter* videoFilter = nullptr;
 		if (videoFilterConfig != NULL && videoEncoder != nullptr)
 		{
+			printf("Applying filter %s to video...\n", videoFilterConfig);
 			videoFilter = new VideoFilter(videoFilterConfig, videoEncoder);
 			videoFrameSink = videoFilter; // used to feed the source below
 		}
@@ -175,20 +196,24 @@ void PlayDemo()
 		{
 			if (inputVideoSource == "RAW")
 			{
+				printf("Pulling video from %s...\n", rawVideoFile);
 				videoInputSource = new RawVideoFileSource(rawVideoFile, videoFrameSink);
 			}
 			else if (inputVideoSource == "ENCODED")
 			{
+				printf("Pulling video from %s...\n", encodedVideoFile);
 				videoInputSource = new RawVideoFileSource(encodedVideoFile, videoFrameSink);
 			}
 			else if (inputVideoSource == "CONTAINER")
 			{
+				printf("Pulling video from %s...\n", containerWithVideoAndAudioFile);
 				Demuxer* demuxer = new Demuxer(containerWithVideoAndAudioFile);
 				demuxer->EncodeBestVideoStream(videoFrameSink);
 				videoInputSource = demuxer;
 			}
 			else if (inputVideoSource == "GENERATED")
 			{
+				printf("Generating checkerboard video pattern...\n");
 				videoInputSource = new GeneratedVideoSource(640, 480, videoFrameSink);
 			}
 		}
@@ -221,26 +246,8 @@ void PlayDemo()
 			while (!videoInputSource->IsDone()) videoInputSource->Step();
 		}
 
-		/*printf("Primed: %d\n", (muxer->IsPrimed() ? 1 : 0));
-		delete videoInputSource;
-		if (videoFilter) delete videoFilter;
-		delete audioInputSource;
-		delete videoEncoder;
-		delete audioEncoder;
-		delete videoCodec;
-		delete audioCodec;
-		delete muxer;
-		return;*/
-
-
-		// Note: if you use a RawVideoDataSource directly, you can do this over time. You don't need
-		// to do it all at once. This can be useful if you want to encode frames that come from rendering.
-		//printf("Press to close muxer\n");  getchar();
-
 		// close the muxer and save the file to disk
 		muxer->Close();
-
-		//printf("Press to delete codecs\n");  getchar();
 
 		// all done
 		if (audioCodec != nullptr)
@@ -254,7 +261,6 @@ void PlayDemo()
 			delete videoEncoder;
 			if (videoFilter != nullptr) delete videoFilter;
 		}
-		//printf("Press to delete input sources\n");  getchar();
 
 		if (audioInputSource != nullptr)
 		{
@@ -266,7 +272,6 @@ void PlayDemo()
 			delete videoInputSource;
 		}
 
-		//printf("Press to delete muxer\n");  getchar();
 
 		delete muxer;
 	}
@@ -279,10 +284,9 @@ void PlayDemo()
 
 int main(int argc, char **argv)
 {
-	PlayDemo();
+	PlayDemo(argc, argv);
 
-	_CrtDumpMemoryLeaks();
-
+	cout << "Encoding complete!" << endl;
 	cout << "Press any key to continue..." << endl;
 
 	getchar();

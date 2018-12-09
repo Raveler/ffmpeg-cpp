@@ -60,22 +60,29 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\FFmpegLibraryLocationProperty.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\FFmpegLibraryLocationProperty.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\FFmpegLibraryLocationProperty.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\FFmpegLibraryLocationProperty.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
+    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(NETFXKitsDir)Lib\um\x64;$(FFmpegLibraryDir)lib</LibraryPath>
+    <OutDir>$(ProjectDir)..\..\..\lib\$(Platform)\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86;$(FFmpegLibraryDir)lib</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -91,12 +98,15 @@
       <SDLCheck>false</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>D:\WonderMedia\ffmpeg\ffmpeg-cpp\source\ffmpeg-cpp\ffmpeg-cpp;D:\WonderMedia\FFMPEG-LGPL-minimal\msvc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(FFmpegLibraryDir)include;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <Lib>
+      <AdditionalDependencies>$(FFmpegLibraryDir)lib\avcodec.lib;$(FFmpegLibraryDir)lib\avfilter.lib;$(FFmpegLibraryDir)lib\avformat.lib;$(FFmpegLibraryDir)lib\avutil.lib;$(FFmpegLibraryDir)lib\swresample.lib;$(FFmpegLibraryDir)lib\swscale.lib</AdditionalDependencies>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -112,6 +122,9 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <Lib>
+      <AdditionalDependencies>$(FFmpegLibraryDir)lib\avcodec.lib;$(FFmpegLibraryDir)lib\avfilter.lib;$(FFmpegLibraryDir)lib\avformat.lib;$(FFmpegLibraryDir)lib\avutil.lib;$(FFmpegLibraryDir)lib\swresample.lib;$(FFmpegLibraryDir)lib\swscale.lib</AdditionalDependencies>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -123,6 +136,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(FFmpegLibraryDir)include;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -130,6 +144,9 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <Lib>
+      <AdditionalDependencies>$(FFmpegLibraryDir)lib\avcodec.lib;$(FFmpegLibraryDir)lib\avfilter.lib;$(FFmpegLibraryDir)lib\avformat.lib;$(FFmpegLibraryDir)lib\avutil.lib;$(FFmpegLibraryDir)lib\swresample.lib;$(FFmpegLibraryDir)lib\swscale.lib</AdditionalDependencies>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -141,6 +158,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(FFmpegLibraryDir)include;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -148,37 +166,19 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <Lib>
+      <AdditionalDependencies>$(FFmpegLibraryDir)lib\avcodec.lib;$(FFmpegLibraryDir)lib\avfilter.lib;$(FFmpegLibraryDir)lib\avformat.lib;$(FFmpegLibraryDir)lib\avutil.lib;$(FFmpegLibraryDir)lib\swresample.lib;$(FFmpegLibraryDir)lib\swscale.lib</AdditionalDependencies>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\FFMPEG-LGPL-minimal\source\FFmpeg\smp\libavcodec.vcxproj">
-      <Project>{b4824eff-c340-425d-a4a8-e2e02a71a7ae}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\FFMPEG-LGPL-minimal\source\FFmpeg\smp\libavfilter.vcxproj">
-      <Project>{bc2e1028-66cd-41a0-af90-eebd8cc52787}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\FFMPEG-LGPL-minimal\source\FFmpeg\smp\libavformat.vcxproj">
-      <Project>{30a96e9b-8061-4f19-bd71-fde7ea8f7929}</Project>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\..\..\FFMPEG-LGPL-minimal\source\FFmpeg\smp\libavutil.vcxproj">
       <Project>{ce6c44dd-6e38-4293-8ab3-04ee28cca972}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\FFMPEG-LGPL-minimal\source\FFmpeg\smp\libswresample.vcxproj">
-      <Project>{3ce4a9ef-98b6-4454-b76e-3ad9c03a2114}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\FFMPEG-LGPL-minimal\source\FFmpeg\smp\libswscale.vcxproj">
-      <Project>{6d8a6330-8ebe-49fd-9281-0a396f9f28f2}</Project>
     </ProjectReference>
     <ProjectReference Include="..\..\FFMPEG-LGPL-minimal\source\FFmpeg\smp\libavcodec.vcxproj">
       <Project>{b4824eff-c340-425d-a4a8-e2e02a71a7ae}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\..\FFMPEG-LGPL-minimal\source\FFmpeg\smp\libavfilter.vcxproj">
-      <Project>{bc2e1028-66cd-41a0-af90-eebd8cc52787}</Project>
-    </ProjectReference>
     <ProjectReference Include="..\..\FFMPEG-LGPL-minimal\source\FFmpeg\smp\libavformat.vcxproj">
       <Project>{30a96e9b-8061-4f19-bd71-fde7ea8f7929}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\..\FFMPEG-LGPL-minimal\source\FFmpeg\smp\libavutil.vcxproj">
-      <Project>{ce6c44dd-6e38-4293-8ab3-04ee28cca972}</Project>
     </ProjectReference>
     <ProjectReference Include="..\..\FFMPEG-LGPL-minimal\source\FFmpeg\smp\libswresample.vcxproj">
       <Project>{3ce4a9ef-98b6-4454-b76e-3ad9c03a2114}</Project>

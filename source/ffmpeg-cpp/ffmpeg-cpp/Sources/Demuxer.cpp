@@ -23,7 +23,7 @@ namespace ffmpegcpp
 		if ((ret = avformat_open_input(&containerContext, fileName, inputFormat, &format_opts)) < 0)
 		{
 			CleanUp();
-			throw FFmpegException("Failed to open input container" + string(fileName), ret);
+			throw FFmpegException("Failed to open input container " + string(fileName), ret);
 		}
 
 		// retrieve stream information
