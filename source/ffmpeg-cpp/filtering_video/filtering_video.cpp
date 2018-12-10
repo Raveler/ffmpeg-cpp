@@ -8,15 +8,15 @@ using namespace ffmpegcpp;
 
 int main()
 {
-	// This example will take a raw audio file and encode it into as MP3.
+	// This example will apply some filters to a video and write it back.
 	try
 	{
 		// Create a muxer that will output the video as MKV.
-		Muxer* muxer = new Muxer("output.mpg");
+		Muxer* muxer = new Muxer("filtered_video.mp4");
 
 		// Create a MP3 codec that will encode the raw data.
-		VideoCodec* codec = new VideoCodec("mpeg2video");
-		//codec->SetOption("preset", "default");
+		VideoCodec* codec = new VideoCodec(AV_CODEC_ID_MPEG2VIDEO);
+		codec->SetOption("preset", "default");
 		//VideoCodec* codec = new H264NVEncCodec();
 
 		// Create an encoder that will encode the raw audio data as MP3.
