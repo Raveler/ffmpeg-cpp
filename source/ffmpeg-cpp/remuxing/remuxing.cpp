@@ -38,14 +38,11 @@ int main()
 		videoContainer->DecodeBestVideoStream(videoEncoder);
 		audioContainer->DecodeBestAudioStream(audioEncoder);
 
-
+		// Prepare the pipeline. We want to call this before the rest of the loop
+		// to ensure that the muxer will be fully ready to receive data from
+		// multiple sources.
 		videoContainer->PreparePipeline();
 		audioContainer->PreparePipeline();
-
-		/*while (!videoContainer->IsDone())
-		{
-			videoContainer->Step();
-		}*/
 
 		// Pump the audio and video fully through.
 		// To avoid big buffers, we interleave these calls so that the container
