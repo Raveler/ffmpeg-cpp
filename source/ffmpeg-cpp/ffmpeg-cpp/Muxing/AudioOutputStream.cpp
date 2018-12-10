@@ -35,6 +35,8 @@ namespace ffmpegcpp
 		{
 			throw FFmpegException("Could not copy codec parameters to stream", ret);
 		}
+
+		codecTimeBase = openCodec->GetContext()->time_base;
 	}
 
 	void AudioOutputStream::WritePacket(AVPacket *pkt, OpenCodec* openCodec)
@@ -45,8 +47,14 @@ namespace ffmpegcpp
 			initialized = true;
 		}
 
+		// Write the compressed frame to the media file.
+		SendPacketToMuxer(pkt);
+	}
+
+	void AudioOutputStream::PreparePacketForMuxer(AVPacket* pkt)
+	{
 		/* rescale output packet timestamp values from codec to stream timebase */
-		AVRational* time_base = &openCodec->GetContext()->time_base;
+		AVRational* time_base = &codecTimeBase;
 		av_packet_rescale_ts(pkt, *time_base, stream->time_base);
 		pkt->stream_index = stream->index;
 
@@ -55,9 +63,6 @@ namespace ffmpegcpp
 		{
 			pkt->duration = stream->time_base.den / stream->time_base.num / stream->avg_frame_rate.num * stream->avg_frame_rate.den;
 		}
-
-		/* Write the compressed frame to the media file. */
-		muxer->WritePacket(pkt);
 	}
 
 	bool AudioOutputStream::IsPrimed()

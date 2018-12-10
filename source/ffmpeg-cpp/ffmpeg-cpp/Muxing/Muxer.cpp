@@ -82,10 +82,20 @@ namespace ffmpegcpp
 
 	bool Muxer::IsPrimed()
 	{
+		if (opened) return true; // we were already opened before - always primed from now on!
 		bool allPrimed = true;
 		for (int i = 0; i < outputStreams.size(); ++i)
 		{
 			if (!outputStreams[i]->IsPrimed()) allPrimed = false;
+		}
+
+		// we are finally primed - open ourselves before we continue.
+		if (allPrimed)
+		{
+			// if we are all primed
+			Open();
+			opened = true;
+			//printf("After %d cached packets, we can finally open the container\n", packetQueue.size());
 		}
 		return allPrimed;
 	}
@@ -99,12 +109,26 @@ namespace ffmpegcpp
 		// pushes one frame down the pipeline so that the output can be configured properly.
 		if (!opened)
 		{
+			throw FFmpegException("You cannot submit a packet to the muxer until all output streams are fully primed!");
+		}
+
+		// submit this packet
+		int ret = av_interleaved_write_frame(containerContext, pkt);
+		if (ret < 0)
+		{
+			throw FFmpegException("Error while writing frame to output container", ret);
+		}
+
+		return;
+
+		if (!opened)
+		{
 			// we CAN open now - all streams are primed and ready to go!
 			if (IsPrimed())
 			{
 				Open();
 				opened = true;
-				//printf("After %d cached packets, we can finally open the container\n", packetQueue.size());
+				printf("After %d cached packets, we can finally open the container\n", packetQueue.size());
 
 				// flush the queue
 				for (int i = 0; i < packetQueue.size(); ++i)
@@ -171,6 +195,15 @@ namespace ffmpegcpp
 
 	void Muxer::Close()
 	{
+		// Make sure we drain all the output streams before we write the first packet.
+		// We must be sure to do this because in an extreme case, one entire stream
+		// might be queueing all its packets before we are opened, so it might not
+		// be draining them at all.
+		for (int i = 0; i < outputStreams.size(); ++i)
+		{
+			outputStreams[i]->DrainPacketQueue();
+		}
+
 		// free the stream
 		CleanUp();
 	}

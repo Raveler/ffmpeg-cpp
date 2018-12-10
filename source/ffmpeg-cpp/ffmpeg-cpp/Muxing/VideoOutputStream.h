@@ -19,6 +19,10 @@ namespace ffmpegcpp
 
 		virtual bool IsPrimed();
 
+	protected:
+
+		virtual void PreparePacketForMuxer(AVPacket* pkt);
+
 	private:
 
 		void LazilyInitialize(OpenCodec* openCodec);
@@ -26,5 +30,7 @@ namespace ffmpegcpp
 		AVStream* stream;
 
 		bool initialized = false;
+
+		AVRational codecTimeBase;
 	};
 }

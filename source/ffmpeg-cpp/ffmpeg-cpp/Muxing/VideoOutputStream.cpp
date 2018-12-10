@@ -35,6 +35,8 @@ namespace ffmpegcpp
 		{
 			throw FFmpegException("Could not copy codec parameters to stream", ret);
 		}
+
+		codecTimeBase = openCodec->GetContext()->time_base;
 	}
 
 	void VideoOutputStream::WritePacket(AVPacket *pkt, OpenCodec* openCodec)
@@ -45,16 +47,19 @@ namespace ffmpegcpp
 			initialized = true;
 		}
 
+		SendPacketToMuxer(pkt);
+	}
+
+	void VideoOutputStream::PreparePacketForMuxer(AVPacket* pkt)
+	{
+
 		/* rescale output packet timestamp values from codec to stream timebase */
-		AVRational* time_base = &openCodec->GetContext()->time_base;
+		AVRational* time_base = &codecTimeBase;
 		av_packet_rescale_ts(pkt, *time_base, stream->time_base);
 		pkt->stream_index = stream->index;
 
 		// We NEED to fill in the duration here, otherwise the frame rate is calculated wrong in the end for certain codecs/containers (ie h264/mp4).
 		pkt->duration = stream->time_base.den / stream->time_base.num / stream->avg_frame_rate.num * stream->avg_frame_rate.den;
-
-		/* Write the compressed frame to the media file. */
-		muxer->WritePacket(pkt);
 	}
 
 	bool VideoOutputStream::IsPrimed()

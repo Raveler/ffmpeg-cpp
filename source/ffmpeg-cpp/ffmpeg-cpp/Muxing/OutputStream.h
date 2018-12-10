@@ -18,10 +18,21 @@ namespace ffmpegcpp
 
 		virtual bool IsPrimed() = 0;
 
+		void DrainPacketQueue();
+
 	protected:
 
-		Muxer* muxer;
+		virtual void PreparePacketForMuxer(AVPacket* packet) = 0;
+
+		void SendPacketToMuxer(AVPacket* packet);
+
 
 		Codec* codec;
+
+		std::vector<AVPacket*> packetQueue;
+
+	private:
+
+		Muxer* muxer;
 	};
 }

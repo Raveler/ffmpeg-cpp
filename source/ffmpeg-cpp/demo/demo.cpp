@@ -31,10 +31,10 @@ void PlayDemo(int argc, char** argv)
 	const char* containerWithAudioFile = "samples/DesiJourney.wav";
 
 	// hard-code the settings here, but let them be overridden by the arguments
-	string inputAudioSource = "GENERATED"; // options are RAW, ENCODED, CONTAINER, GENERATED
+	string inputAudioSource = "CONTAINER"; // options are RAW, ENCODED, CONTAINER, GENERATED
 	string inputVideoSource = "ENCODED"; // options are RAW, ENCODED, CONTAINER, GENERATED
-	string outputAudioCodec = "MP2"; // options are MP2, AAC, NONE
-	string outputVideoCodec = "NONE"; // options are H264, H265, VP9, NONE (H264 and H265 only work on Nvidia hardware)
+	string outputAudioCodec = "AAC"; // options are MP2, AAC, NONE
+	string outputVideoCodec = "H264"; // options are H264, H265, VP9, NONE (H264 and H265 only work on Nvidia hardware)
 	string outputContainerName = "out.mp4"; // container format is deduced from extension so use a known one
 
 	// you can use any filter string that you can use in the ffmpeg command-line here
