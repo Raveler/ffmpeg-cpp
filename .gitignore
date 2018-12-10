@@ -21,3 +21,4 @@
 /source/ffmpeg-cpp/filter_video/obj
 /include
 
+/source/ffmpeg-cpp/remuxing/obj
