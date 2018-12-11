@@ -20,6 +20,7 @@ namespace ffmpegcpp
 		bool IsFrameRateSupported(AVRational* frameRate);
 
 		AVPixelFormat GetDefaultPixelFormat();
+		AVRational GetClosestSupportedFrameRate(AVRational frameRate);
 
 	};
 

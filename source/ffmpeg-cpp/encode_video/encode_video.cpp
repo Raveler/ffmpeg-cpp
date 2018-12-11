@@ -28,6 +28,8 @@ int main()
 		// but if we have something weird, we can specify the properties of the format
 		// in the constructor as commented out below.
 		RawVideoFileSource* videoFile = new RawVideoFileSource("samples/carphone_qcif.y4m", encoder);
+		/*Demuxer* videoFile = new Demuxer("samples/big_buck_bunny.mp4");
+		videoFile->DecodeBestVideoStream(encoder);*/
 
 		// Prepare the output pipeline. This will push a small amount of frames to the file sink until it IsPrimed returns true.
 		videoFile->PreparePipeline();
