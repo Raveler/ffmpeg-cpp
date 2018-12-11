@@ -37,6 +37,26 @@ namespace ffmpegcpp
 		}
 
 		codecTimeBase = openCodec->GetContext()->time_base;
+
+		// Copy side_data from the codec context to the stream... this is 
+		// necessary for certain codecs such as mpeg2video!
+		if (openCodec->GetContext()->nb_coded_side_data)
+		{
+			int i;
+
+			for (i = 0; i < openCodec->GetContext()->nb_coded_side_data; i++)
+			{
+				const AVPacketSideData *sd_src = &openCodec->GetContext()->coded_side_data[i];
+				uint8_t *dst_data;
+
+				dst_data = av_stream_new_side_data(stream, sd_src->type, sd_src->size);
+				if (!dst_data)
+				{
+					throw FFmpegException("Failed to allocate memory for new side_data");
+				}
+				memcpy(dst_data, sd_src->data, sd_src->size);
+			}
+		}
 	}
 
 	void AudioOutputStream::WritePacket(AVPacket *pkt, OpenCodec* openCodec)

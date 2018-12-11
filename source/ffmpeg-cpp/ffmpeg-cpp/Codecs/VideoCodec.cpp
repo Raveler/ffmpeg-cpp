@@ -19,6 +19,13 @@ namespace ffmpegcpp
 	{
 	}
 
+	void VideoCodec::SetQualityScale(int qscale)
+	{
+
+		codecContext->flags |= AV_CODEC_FLAG_QSCALE;
+		codecContext->global_quality = FF_QP2LAMBDA * 0;
+	}
+
 	bool VideoCodec::IsPixelFormatSupported(AVPixelFormat format)
 	{
 		if (format == AV_PIX_FMT_NONE) return true; // let the codec deal with this

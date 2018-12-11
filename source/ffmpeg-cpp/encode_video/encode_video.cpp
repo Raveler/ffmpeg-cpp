@@ -16,8 +16,10 @@ int main()
 
 		// Create a MP3 codec that will encode the raw data.
 		VideoCodec* codec = new VideoCodec("mpeg2video");
-		//codec->SetOption("preset", "default");
-		//VideoCodec* codec = new H264NVEncCodec();
+
+		// Set the global quality of the video encoding. This maps to the command line
+		// parameter -qscale and must be within range [0,31].
+		codec->SetQualityScale(0);
 
 		// Create an encoder that will encode the raw audio data as MP3.
 		// Tie it to the muxer so it will be written to the file.
@@ -28,8 +30,6 @@ int main()
 		// but if we have something weird, we can specify the properties of the format
 		// in the constructor as commented out below.
 		RawVideoFileSource* videoFile = new RawVideoFileSource("samples/carphone_qcif.y4m", encoder);
-		/*Demuxer* videoFile = new Demuxer("samples/big_buck_bunny.mp4");
-		videoFile->DecodeBestVideoStream(encoder);*/
 
 		// Prepare the output pipeline. This will push a small amount of frames to the file sink until it IsPrimed returns true.
 		videoFile->PreparePipeline();
@@ -43,16 +43,12 @@ int main()
 		// Save everything to disk by closing the muxer.
 		muxer->Close();
 	}
-	catch (const char* bla)
-	{
-
-	}
-	/*catch (FFmpegException e)
+	catch (FFmpegException e)
 	{
 		cerr << "Exception caught!" << endl;
 		cerr << e.what() << endl;
 		throw e;
-	}*/
+	}
 
 	cout << "Encoding complete!" << endl;
 	cout << "Press any key to continue..." << endl;
