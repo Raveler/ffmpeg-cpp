@@ -18,7 +18,7 @@
 /source/ffmpeg-cpp/encode_audio/obj
 /source/ffmpeg-cpp/encode_video/obj
 /source/ffmpeg-cpp/decode_video/obj
-/source/ffmpeg-cpp/filter_video/obj
+/source/ffmpeg-cpp/filtering_video/obj
 /include
 
 /source/ffmpeg-cpp/remuxing/obj

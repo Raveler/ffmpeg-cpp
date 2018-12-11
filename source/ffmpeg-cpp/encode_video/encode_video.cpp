@@ -14,7 +14,7 @@ int main()
 		// Create a muxer that will output the video as MKV.
 		Muxer* muxer = new Muxer("output.mpg");
 
-		// Create a MP3 codec that will encode the raw data.
+		// Create a MPEG2 codec that will encode the raw data.
 		VideoCodec* codec = new VideoCodec("mpeg2video");
 
 		// Set the global quality of the video encoding. This maps to the command line

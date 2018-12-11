@@ -56,16 +56,12 @@ int main()
 		// Save everything to disk by closing the muxer.
 		muxer->Close();
 	}
-	catch (const char* bla)
-	{
-
-	}
-	/*catch (FFmpegException e)
+	catch (FFmpegException e)
 	{
 		cerr << "Exception caught!" << endl;
 		cerr << e.what() << endl;
 		throw e;
-	}*/
+	}
 
 	cout << "Encoding complete!" << endl;
 	cout << "Press any key to continue..." << endl;
