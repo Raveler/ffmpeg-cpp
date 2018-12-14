@@ -1,8 +1,8 @@
 #pragma once
 
 #include "ffmpeg.h"
-#include "InputStream.h"
-#include "Frame Sinks/AudioFrameSink.h"
+#include "Demuxing/InputStream.h"
+#include "FrameSinks/AudioFrameSink.h"
 
 namespace ffmpegcpp
 {

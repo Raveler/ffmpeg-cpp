@@ -11,9 +11,9 @@
 #include "Sources/RawVideoDataSource.h"
 #include "Sources/EncodedFileSource.h"
 
-#include "Frame Sinks/VideoEncoder.h"
-#include "Frame Sinks/AudioEncoder.h"
-#include "Frame Sinks/VideoFilter.h"
+#include "FrameSinks/VideoEncoder.h"
+#include "FrameSinks/AudioEncoder.h"
+#include "FrameSinks/VideoFilter.h"
 
 #include "Codecs/AudioCodec.h"
 

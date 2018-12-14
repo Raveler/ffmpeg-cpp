@@ -1,4 +1,4 @@
-#include "VideoCodec.h"
+#include "Codecs/VideoCodec.h"
 #include "FFmpegException.h"
 
 using namespace std;

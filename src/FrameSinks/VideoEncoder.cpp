@@ -1,4 +1,4 @@
-#include "VideoEncoder.h"
+#include "FrameSinks/VideoEncoder.h"
 
 #include "FFmpegException.h"
 #include "Muxing/VideoOutputStream.h"

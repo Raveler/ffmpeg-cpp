@@ -1,4 +1,4 @@
-#include "JPGCodec.h"
+#include "Codecs/JPGCodec.h"
 
 namespace ffmpegcpp
 {

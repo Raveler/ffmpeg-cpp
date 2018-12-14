@@ -1,4 +1,4 @@
-#include "OutputStream.h"
+#include "Muxing/OutputStream.h"
 #include "FFmpegException.h"
 
 using namespace std;

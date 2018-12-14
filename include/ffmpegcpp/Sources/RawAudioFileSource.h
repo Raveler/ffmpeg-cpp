@@ -2,8 +2,8 @@
 
 #include "ffmpeg.h"
 
-#include "InputSource.h"
-#include "Demuxer.h"
+#include "Sources/InputSource.h"
+#include "Sources/Demuxer.h"
 
 
 namespace ffmpegcpp

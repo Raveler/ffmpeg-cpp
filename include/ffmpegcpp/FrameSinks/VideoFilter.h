@@ -2,7 +2,7 @@
 
 #include "ffmpeg.h"
 
-#include "VideoFrameSink.h"
+#include "FrameSinks/VideoFrameSink.h"
 
 namespace ffmpegcpp
 {

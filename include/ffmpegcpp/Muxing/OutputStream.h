@@ -2,7 +2,7 @@
 
 #include "ffmpeg.h"
 #include "Codecs/Codec.h"
-#include "Muxer.h"
+#include "Muxing/Muxer.h"
 
 namespace ffmpegcpp
 {

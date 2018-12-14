@@ -2,8 +2,8 @@
 
 #include "ffmpeg.h"
 #include "Codecs/Codec.h"
-#include "OutputStream.h"
-#include "Muxer.h"
+#include "Muxing/OutputStream.h"
+#include "Muxing/Muxer.h"
 
 namespace ffmpegcpp
 {
