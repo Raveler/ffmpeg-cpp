@@ -17,7 +17,7 @@ namespace ffmpegcpp
 			throw FFmpegException("Unknown input format: " + string(inputFormat));
 		}
 
-		AVDictionary* format_opts = NULL;
+		AVDictionary* format_opts = nullptr;
 
 		av_dict_set_int(&format_opts, "sample_rate", sampleRate, 0);
 		av_dict_set_int(&format_opts, "channels", channels, 0);

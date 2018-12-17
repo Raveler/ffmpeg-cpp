@@ -82,7 +82,7 @@ namespace ffmpegcpp
 		swsContext = sws_getCachedContext(swsContext,
 			frame->width, frame->height, sourcePixelFormat,
 			frame->width, frame->height, (AVPixelFormat)frame->format,
-			0, 0, 0, 0);
+			0, nullptr, nullptr, nullptr);
 		sws_scale(swsContext, (const uint8_t * const *)&data, in_linesize, 0,
 			frame->height, frame->data, frame->linesize);
 

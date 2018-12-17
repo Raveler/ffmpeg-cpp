@@ -10,7 +10,7 @@ namespace ffmpegcpp
 {
 
 	Demuxer::Demuxer(const char* fileName)
-		: Demuxer(fileName, NULL, NULL)
+		: Demuxer(fileName, nullptr, nullptr)
 	{
 	}
 
@@ -27,7 +27,7 @@ namespace ffmpegcpp
 		}
 
 		// retrieve stream information
-		if (ret = (avformat_find_stream_info(containerContext, NULL)) < 0)
+		if (ret = (avformat_find_stream_info(containerContext, nullptr)) < 0)
 		{
 			CleanUp();
 			throw FFmpegException("Failed to read streams from " + string(fileName), ret);
@@ -47,7 +47,7 @@ namespace ffmpegcpp
 			throw FFmpegException("Failed to create packet for input stream");
 		}
 		av_init_packet(pkt);
-		pkt->data = NULL;
+		pkt->data = nullptr;
 		pkt->size = 0;
 	}
 
@@ -125,7 +125,7 @@ namespace ffmpegcpp
 
 	void Demuxer::DecodeBestAudioStream(AudioFrameSink* frameSink)
 	{
-		int ret = av_find_best_stream(containerContext, AVMEDIA_TYPE_AUDIO, -1, -1, NULL, 0);
+		int ret = av_find_best_stream(containerContext, AVMEDIA_TYPE_AUDIO, -1, -1, nullptr, 0);
 		if (ret < 0)
 		{
 			throw FFmpegException("Could not find " + string(av_get_media_type_string(AVMEDIA_TYPE_AUDIO)) + " stream in input file " + fileName, ret);
@@ -136,7 +136,7 @@ namespace ffmpegcpp
 
 	void Demuxer::DecodeBestVideoStream(VideoFrameSink* frameSink)
 	{
-		int ret = av_find_best_stream(containerContext, AVMEDIA_TYPE_VIDEO, -1, -1, NULL, 0);
+		int ret = av_find_best_stream(containerContext, AVMEDIA_TYPE_VIDEO, -1, -1, nullptr, 0);
 		if (ret < 0)
 		{
 			throw FFmpegException("Could not find " + string(av_get_media_type_string(AVMEDIA_TYPE_VIDEO)) + " stream in input file " + fileName, ret);
@@ -213,7 +213,7 @@ namespace ffmpegcpp
 		// EOF
 		if (ret == AVERROR_EOF)
 		{
-			pkt->data = NULL;
+			pkt->data = nullptr;
 			pkt->size = 0;
 			for (int i = 0; i < containerContext->nb_streams; ++i)
 			{

@@ -135,7 +135,7 @@ namespace ffmpegcpp
 		while (tmp_frame->nb_samples > 0)
 		{
 			AddToFifo(tmp_frame);
-			ret = swr_convert_frame(swr_ctx, tmp_frame, NULL);
+			ret = swr_convert_frame(swr_ctx, tmp_frame, nullptr);
 			if (ret < 0)
 			{
 				throw FFmpegException("Error while converting audio frame to destination format", ret);
@@ -145,7 +145,7 @@ namespace ffmpegcpp
 		/* If we have enough samples for the encoder, we encode them.
 		* At the end of the file, we pass the remaining samples to
 		* the encoder. */
-		bool finished = (frame == NULL);
+		bool finished = (frame == nullptr);
 		int fifoSize = av_audio_fifo_size(fifo);
 		while (fifoSize >= converted_frame->nb_samples ||
 			(finished && fifoSize > 0))

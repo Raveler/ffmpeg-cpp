@@ -140,7 +140,7 @@ namespace ffmpegcpp
 	{
 		if (codec == nullptr) return; // can't close if we were never opened
 
-		int ret = avcodec_send_frame(codec->GetContext(), NULL);
+		int ret = avcodec_send_frame(codec->GetContext(), nullptr);
 		if (ret < 0)
 		{
 			throw FFmpegException("Error flushing codec after encoding", ret);

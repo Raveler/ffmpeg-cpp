@@ -88,7 +88,7 @@ namespace ffmpegcpp
 		}
 
 		/* open it */
-		if (int ret = avcodec_open2(codecContext, codec, NULL) < 0)
+		if (int ret = avcodec_open2(codecContext, codec, nullptr) < 0)
 		{
 			throw FFmpegException("Failed to open context for codec " + string(codec->name), ret);
 		}
@@ -183,7 +183,7 @@ namespace ffmpegcpp
 		{
 
 			/* flush the decoder */
-			pkt->data = NULL;
+			pkt->data = nullptr;
 			pkt->size = 0;
 			Decode(pkt, decoded_frame);
 

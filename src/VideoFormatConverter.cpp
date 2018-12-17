@@ -54,7 +54,7 @@ namespace ffmpegcpp
 		swsContext = sws_getCachedContext(swsContext,
 			frame->width, frame->height, (AVPixelFormat)frame->format,
 			converted_frame->width, converted_frame->height, (AVPixelFormat)converted_frame->format,
-			0, 0, 0, 0);
+			0, nullptr, nullptr, nullptr);
 
 	}
 

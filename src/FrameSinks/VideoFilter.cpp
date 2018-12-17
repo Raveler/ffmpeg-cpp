@@ -67,7 +67,7 @@ namespace ffmpegcpp
 			//codec->codecContext->sample_aspect_ratio.num, codec->codecContext->sample_aspect_ratio.den);
 
 			ret = avfilter_graph_create_filter(&buffersrc_ctx, buffersrc, "in",
-				args, NULL, filter_graph);
+				args, nullptr, filter_graph);
 			if (ret < 0)
 			{
 				throw FFmpegException("Cannot create buffer source", ret);
@@ -75,7 +75,7 @@ namespace ffmpegcpp
 
 			/* buffer video sink: to terminate the filter chain. */
 			ret = avfilter_graph_create_filter(&buffersink_ctx, buffersink, "out",
-				NULL, NULL, filter_graph);
+				nullptr, nullptr, filter_graph);
 			if (ret < 0)
 			{
 				throw FFmpegException("Cannot create buffer sink", ret);
@@ -102,7 +102,7 @@ namespace ffmpegcpp
 			outputs->name = av_strdup("in");
 			outputs->filter_ctx = buffersrc_ctx;
 			outputs->pad_idx = 0;
-			outputs->next = NULL;
+			outputs->next = nullptr;
 
 			/*
 			 * The buffer sink input must be connected to the output pad of
@@ -113,15 +113,15 @@ namespace ffmpegcpp
 			inputs->name = av_strdup("out");
 			inputs->filter_ctx = buffersink_ctx;
 			inputs->pad_idx = 0;
-			inputs->next = NULL;
+			inputs->next = nullptr;
 
 			if ((ret = avfilter_graph_parse_ptr(filter_graph, filterString,
-				&inputs, &outputs, NULL)) < 0)
+				&inputs, &outputs, nullptr)) < 0)
 			{
 				throw FFmpegException("Failed to parse and generate filters", ret);
 			}
 
-			if ((ret = avfilter_graph_config(filter_graph, NULL)) < 0)
+			if ((ret = avfilter_graph_config(filter_graph, nullptr)) < 0)
 			{
 				throw FFmpegException("Failed to configure filter graph", ret);
 			}
@@ -158,7 +158,7 @@ namespace ffmpegcpp
 	{
 		if (!initialized) return; // can't close if we were never opened
 
-		int ret = av_buffersrc_add_frame_flags(buffersrc_ctx, NULL, AV_BUFFERSRC_FLAG_KEEP_REF);
+		int ret = av_buffersrc_add_frame_flags(buffersrc_ctx, nullptr, AV_BUFFERSRC_FLAG_KEEP_REF);
 		PollFilterGraphForFrames();
 
 		// close our target as well

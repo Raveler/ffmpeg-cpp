@@ -41,7 +41,7 @@ void PlayDemo(int argc, char** argv)
 	// set the filter to NULL to disable filtering.
 	// See https://trac.ffmpeg.org/wiki/FilteringGuide for more info
 	// This example rotates the entire video and then puts a vignette on top of it.
-	const char* videoFilterConfig = NULL;//"transpose=cclock[middle];[middle]vignette"
+	const char* videoFilterConfig = nullptr;//"transpose=cclock[middle];[middle]vignette"
 
 	// if command line is specified, we overwrite our hard-coded settings
 	if (argc >= 6)
@@ -179,7 +179,7 @@ void PlayDemo(int argc, char** argv)
 		// Instead of feeding the video source directly to the encoder, we feed it to
 		// the video filter instead, which will pass it on to the encoder.
 		VideoFilter* videoFilter = nullptr;
-		if (videoFilterConfig != NULL && videoEncoder != nullptr)
+		if (videoFilterConfig != nullptr && videoEncoder != nullptr)
 		{
 			printf("Applying filter %s to video...\n", videoFilterConfig);
 			videoFilter = new VideoFilter(videoFilterConfig, videoEncoder);

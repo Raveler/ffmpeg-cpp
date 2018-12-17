@@ -21,6 +21,6 @@ private:
 
 	int frameNumber = 0;
 
-	uint8_t *rgb = NULL;
+	uint8_t *rgb = nullptr;
 };
 

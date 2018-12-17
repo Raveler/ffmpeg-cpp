@@ -65,7 +65,7 @@ namespace ffmpegcpp
 			throw FFmpegException("You can only open a codec once");
 		}
 
-		int ret = avcodec_open2(codecContext, codecContext->codec, NULL);
+		int ret = avcodec_open2(codecContext, codecContext->codec, nullptr);
 		if (ret < 0)
 		{
 			throw FFmpegException("Could not open codecContext for codec", ret);

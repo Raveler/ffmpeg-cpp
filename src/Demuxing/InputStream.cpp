@@ -54,7 +54,7 @@ namespace ffmpegcpp
 		ConfigureCodecContext();
 
 		// Init the decoders
-		if ((ret = avcodec_open2(codecContext, codec, NULL)) < 0)
+		if ((ret = avcodec_open2(codecContext, codec, nullptr)) < 0)
 		{
 			throw FFmpegException("Failed to open codec " + string(codec->name), ret);
 		}
