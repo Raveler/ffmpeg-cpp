@@ -1,5 +1,6 @@
 
 #include <iostream>
+#include <memory>
 
 #include "ffmpegcpp.h"
 
@@ -13,10 +14,10 @@ int main()
 	try
 	{
 		// Create a muxer that will output the video as MKV.
-		Muxer* muxer = new Muxer("output.mkv");
+		auto muxer = std::make_unique<Muxer>("output.mkv");
 
 		// Create a codec that will encode video as VP9
-		VP9Codec* videoCodec = new VP9Codec();
+		auto videoCodec = std::make_unique<VP9Codec>();
 
 		// Configure the codec to not do compression, to use multiple CPU's and to go as fast as possible.
 		videoCodec->SetLossless(true);
@@ -24,19 +25,19 @@ int main()
 		videoCodec->SetDeadline("realtime");
 
 		// Create a codec that will encode audio as AAC
-		AudioCodec* audioCodec = new AudioCodec(AV_CODEC_ID_AAC);
+		auto audioCodec = std::make_unique<AudioCodec>(AV_CODEC_ID_AAC);
 
 		// Create encoders for both
-		VideoEncoder* videoEncoder = new VideoEncoder(videoCodec, muxer);
-		AudioEncoder* audioEncoder = new AudioEncoder(audioCodec, muxer);
+		auto videoEncoder = std::make_unique<VideoEncoder>(videoCodec.get(), muxer.get());
+		auto audioEncoder = std::make_unique<AudioEncoder>(audioCodec.get(), muxer.get());
 
 		// Load both audio and video from a container
-		Demuxer* videoContainer = new Demuxer("samples/big_buck_bunny.mp4");
-		Demuxer* audioContainer = new Demuxer("samples/DesiJourney.wav");
+		auto videoContainer = std::make_unique<Demuxer>("samples/big_buck_bunny.mp4");
+		auto audioContainer = std::make_unique<Demuxer>("samples/DesiJourney.wav");
 
 		// Tie the best stream from each container to the output
-		videoContainer->DecodeBestVideoStream(videoEncoder);
-		audioContainer->DecodeBestAudioStream(audioEncoder);
+		videoContainer->DecodeBestVideoStream(videoEncoder.get());
+		audioContainer->DecodeBestAudioStream(audioEncoder.get());
 
 		// Prepare the pipeline. We want to call this before the rest of the loop
 		// to ensure that the muxer will be fully ready to receive data from

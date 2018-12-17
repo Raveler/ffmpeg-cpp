@@ -4,12 +4,11 @@ GeneratedVideoSource::GeneratedVideoSource(int width, int height, VideoFrameSink
 {
 	// generate a raw video source that will convert the raw format to any other format and pass it on to the encoder
 	// or any other sink (might be a filter as well).
-	output = new RawVideoDataSource(width, height, AV_PIX_FMT_RGBA, AV_PIX_FMT_RGBA, 30, frameSink);
+	output = std::make_unique<RawVideoDataSource>(width, height, AV_PIX_FMT_RGBA, AV_PIX_FMT_RGBA, 30, frameSink);
 }
 
 GeneratedVideoSource::~GeneratedVideoSource()
 {
-	delete output;
 	delete rgb;
 }
 

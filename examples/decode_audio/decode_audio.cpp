@@ -1,5 +1,6 @@
 
 #include <iostream>
+#include <memory>
 
 #include "ffmpegcpp.h"
 
@@ -52,26 +53,23 @@ int main()
 	try
 	{
 		// Load this container file so we can extract audio from it.
-		Demuxer* demuxer = new Demuxer("samples/big_buck_bunny.mp4");
+		Demuxer demuxer("samples/big_buck_bunny.mp4");
 
 		// Create a file sink that will just output the raw audio data.
-		RawAudioFileSink* fileSink = new RawAudioFileSink("rawaudio");
+		auto fileSink = std::make_unique<RawAudioFileSink>("rawaudio");
 
 		// tie the file sink to the best audio stream in the input container.
-		demuxer->DecodeBestAudioStream(fileSink);
+		demuxer.DecodeBestAudioStream(fileSink.get());
 
 		// Prepare the output pipeline. This will push a small amount of frames to the file sink until it IsPrimed returns true.
-		demuxer->PreparePipeline();
+		demuxer.PreparePipeline();
 
 		// Push all the remaining frames through.
-		while (!demuxer->IsDone())
+		while (!demuxer.IsDone())
 		{
-			demuxer->Step();
+			demuxer.Step();
 		}
 
-		// done
-		delete demuxer;
-		delete fileSink;
 	}
 	catch (FFmpegException e)
 	{

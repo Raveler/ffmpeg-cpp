@@ -8,7 +8,7 @@ GeneratedAudioSource::GeneratedAudioSource(AudioFrameSink* frameSink)
 
 	// generate a raw video source that will convert the raw format to any other format and pass it on to the encoder
 	// or any other sink (might be a filter as well).
-	output = new RawAudioDataSource(format, this->sampleRate, this->channels, frameSink);
+	output = std::make_unique<RawAudioDataSource>(format, this->sampleRate, this->channels, frameSink);
 
 	samples = new uint16_t[channels * 2 * sampleCount];
 
@@ -16,7 +16,6 @@ GeneratedAudioSource::GeneratedAudioSource(AudioFrameSink* frameSink)
 
 GeneratedAudioSource::~GeneratedAudioSource()
 {
-	delete output;
 	delete samples;
 }
 

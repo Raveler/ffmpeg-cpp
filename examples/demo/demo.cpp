@@ -1,5 +1,6 @@
 
 #include <iostream>
+#include <memory>
 
 #include "GeneratedVideoSource.h"
 #include "GeneratedAudioSource.h"
@@ -63,24 +64,24 @@ void PlayDemo(int argc, char** argv)
 		*/
 
 		// create the output muxer - we'll be adding encoders to it later
-		Muxer* muxer = new Muxer(outputContainerName.c_str());
+		auto muxer = std::make_unique<Muxer>(outputContainerName.c_str());
 
 		/**
 			* CONFIGURE AUDIO OUTPUT
 		*/
 
 		// create the output encoder based on our setting above
-		AudioCodec* audioCodec = nullptr;
+		std::unique_ptr<AudioCodec> audioCodec;
 		if (outputAudioCodec == "MP2")
 		{
 			printf("Encoding audio as MP2...\n");
-			audioCodec = new AudioCodec(AV_CODEC_ID_MP2);
+			audioCodec = std::make_unique<AudioCodec>(AV_CODEC_ID_MP2);
 
 		}
 		else if (outputAudioCodec == "AAC")
 		{
 			printf("Encoding audio as AAC...\n");
-			audioCodec = new AudioCodec(AV_CODEC_ID_AAC);
+			audioCodec = std::make_unique<AudioCodec>(AV_CODEC_ID_AAC);
 
 		}
 		else if (outputAudioCodec == "NONE")
@@ -90,10 +91,10 @@ void PlayDemo(int argc, char** argv)
 
 		// create an encoder - this encoder will receive raw data from any source (filter, file, container, memory, etc),
 		// encode it and send it to the muxer (the output container).
-		AudioEncoder* audioEncoder = nullptr;
+		std::unique_ptr<AudioEncoder> audioEncoder;
 		if (audioCodec != nullptr)
 		{
-			audioEncoder = new AudioEncoder(audioCodec, muxer);
+			audioEncoder = std::make_unique<AudioEncoder>(audioCodec.get(), muxer.get());
 		}
 
 		/**
@@ -101,27 +102,27 @@ void PlayDemo(int argc, char** argv)
 		*/
 
 		// create the output encoder based on our setting above
-		VideoCodec* videoCodec = nullptr;
+		std::unique_ptr<VideoCodec> videoCodec;
 		if (outputVideoCodec == "H264")
 		{
 			printf("Encoding video as H264 on Nvidia GPU...\n");
-			H264NVEncCodec* h264Codec = new H264NVEncCodec();
+			auto h264Codec = std::make_unique<H264NVEncCodec>();
 			h264Codec->SetPreset("hq");
-			videoCodec = h264Codec;
+			videoCodec = std::move(h264Codec);
 		}
 		else if (outputVideoCodec == "H265")
 		{
 			printf("Encoding video as H265 on Nvidia GPU...\n");
-			H265NVEncCodec* h265Codec = new H265NVEncCodec();
+			auto h265Codec = std::make_unique<H265NVEncCodec>();
 			h265Codec->SetPreset("hq");
-			videoCodec = h265Codec;
+			videoCodec = std::move(h265Codec);
 		}
 		else if (outputVideoCodec == "VP9")
 		{
 			printf("Encoding video as VP9...\n");
-			VP9Codec* vp9Codec = new VP9Codec();
+			auto vp9Codec = std::make_unique<VP9Codec>();
 			vp9Codec->SetLossless(true);
-			videoCodec = vp9Codec;
+			videoCodec = std::move(vp9Codec);
 		}
 		else if (outputVideoCodec == "NONE")
 		{
@@ -130,10 +131,10 @@ void PlayDemo(int argc, char** argv)
 
 		// create an encoder for the codec and tie it to the muxer
 		// this encoder will receive data from an input source (file, raw, filter, etc), encode it and send it to the output container (muxer)
-		VideoEncoder* videoEncoder = nullptr;
+		std::unique_ptr<VideoEncoder> videoEncoder;
 		if (videoCodec != nullptr)
 		{
-			videoEncoder = new VideoEncoder(videoCodec, muxer);
+			videoEncoder = std::make_unique<VideoEncoder>(videoCodec.get(), muxer.get());
 		}
 
 		/**
@@ -141,31 +142,31 @@ void PlayDemo(int argc, char** argv)
 		*/
 
 		// only do this when there is an output - otherwise there is no point in reading audio
-		InputSource* audioInputSource = nullptr;
+		std::unique_ptr<InputSource> audioInputSource;
 		if (audioEncoder != nullptr)
 		{
 			if (inputAudioSource == "RAW")
 			{
 				printf("Pulling audio from %s...\n", rawAudioFile);
-				audioInputSource = new RawAudioFileSource(rawAudioFile, rawAudioFormat, rawAudioSampleRate, rawAudioChannels, audioEncoder);
+				audioInputSource = std::make_unique<RawAudioFileSource>(rawAudioFile, rawAudioFormat, rawAudioSampleRate, rawAudioChannels, audioEncoder.get());
 			}
 			else if (inputAudioSource == "ENCODED")
 			{
 				printf("Pulling audio from %s...\n", encodedAudioFile);
-				audioInputSource = new EncodedFileSource(encodedAudioFile, AV_CODEC_ID_MP3, audioEncoder);
+				audioInputSource = std::make_unique<EncodedFileSource>(encodedAudioFile, AV_CODEC_ID_MP3, audioEncoder.get());
 			}
 			else if (inputAudioSource == "CONTAINER")
 			{
 				// if the input comes from a container, we use the demuxer class - it is just an input source like any other
 				printf("Pulling audio from %s...\n", containerWithAudioFile);
-				Demuxer* demuxer = new Demuxer(containerWithAudioFile);
-				demuxer->DecodeBestAudioStream(audioEncoder);
-				audioInputSource = demuxer;
+				auto demuxer = std::make_unique<Demuxer>(containerWithAudioFile);
+				demuxer->DecodeBestAudioStream(audioEncoder.get());
+				audioInputSource = std::move(demuxer);
 			}
 			else if (inputAudioSource == "GENERATED")
 			{
 				printf("Generating 440Hz audio tone...\n");
-				audioInputSource = new GeneratedAudioSource(audioEncoder);
+				audioInputSource = std::make_unique<GeneratedAudioSource>(audioEncoder.get());
 			}
 		}
 
@@ -173,17 +174,14 @@ void PlayDemo(int argc, char** argv)
 			* CONFIGURE VIDEO FILTER IF IT IS USED
 		*/
 
-		VideoFrameSink* videoFrameSink = videoEncoder;
-
 		// If a video filter was specified, we inject it into the pipeline here.
 		// Instead of feeding the video source directly to the encoder, we feed it to
 		// the video filter instead, which will pass it on to the encoder.
-		VideoFilter* videoFilter = nullptr;
+		std::unique_ptr<VideoFilter> videoFilter;
 		if (videoFilterConfig != nullptr && videoEncoder != nullptr)
 		{
 			printf("Applying filter %s to video...\n", videoFilterConfig);
-			videoFilter = new VideoFilter(videoFilterConfig, videoEncoder);
-			videoFrameSink = videoFilter; // used to feed the source below
+			videoFilter = std::make_unique<VideoFilter>(videoFilterConfig, videoEncoder.get());
 		}
 
 		/**
@@ -191,30 +189,30 @@ void PlayDemo(int argc, char** argv)
 		*/
 
 		// only do this when there is video output
-		InputSource* videoInputSource = nullptr;
+		std::unique_ptr<InputSource> videoInputSource;
 		if (videoEncoder != nullptr)
 		{
 			if (inputVideoSource == "RAW")
 			{
 				printf("Pulling video from %s...\n", rawVideoFile);
-				videoInputSource = new RawVideoFileSource(rawVideoFile, videoFrameSink);
+				videoInputSource = std::make_unique<RawVideoFileSource>(rawVideoFile, videoFilter.get());
 			}
 			else if (inputVideoSource == "ENCODED")
 			{
 				printf("Pulling video from %s...\n", encodedVideoFile);
-				videoInputSource = new RawVideoFileSource(encodedVideoFile, videoFrameSink);
+				videoInputSource = std::make_unique<RawVideoFileSource>(encodedVideoFile, videoFilter.get());
 			}
 			else if (inputVideoSource == "CONTAINER")
 			{
 				printf("Pulling video from %s...\n", containerWithVideoAndAudioFile);
-				Demuxer* demuxer = new Demuxer(containerWithVideoAndAudioFile);
-				demuxer->DecodeBestVideoStream(videoFrameSink);
-				videoInputSource = demuxer;
+				auto demuxer = std::make_unique<Demuxer>(containerWithVideoAndAudioFile);
+				demuxer->DecodeBestVideoStream(videoFilter.get());
+				videoInputSource = std::move(demuxer);
 			}
 			else if (inputVideoSource == "GENERATED")
 			{
 				printf("Generating checkerboard video pattern...\n");
-				videoInputSource = new GeneratedVideoSource(640, 480, videoFrameSink);
+				videoInputSource = std::make_unique<GeneratedVideoSource>(640, 480, videoFilter.get());
 			}
 		}
 
@@ -249,31 +247,6 @@ void PlayDemo(int argc, char** argv)
 		// close the muxer and save the file to disk
 		muxer->Close();
 
-		// all done
-		if (audioCodec != nullptr)
-		{
-			delete audioCodec;
-			delete audioEncoder;
-		}
-		if (videoCodec != nullptr)
-		{
-			delete videoCodec;
-			delete videoEncoder;
-			if (videoFilter != nullptr) delete videoFilter;
-		}
-
-		if (audioInputSource != nullptr)
-		{
-			delete audioInputSource;
-		}
-
-		if (videoInputSource != nullptr)
-		{
-			delete videoInputSource;
-		}
-
-
-		delete muxer;
 	}
 	catch (FFmpegException e)
 	{

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #include "ffmpegcpp.h"
 
 using namespace ffmpegcpp;
@@ -17,7 +19,7 @@ public:
 
 private:
 
-	RawVideoDataSource* output;
+	std::unique_ptr<RawVideoDataSource> output;
 
 	int frameNumber = 0;
 

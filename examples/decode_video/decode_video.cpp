@@ -1,5 +1,6 @@
 
 #include <iostream>
+#include <memory>
 
 #include "ffmpegcpp.h"
 
@@ -67,26 +68,22 @@ int main()
 	try
 	{
 		// Load this container file so we can extract video from it.
-		Demuxer* demuxer = new Demuxer("samples/big_buck_bunny.mp4");
+		Demuxer demuxer("samples/big_buck_bunny.mp4");
 
 		// Create a file sink that will just output the raw frame data in one PGM file per frame.
-		PGMFileSink* fileSink = new PGMFileSink();
+		auto fileSink = std::make_unique<PGMFileSink>();
 
 		// tie the file sink to the best video stream in the input container.
-		demuxer->DecodeBestVideoStream(fileSink);
+		demuxer.DecodeBestVideoStream(fileSink.get());
 
 		// Prepare the output pipeline. This will push a small amount of frames to the file sink until it IsPrimed returns true.
-		demuxer->PreparePipeline();
+		demuxer.PreparePipeline();
 
 		// Push all the remaining frames through.
-		while (!demuxer->IsDone())
+		while (!demuxer.IsDone())
 		{
-			demuxer->Step();
+			demuxer.Step();
 		}
-
-		// done
-		delete demuxer;
-		delete fileSink;
 	}
 	catch (FFmpegException e)
 	{

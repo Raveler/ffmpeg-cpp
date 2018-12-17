@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #include "ffmpegcpp.h"
 
 using namespace ffmpegcpp;
@@ -21,7 +23,7 @@ private:
 	int channels;
 	AVSampleFormat format;
 
-	RawAudioDataSource* output;
+	std::unique_ptr<RawAudioDataSource> output;
 
 	int sampleCount = 735;
 
