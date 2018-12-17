@@ -4,19 +4,16 @@
 
 #include "ffmpegcpp.h"
 
-using namespace ffmpegcpp;
-
-
 int main()
 {
 	// This example will take a raw audio file and encode it into as MP3.
 	try
 	{
 		// Create a muxer that will output the video as MKV.
-		auto muxer = std::make_unique<Muxer>("output.mkv");
+		auto muxer = std::make_unique<ffmpegcpp::Muxer>("output.mkv");
 
 		// Create a codec that will encode video as VP9
-		auto videoCodec = std::make_unique<VP9Codec>();
+		auto videoCodec = std::make_unique<ffmpegcpp::VP9Codec>();
 
 		// Configure the codec to not do compression, to use multiple CPU's and to go as fast as possible.
 		videoCodec->SetLossless(true);
@@ -24,15 +21,15 @@ int main()
 		videoCodec->SetDeadline("realtime");
 
 		// Create a codec that will encode audio as AAC
-		auto audioCodec = std::make_unique<AudioCodec>(AV_CODEC_ID_AAC);
+		auto audioCodec = std::make_unique<ffmpegcpp::AudioCodec>(AV_CODEC_ID_AAC);
 
 		// Create encoders for both
-		auto videoEncoder = std::make_unique<VideoEncoder>(videoCodec.get(), muxer.get());
-		auto audioEncoder = std::make_unique<AudioEncoder>(audioCodec.get(), muxer.get());
+		auto videoEncoder = std::make_unique<ffmpegcpp::VideoEncoder>(videoCodec.get(), muxer.get());
+		auto audioEncoder = std::make_unique<ffmpegcpp::AudioEncoder>(audioCodec.get(), muxer.get());
 
 		// Load both audio and video from a container
-		auto videoContainer = std::make_unique<Demuxer>("samples/big_buck_bunny.mp4");
-		auto audioContainer = std::make_unique<Demuxer>("samples/DesiJourney.wav");
+		auto videoContainer = std::make_unique<ffmpegcpp::Demuxer>("samples/big_buck_bunny.mp4");
+		auto audioContainer = std::make_unique<ffmpegcpp::Demuxer>("samples/DesiJourney.wav");
 
 		// Tie the best stream from each container to the output
 		videoContainer->DecodeBestVideoStream(videoEncoder.get());
@@ -56,7 +53,7 @@ int main()
 		// Save everything to disk by closing the muxer.
 		muxer->Close();
 	}
-	catch (FFmpegException e)
+	catch (ffmpegcpp::FFmpegException e)
 	{
 		std::cerr << "Exception caught!" << '\n';
 		std::cerr << e.what() << '\n';

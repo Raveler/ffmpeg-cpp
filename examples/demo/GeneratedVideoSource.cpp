@@ -1,10 +1,10 @@
 #include "GeneratedVideoSource.h"
 
-GeneratedVideoSource::GeneratedVideoSource(int width, int height, VideoFrameSink* frameSink)
+GeneratedVideoSource::GeneratedVideoSource(int width, int height, ffmpegcpp::VideoFrameSink* frameSink)
 {
 	// generate a raw video source that will convert the raw format to any other format and pass it on to the encoder
 	// or any other sink (might be a filter as well).
-	output = std::make_unique<RawVideoDataSource>(width, height, AV_PIX_FMT_RGBA, AV_PIX_FMT_RGBA, 30, frameSink);
+	output = std::make_unique<ffmpegcpp::RawVideoDataSource>(width, height, AV_PIX_FMT_RGBA, AV_PIX_FMT_RGBA, 30, frameSink);
 }
 
 GeneratedVideoSource::~GeneratedVideoSource()

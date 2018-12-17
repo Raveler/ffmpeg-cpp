@@ -4,13 +4,11 @@
 
 #include "ffmpegcpp.h"
 
-using namespace ffmpegcpp;
-
-class GeneratedVideoSource : public InputSource
+class GeneratedVideoSource : public ffmpegcpp::InputSource
 {
 public:
 
-	GeneratedVideoSource(int width, int height, VideoFrameSink* frameSink);
+	GeneratedVideoSource(int width, int height, ffmpegcpp::VideoFrameSink* frameSink);
 	~GeneratedVideoSource() override;
 
 	void PreparePipeline() override;
@@ -19,7 +17,7 @@ public:
 
 private:
 
-	std::unique_ptr<RawVideoDataSource> output;
+	std::unique_ptr<ffmpegcpp::RawVideoDataSource> output;
 
 	int frameNumber = 0;
 

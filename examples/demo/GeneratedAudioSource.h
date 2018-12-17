@@ -4,13 +4,11 @@
 
 #include "ffmpegcpp.h"
 
-using namespace ffmpegcpp;
-
-class GeneratedAudioSource : public InputSource
+class GeneratedAudioSource : public ffmpegcpp::InputSource
 {
 public:
 
-	GeneratedAudioSource(AudioFrameSink* frameSink);
+	GeneratedAudioSource(ffmpegcpp::AudioFrameSink* frameSink);
 	~GeneratedAudioSource() override;
 
 	void PreparePipeline() override;
@@ -23,7 +21,7 @@ private:
 	int channels;
 	AVSampleFormat format;
 
-	std::unique_ptr<RawAudioDataSource> output;
+	std::unique_ptr<ffmpegcpp::RawAudioDataSource> output;
 
 	int sampleCount = 735;
 

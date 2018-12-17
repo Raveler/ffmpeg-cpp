@@ -4,9 +4,7 @@
 
 #include "ffmpegcpp.h"
 
-using namespace ffmpegcpp;
-
-class RawAudioFileSink : public AudioFrameSink
+class RawAudioFileSink : public ffmpegcpp::AudioFrameSink
 {
 public:
 
@@ -52,7 +50,7 @@ int main()
 	try
 	{
 		// Load this container file so we can extract audio from it.
-		Demuxer demuxer("samples/big_buck_bunny.mp4");
+		ffmpegcpp::Demuxer demuxer("samples/big_buck_bunny.mp4");
 
 		// Create a file sink that will just output the raw audio data.
 		auto fileSink = std::make_unique<RawAudioFileSink>("rawaudio");
@@ -70,7 +68,7 @@ int main()
 		}
 
 	}
-	catch (FFmpegException e)
+	catch (ffmpegcpp::FFmpegException e)
 	{
 		std::cerr << "Exception caught!" << '\n';
 		std::cerr << e.what() << '\n';
