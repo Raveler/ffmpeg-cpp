@@ -45,13 +45,13 @@ int main()
 	}
 	catch (FFmpegException e)
 	{
-		cerr << "Exception caught!" << endl;
-		cerr << e.what() << endl;
+		cerr << "Exception caught!" << '\n';
+		cerr << e.what() << '\n';
 		throw e;
 	}
 
-	cout << "Encoding complete!" << endl;
-	cout << "Press any key to continue..." << endl;
+	cout << "Encoding complete!" << '\n';
+	cout << "Press any key to continue..." << '\n';
 
 	getchar();
 }

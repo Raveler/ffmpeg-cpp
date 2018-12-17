@@ -277,7 +277,7 @@ void PlayDemo(int argc, char** argv)
 	}
 	catch (FFmpegException e)
 	{
-		cerr << e.what() << endl;
+		cerr << e.what() << '\n';
 		throw e;
 	}
 }
@@ -286,8 +286,8 @@ int main(int argc, char **argv)
 {
 	PlayDemo(argc, argv);
 
-	cout << "Encoding complete!" << endl;
-	cout << "Press any key to continue..." << endl;
+	cout << "Encoding complete!" << '\n';
+	cout << "Press any key to continue..." << '\n';
 
 	getchar();
 
