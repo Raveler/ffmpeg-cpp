@@ -15,7 +15,7 @@ public:
 		file = fopen(fileName, "wb");
 	}
 
-	virtual void WriteFrame(AVFrame* frame, AVRational* timeBase)
+	void WriteFrame(AVFrame* frame, AVRational* timeBase) override
 	{
 		// Just write out the samples channel by channel to a file.
 		int data_size = av_get_bytes_per_sample((AVSampleFormat)frame->format);
@@ -28,12 +28,12 @@ public:
 		}
 	}
 
-	virtual void Close()
+	void Close() override
 	{
 		fclose(file);
 	}
 
-	virtual bool IsPrimed()
+	bool IsPrimed() override
 	{
 		// Return whether we have all information we need to start writing out data.
 		// Since we don't really need any data in this use case, we are always ready.

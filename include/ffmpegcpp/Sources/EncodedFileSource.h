@@ -16,9 +16,9 @@ namespace ffmpegcpp
 		EncodedFileSource(const char* inFileName, const char* codecName, FrameSink* output);
 		virtual ~EncodedFileSource();
 
-		virtual void PreparePipeline();
-		virtual bool IsDone();
-		virtual void Step();
+		void PreparePipeline() override;
+		bool IsDone() override;
+		void Step() override;
 
 	private:
 

@@ -18,10 +18,10 @@ namespace ffmpegcpp
 		VideoEncoder(VideoCodec* codec, Muxer* muxer, AVRational frameRate, AVPixelFormat format);
 		virtual ~VideoEncoder();
 
-		void WriteFrame(AVFrame* frame, AVRational* timeBase);
-		void Close();
+		void WriteFrame(AVFrame* frame, AVRational* timeBase) override;
+		void Close() override;
 
-		bool IsPrimed();
+		bool IsPrimed() override;
 
 	private:
 

@@ -13,15 +13,15 @@ namespace ffmpegcpp
 
 		VideoOutputStream(Muxer* muxer, Codec* codec);
 
-		virtual void OpenStream(AVStream* stream, int containerFlags);
+		void OpenStream(AVStream* stream, int containerFlags) override;
 
-		virtual void WritePacket(AVPacket* pkt, OpenCodec* openCodec);
+		void WritePacket(AVPacket* pkt, OpenCodec* openCodec) override;
 
-		virtual bool IsPrimed();
+		bool IsPrimed() override;
 
 	protected:
 
-		virtual void PreparePacketForMuxer(AVPacket* pkt);
+		void PreparePacketForMuxer(AVPacket* pkt) override;
 
 	private:
 

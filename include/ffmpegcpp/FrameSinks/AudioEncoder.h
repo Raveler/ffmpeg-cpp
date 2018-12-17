@@ -19,12 +19,12 @@ namespace ffmpegcpp
 		AudioEncoder(AudioCodec* codec, Muxer* muxer, int bitRate);
 		virtual ~AudioEncoder();
 
-		void WriteFrame(AVFrame* frame, AVRational* timeBase);
-		void Close();
+		void WriteFrame(AVFrame* frame, AVRational* timeBase) override;
+		void Close() override;
 
-		virtual void WriteConvertedFrame(AVFrame* frame);
+		void WriteConvertedFrame(AVFrame* frame) override;
 
-		bool IsPrimed();
+		bool IsPrimed() override;
 
 	private:
 

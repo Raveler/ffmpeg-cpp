@@ -34,9 +34,9 @@ namespace ffmpegcpp
 		std::vector<StreamInfo> GetAudioStreamInfo();
 		std::vector<StreamInfo> GetVideoStreamInfo();
 
-		virtual void PreparePipeline();
-		virtual bool IsDone();
-		virtual void Step();
+		void PreparePipeline() override;
+		bool IsDone() override;
+		void Step() override;
 
 	private:
 

@@ -16,6 +16,6 @@ namespace ffmpegcpp
 
 	protected:
 
-		virtual void ConfigureCodecContext();
+		void ConfigureCodecContext() override;
 	};
 }

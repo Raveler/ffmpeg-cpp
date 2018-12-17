@@ -14,7 +14,7 @@ public:
 	{
 	}
 
-	virtual void WriteFrame(AVFrame* frame, AVRational* timeBase)
+	void WriteFrame(AVFrame* frame, AVRational* timeBase) override
 	{
 		++frameNumber;
 		printf("saving frame %3d\n", frameNumber);
@@ -41,12 +41,12 @@ public:
 		fclose(f);
 	}
 
-	virtual void Close()
+	void Close() override
 	{
 		// nothing to do here.
 	}
 
-	virtual bool IsPrimed()
+	bool IsPrimed() override
 	{
 		// Return whether we have all information we need to start writing out data.
 		// Since we don't really need any data in this use case, we are always ready.

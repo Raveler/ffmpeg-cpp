@@ -9,11 +9,11 @@ class GeneratedVideoSource : public InputSource
 public:
 
 	GeneratedVideoSource(int width, int height, VideoFrameSink* frameSink);
-	~GeneratedVideoSource();
+	~GeneratedVideoSource() override;
 
-	virtual void PreparePipeline();
-	virtual bool IsDone();
-	virtual void Step();
+	void PreparePipeline() override;
+	bool IsDone() override;
+	void Step() override;
 
 private:
 

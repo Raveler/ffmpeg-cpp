@@ -14,10 +14,10 @@ namespace ffmpegcpp
 		VideoFilter(const char* filterString, VideoFrameSink* target);
 		virtual ~VideoFilter();
 
-		void WriteFrame(AVFrame* frame, AVRational* timeBase);
-		void Close();
+		void WriteFrame(AVFrame* frame, AVRational* timeBase) override;
+		void Close() override;
 
-		bool IsPrimed();
+		bool IsPrimed() override;
 
 	private:
 

@@ -9,11 +9,11 @@ class GeneratedAudioSource : public InputSource
 public:
 
 	GeneratedAudioSource(AudioFrameSink* frameSink);
-	~GeneratedAudioSource();
+	~GeneratedAudioSource() override;
 
-	virtual void PreparePipeline();
-	virtual bool IsDone();
-	virtual void Step();
+	void PreparePipeline() override;
+	bool IsDone() override;
+	void Step() override;
 
 private:
 
