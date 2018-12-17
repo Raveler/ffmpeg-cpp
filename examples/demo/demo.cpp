@@ -8,7 +8,6 @@
 #include <ffmpegcpp.h>
 
 using namespace ffmpegcpp;
-using namespace std;
 
 // This example demonstrates different combinations and usages for ffmpeg-cpp.
 // Configure it by changing the values below.
@@ -32,11 +31,11 @@ void PlayDemo(int argc, char** argv)
 	const char* containerWithAudioFile = "samples/DesiJourney.wav";
 
 	// hard-code the settings here, but let them be overridden by the arguments
-	string inputAudioSource = "CONTAINER"; // options are RAW, ENCODED, CONTAINER, GENERATED
-	string inputVideoSource = "ENCODED"; // options are RAW, ENCODED, CONTAINER, GENERATED
-	string outputAudioCodec = "AAC"; // options are MP2, AAC, NONE
-	string outputVideoCodec = "H264"; // options are H264, H265, VP9, NONE (H264 and H265 only work on Nvidia hardware)
-	string outputContainerName = "out.mp4"; // container format is deduced from extension so use a known one
+	std::string inputAudioSource = "CONTAINER"; // options are RAW, ENCODED, CONTAINER, GENERATED
+	std::string inputVideoSource = "ENCODED"; // options are RAW, ENCODED, CONTAINER, GENERATED
+	std::string outputAudioCodec = "AAC"; // options are MP2, AAC, NONE
+	std::string outputVideoCodec = "H264"; // options are H264, H265, VP9, NONE (H264 and H265 only work on Nvidia hardware)
+	std::string outputContainerName = "out.mp4"; // container format is deduced from extension so use a known one
 
 	// you can use any filter string that you can use in the ffmpeg command-line here
 	// set the filter to NULL to disable filtering.
@@ -47,10 +46,10 @@ void PlayDemo(int argc, char** argv)
 	// if command line is specified, we overwrite our hard-coded settings
 	if (argc >= 6)
 	{
-		inputAudioSource = string(argv[1]);
-		inputVideoSource = string(argv[2]);
-		outputAudioCodec = string(argv[3]);
-		outputVideoCodec = string(argv[4]);
+		inputAudioSource = std::string(argv[1]);
+		inputVideoSource = std::string(argv[2]);
+		outputAudioCodec = std::string(argv[3]);
+		outputVideoCodec = std::string(argv[4]);
 		videoFilterConfig = argv[5];
 	}
 
@@ -250,7 +249,7 @@ void PlayDemo(int argc, char** argv)
 	}
 	catch (FFmpegException e)
 	{
-		cerr << e.what() << '\n';
+		std::cerr << e.what() << '\n';
 		throw e;
 	}
 }
@@ -259,8 +258,8 @@ int main(int argc, char **argv)
 {
 	PlayDemo(argc, argv);
 
-	cout << "Encoding complete!" << '\n';
-	cout << "Press any key to continue..." << '\n';
+	std::cout << "Encoding complete!" << '\n';
+	std::cout << "Press any key to continue..." << '\n';
 
 	getchar();
 

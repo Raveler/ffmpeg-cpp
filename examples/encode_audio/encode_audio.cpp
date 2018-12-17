@@ -4,7 +4,6 @@
 
 #include "ffmpegcpp.h"
 
-using namespace std;
 using namespace ffmpegcpp;
 
 int main()
@@ -43,13 +42,13 @@ int main()
 	}
 	catch (FFmpegException e)
 	{
-		cerr << "Exception caught!" << '\n';
-		cerr << e.what() << '\n';
+		std::cerr << "Exception caught!" << '\n';
+		std::cerr << e.what() << '\n';
 		throw e;
 	}
 
-	cout << "Encoding complete!" << '\n';
-	cout << "Press any key to continue..." << '\n';
+	std::cout << "Encoding complete!" << '\n';
+	std::cout << "Press any key to continue..." << '\n';
 
 	getchar();
 }
