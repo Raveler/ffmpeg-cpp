@@ -3,6 +3,7 @@
 #include "ffmpeg.h"
 #include "FrameSinks/FrameSink.h"
 #include "Sources/InputSource.h"
+#include "FFmpegResource.h"
 
 namespace ffmpegcpp
 {
@@ -30,8 +31,7 @@ namespace ffmpegcpp
 		
 		AVCodecParserContext* parser = nullptr;
 
-		AVCodec* codec;
-		AVCodecContext* codecContext = nullptr;
+		FFmpegResource<AVCodecContext> codecContext;
 
 		int bufferSize;
 

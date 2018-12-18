@@ -56,11 +56,6 @@ namespace ffmpegcpp
 			delete buffer;
 			buffer = nullptr;
 		}
-		if (codecContext != nullptr)
-		{
-			avcodec_free_context(&codecContext);
-			codecContext = nullptr;
-		}
 		if (parser != nullptr)
 		{
 			av_parser_close(parser);
@@ -73,7 +68,6 @@ namespace ffmpegcpp
 	void EncodedFileSource::Init(const char* inFileName, AVCodec* codec, FrameSink* output)
 	{
 		this->output = output;
-		this->codec = codec;
 
 		parser = av_parser_init(codec->id);
 		if (!parser)
@@ -81,14 +75,14 @@ namespace ffmpegcpp
 			throw FFmpegException("Parser for codec not found " + string(codec->name));
 		}
 
-		codecContext = avcodec_alloc_context3(codec);
+		codecContext = MakeFFmpegResource<AVCodecContext>(avcodec_alloc_context3(codec));
 		if (!codecContext)
 		{
 			throw FFmpegException("Failed to allocate context for codec " + string(codec->name));
 		}
 
 		/* open it */
-		if (int ret = avcodec_open2(codecContext, codec, nullptr) < 0)
+		if (int ret = avcodec_open2(codecContext.get(), codec, nullptr) < 0)
 		{
 			throw FFmpegException("Failed to open context for codec " + string(codec->name), ret);
 		}
@@ -163,7 +157,7 @@ namespace ffmpegcpp
 		data = buffer;
 		while (data_size > 0)
 		{
-			ret = av_parser_parse2(parser, codecContext, &pkt->data, &pkt->size,
+			ret = av_parser_parse2(parser, codecContext.get(), &pkt->data, &pkt->size,
 				data, data_size, AV_NOPTS_VALUE, AV_NOPTS_VALUE, 0);
 			if (ret < 0)
 			{
@@ -198,7 +192,7 @@ namespace ffmpegcpp
 		int ret;
 
 		/* send the packet with the compressed data to the decoder */
-		ret = avcodec_send_packet(codecContext, pkt);
+		ret = avcodec_send_packet(codecContext.get(), pkt);
 		if (ret < 0)
 		{
 			throw FFmpegException("Error submitting the packet to the decoder", ret);
@@ -207,7 +201,7 @@ namespace ffmpegcpp
 		/* read all the output frames (in general there may be any number of them */
 		while (ret >= 0)
 		{
-			ret = avcodec_receive_frame(codecContext, frame);
+			ret = avcodec_receive_frame(codecContext.get(), frame);
 			if (ret == AVERROR(EAGAIN) || ret == AVERROR_EOF)
 				return;
 			else if (ret < 0)

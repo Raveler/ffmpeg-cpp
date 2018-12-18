@@ -19,7 +19,7 @@ namespace ffmpegcpp
 		}
 
 		// Allocate a codec context for the decoder
-		codecContext = avcodec_alloc_context3(codec);
+		codecContext = MakeFFmpegResource<AVCodecContext>(avcodec_alloc_context3(codec));
 		if (!codecContext)
 		{
 			CleanUp();
@@ -45,7 +45,7 @@ namespace ffmpegcpp
 
 		// Copy codec parameters from input stream to output codec context
 		int ret;
-		if ((ret = avcodec_parameters_to_context(codecContext, stream->codecpar)) < 0)
+		if ((ret = avcodec_parameters_to_context(codecContext.get(), stream->codecpar)) < 0)
 		{
 			throw FFmpegException("Failed to copy " + string(codec->name) + " codec parameters to decoder context", ret);
 		}
@@ -54,7 +54,7 @@ namespace ffmpegcpp
 		ConfigureCodecContext();
 
 		// Init the decoders
-		if ((ret = avcodec_open2(codecContext, codec, nullptr)) < 0)
+		if ((ret = avcodec_open2(codecContext.get(), codec, nullptr)) < 0)
 		{
 			throw FFmpegException("Failed to open codec " + string(codec->name), ret);
 		}
@@ -75,11 +75,6 @@ namespace ffmpegcpp
 
 	void InputStream::CleanUp()
 	{
-		if (codecContext != nullptr)
-		{
-			avcodec_free_context(&codecContext);
-			codecContext = nullptr;
-		}
 		if (frame != nullptr)
 		{
 			av_frame_free(&frame);
@@ -99,7 +94,7 @@ namespace ffmpegcpp
 		int ret;
 
 		/* send the packet with the compressed data to the decoder */
-		ret = avcodec_send_packet(codecContext, pkt);
+		ret = avcodec_send_packet(codecContext.get(), pkt);
 		if (ret < 0)
 		{
 			throw FFmpegException("Error submitting the packet to the decoder", ret);
@@ -108,7 +103,7 @@ namespace ffmpegcpp
 		/* read all the output frames (in general there may be any number of them */
 		while (ret >= 0)
 		{
-			ret = avcodec_receive_frame(codecContext, frame);
+			ret = avcodec_receive_frame(codecContext.get(), frame);
 			if (ret == AVERROR(EAGAIN) || ret == AVERROR_EOF)
 				return;
 			else if (ret < 0)

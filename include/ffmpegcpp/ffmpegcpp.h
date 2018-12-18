@@ -26,3 +26,4 @@
 
 
 #include "FFmpegException.h"
+#include "FFmpegResource.h"

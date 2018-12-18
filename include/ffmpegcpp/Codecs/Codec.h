@@ -4,6 +4,7 @@
 #include "std.h"
 
 #include "OpenCodec.h"
+#include "FFmpegResource.h"
 
 namespace ffmpegcpp
 {
@@ -14,7 +15,6 @@ namespace ffmpegcpp
 
 		Codec(const char* codecName);
 		Codec(AVCodecID codecId);
-		virtual ~Codec();
 
 		void SetOption(const char* name, const char* value);
 		void SetOption(const char* name, int value);
@@ -24,15 +24,11 @@ namespace ffmpegcpp
 
 	protected:
 
-		AVCodecContext* codecContext = nullptr;
+		FFmpegResource<AVCodecContext> codecContext;
 
 		OpenCodec* Open();
 
 	private:
-
-		void CleanUp();
-
-		AVCodecContext* LoadContext(AVCodec* codec);
 
 		bool opened = false;
 	};

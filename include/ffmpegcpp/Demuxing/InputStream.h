@@ -3,6 +3,7 @@
 #include "ffmpeg.h"
 #include "std.h"
 #include "FrameSinks/FrameSink.h"
+#include "FFmpegResource.h"
 
 namespace ffmpegcpp
 {
@@ -23,7 +24,7 @@ namespace ffmpegcpp
 
 	protected:
 
-		AVCodecContext* codecContext = nullptr;
+		FFmpegResource<AVCodecContext> codecContext;
 
 		void SetFrameSink(FrameSink* frameSink);
 

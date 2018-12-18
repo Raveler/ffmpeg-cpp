@@ -4,6 +4,24 @@
 
 using namespace std;
 
+namespace
+{
+	ffmpegcpp::FFmpegResource<AVCodecContext> LoadContext(AVCodec* codec)
+	{
+		auto codecContext = ffmpegcpp::MakeFFmpegResource<AVCodecContext>(avcodec_alloc_context3(codec));
+		if (!codecContext)
+		{
+			throw ffmpegcpp::FFmpegException("Could not allocate video codec context for codec " + string(codec->name));
+		}
+
+		// copy the type
+		codecContext->codec_type = codec->type;
+
+		return codecContext;
+	}
+
+}
+
 namespace ffmpegcpp
 {
 	Codec::Codec(const char* codecName)
@@ -35,29 +53,6 @@ namespace ffmpegcpp
 		av_opt_set_double(codecContext->priv_data, name, value, 0);
 	}
 
-	AVCodecContext* Codec::LoadContext(AVCodec* codec)
-	{
-		AVCodecContext* codecContext = avcodec_alloc_context3(codec);
-		if (!codecContext)
-		{
-			CleanUp();
-			throw FFmpegException("Could not allocate video codec context for codec " + string(codec->name));
-		}
-
-		// copy the type
-		codecContext->codec_type = codec->type;
-
-		return codecContext;
-	}
-
-	void Codec::CleanUp()
-	{
-		if (codecContext != nullptr && !opened)
-		{
-			avcodec_free_context(&codecContext);
-		}
-	}
-
 	OpenCodec* Codec::Open()
 	{
 		if (opened)
@@ -65,7 +60,7 @@ namespace ffmpegcpp
 			throw FFmpegException("You can only open a codec once");
 		}
 
-		int ret = avcodec_open2(codecContext, codecContext->codec, nullptr);
+		int ret = avcodec_open2(codecContext.get(), codecContext->codec, nullptr);
 		if (ret < 0)
 		{
 			throw FFmpegException("Could not open codecContext for codec", ret);
@@ -73,12 +68,7 @@ namespace ffmpegcpp
 
 		opened = true;
 
-		return new OpenCodec(codecContext);
-	}
-
-	Codec::~Codec()
-	{
-		CleanUp();
+		return new OpenCodec(codecContext.get());
 	}
 
 	void Codec::SetGlobalContainerHeader()
