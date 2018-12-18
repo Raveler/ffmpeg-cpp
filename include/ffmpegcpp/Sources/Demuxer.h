@@ -50,7 +50,7 @@ namespace ffmpegcpp
 
 		InputStream** inputStreams = nullptr;
 
-		AVFormatContext* containerContext = nullptr;
+		FFmpegResource<AVFormatContext> containerContext;
 		FFmpegResource<AVPacket> pkt;
 
 		void DecodePacket();

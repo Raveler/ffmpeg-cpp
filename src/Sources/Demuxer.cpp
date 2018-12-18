@@ -20,14 +20,15 @@ namespace ffmpegcpp
 
 		// open input file, and allocate format context
 		int ret;
-		if ((ret = avformat_open_input(&containerContext, fileName, inputFormat, &format_opts)) < 0)
+        auto container_ctx = containerContext.get();
+		if ((ret = avformat_open_input(&container_ctx, fileName, inputFormat, &format_opts)) < 0)
 		{
 			CleanUp();
 			throw FFmpegException("Failed to open input container " + string(fileName), ret);
 		}
 
 		// retrieve stream information
-		if (ret = (avformat_find_stream_info(containerContext, nullptr)) < 0)
+		if (ret = (avformat_find_stream_info(containerContext.get(), nullptr)) < 0)
 		{
 			CleanUp();
 			throw FFmpegException("Failed to read streams from " + string(fileName), ret);
@@ -69,11 +70,6 @@ namespace ffmpegcpp
 			}
 			delete inputStreams;
 			inputStreams = nullptr;
-		}
-		if (containerContext != nullptr)
-		{
-			avformat_close_input(&containerContext);
-			containerContext = nullptr;
 		}
 	}
 
@@ -120,7 +116,7 @@ namespace ffmpegcpp
 
 	void Demuxer::DecodeBestAudioStream(AudioFrameSink* frameSink)
 	{
-		int ret = av_find_best_stream(containerContext, AVMEDIA_TYPE_AUDIO, -1, -1, nullptr, 0);
+		int ret = av_find_best_stream(containerContext.get(), AVMEDIA_TYPE_AUDIO, -1, -1, nullptr, 0);
 		if (ret < 0)
 		{
 			throw FFmpegException("Could not find " + string(av_get_media_type_string(AVMEDIA_TYPE_AUDIO)) + " stream in input file " + fileName, ret);
@@ -131,7 +127,7 @@ namespace ffmpegcpp
 
 	void Demuxer::DecodeBestVideoStream(VideoFrameSink* frameSink)
 	{
-		int ret = av_find_best_stream(containerContext, AVMEDIA_TYPE_VIDEO, -1, -1, nullptr, 0);
+		int ret = av_find_best_stream(containerContext.get(), AVMEDIA_TYPE_VIDEO, -1, -1, nullptr, 0);
 		if (ret < 0)
 		{
 			throw FFmpegException("Could not find " + string(av_get_media_type_string(AVMEDIA_TYPE_VIDEO)) + " stream in input file " + fileName, ret);
@@ -203,7 +199,7 @@ namespace ffmpegcpp
 	void Demuxer::Step()
 	{
 		// read frames from the file
-		int ret = av_read_frame(containerContext, pkt.get());
+		int ret = av_read_frame(containerContext.get(), pkt.get());
 
 		// EOF
 		if (ret == AVERROR_EOF)

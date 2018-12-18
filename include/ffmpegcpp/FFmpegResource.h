@@ -40,6 +40,11 @@ namespace ffmpegcpp
 	};
 
     template <>
+	struct Deleter<AVFormatContext> {
+		void operator()(AVFormatContext * ptr) { avformat_close_input(&ptr); }
+	};
+
+    template <>
 	struct Deleter<struct SwsContext> {
 		void operator()(struct SwsContext * ptr) { sws_freeContext(ptr); }
 	};
