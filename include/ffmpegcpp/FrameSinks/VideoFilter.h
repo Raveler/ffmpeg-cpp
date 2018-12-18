@@ -13,7 +13,6 @@ namespace ffmpegcpp
 	public:
 
 		VideoFilter(const char* filterString, VideoFrameSink* target);
-		virtual ~VideoFilter();
 
 		void WriteFrame(AVFrame* frame, AVRational* timeBase) override;
 		void Close() override;
@@ -30,7 +29,7 @@ namespace ffmpegcpp
 		const char* filterString;
 		AVPixelFormat outputFormat;
 
-		AVFilterGraph *filter_graph = nullptr;
+		FFmpegResource<AVFilterGraph> filter_graph;
 		AVFilterContext *buffersink_ctx = nullptr;
 		AVFilterContext *buffersrc_ctx = nullptr;
 		FFmpegResource<AVFrame> filt_frame;
@@ -38,8 +37,6 @@ namespace ffmpegcpp
 		bool initialized = false;
 
 		AVRational* timeBase;
-
-		void CleanUp();
 	};
 
 

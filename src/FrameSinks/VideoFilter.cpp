@@ -10,16 +10,6 @@ namespace ffmpegcpp
 		this->filterString = filterString;
 	}
 
-	VideoFilter::~VideoFilter()
-	{
-		CleanUp();
-	}
-
-	void VideoFilter::CleanUp()
-	{
-		avfilter_graph_free(&filter_graph);
-	}
-
 	void VideoFilter::InitDelayed(AVFrame* frame, AVRational* timeBase)
 	{
 		outputFormat = (AVPixelFormat)frame->format;
@@ -50,7 +40,7 @@ namespace ffmpegcpp
 
 			enum AVPixelFormat out_pix_fmts[] = { outputFormat, AV_PIX_FMT_NONE };
 
-			filter_graph = avfilter_graph_alloc();
+			filter_graph = MakeFFmpegResource<AVFilterGraph>(avfilter_graph_alloc());
 			if (!outputs || !inputs || !filter_graph)
 			{
 				throw FFmpegException("Failed to allocate filter graph");
@@ -66,7 +56,7 @@ namespace ffmpegcpp
 			//codec->codecContext->sample_aspect_ratio.num, codec->codecContext->sample_aspect_ratio.den);
 
 			ret = avfilter_graph_create_filter(&buffersrc_ctx, buffersrc, "in",
-				args, nullptr, filter_graph);
+				args, nullptr, filter_graph.get());
 			if (ret < 0)
 			{
 				throw FFmpegException("Cannot create buffer source", ret);
@@ -74,7 +64,7 @@ namespace ffmpegcpp
 
 			/* buffer video sink: to terminate the filter chain. */
 			ret = avfilter_graph_create_filter(&buffersink_ctx, buffersink, "out",
-				nullptr, nullptr, filter_graph);
+				nullptr, nullptr, filter_graph.get());
 			if (ret < 0)
 			{
 				throw FFmpegException("Cannot create buffer sink", ret);
@@ -114,13 +104,13 @@ namespace ffmpegcpp
 			inputs->pad_idx = 0;
 			inputs->next = nullptr;
 
-			if ((ret = avfilter_graph_parse_ptr(filter_graph, filterString,
+			if ((ret = avfilter_graph_parse_ptr(filter_graph.get(), filterString,
 				&inputs, &outputs, nullptr)) < 0)
 			{
 				throw FFmpegException("Failed to parse and generate filters", ret);
 			}
 
-			if ((ret = avfilter_graph_config(filter_graph, nullptr)) < 0)
+			if ((ret = avfilter_graph_config(filter_graph.get(), nullptr)) < 0)
 			{
 				throw FFmpegException("Failed to configure filter graph", ret);
 			}
