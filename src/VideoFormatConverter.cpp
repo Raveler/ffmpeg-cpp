@@ -11,7 +11,6 @@ namespace ffmpegcpp
 		int ret;
 		if (!converted_frame)
 		{
-			CleanUp();
 			throw FFmpegException("Error allocating a video frame");
 		}
 
@@ -24,29 +23,14 @@ namespace ffmpegcpp
 		ret = av_frame_get_buffer(converted_frame.get(), 32);
 		if (ret < 0)
 		{
-			CleanUp();
 			throw FFmpegException("Failed to allocate buffer for frame", ret);
-		}
-	}
-
-	VideoFormatConverter::~VideoFormatConverter()
-	{
-		CleanUp();
-	}
-
-	void VideoFormatConverter::CleanUp()
-	{
-		if (swsContext != nullptr)
-		{
-			sws_freeContext(swsContext);
-			swsContext = nullptr;
 		}
 	}
 
 	void VideoFormatConverter::InitDelayed(AVFrame* frame)
 	{
 		// configure the conversion context based in the source and target data
-		swsContext = sws_getCachedContext(swsContext,
+		swsContext = sws_getCachedContext(swsContext.get(),
 			frame->width, frame->height, (AVPixelFormat)frame->format,
 			converted_frame->width, converted_frame->height, (AVPixelFormat)converted_frame->format,
 			0, nullptr, nullptr, nullptr);
@@ -63,7 +47,7 @@ namespace ffmpegcpp
 		}
 
 		// convert the frame
-		sws_scale(swsContext, frame->data, frame->linesize, 0,
+		sws_scale(swsContext.get(), frame->data, frame->linesize, 0,
 			frame->height, converted_frame->data, converted_frame->linesize);
 
 		av_frame_copy_props(converted_frame.get(), frame); // remember all the other data

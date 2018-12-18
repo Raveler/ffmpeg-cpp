@@ -11,26 +11,19 @@ namespace ffmpegcpp
 	public:
 
 		VideoFormatConverter(AVCodecContext* codecContext);
-		~VideoFormatConverter();
 
 		AVFrame* ConvertFrame(AVFrame* frame);
 
-
-
 	private:
 
-		void CleanUp();
-
 		void InitDelayed(AVFrame* frame);
-
 
 		AVCodecContext* codecContext;
 
 		bool initialized = false;
 
 		FFmpegResource<AVFrame> converted_frame;
-		struct SwsContext* swsContext = nullptr;
+		FFmpegResource<struct SwsContext> swsContext;
 	};
-
 
 }

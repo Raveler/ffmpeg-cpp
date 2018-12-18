@@ -34,6 +34,11 @@ namespace ffmpegcpp
 		void operator()(AVAudioFifo * ptr) { av_audio_fifo_free(ptr); }
 	};
 
+    template <>
+	struct Deleter<struct SwsContext> {
+		void operator()(struct SwsContext * ptr) { sws_freeContext(ptr); }
+	};
+
 	template <typename value_type>
 	class FFmpegResource : public std::unique_ptr<value_type, Deleter<value_type>>
 	{

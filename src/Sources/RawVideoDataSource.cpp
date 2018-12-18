@@ -30,7 +30,6 @@ namespace ffmpegcpp
 		frame = MakeFFmpegResource<AVFrame>(av_frame_alloc());
 		if (!frame)
 		{
-			CleanUp();
 			throw FFmpegException("Could not allocate video frame");
 		}
 
@@ -42,22 +41,7 @@ namespace ffmpegcpp
 		ret = av_frame_get_buffer(frame.get(), 32);
 		if (ret < 0)
 		{
-			CleanUp();
 			throw FFmpegException("Could not allocate the video frame data", ret);
-		}
-	}
-
-	RawVideoDataSource::~RawVideoDataSource()
-	{
-		CleanUp();
-	}
-
-	void RawVideoDataSource::CleanUp()
-	{
-		if (swsContext != nullptr)
-		{
-			sws_freeContext(swsContext);
-			swsContext = nullptr;
 		}
 	}
 
@@ -74,11 +58,11 @@ namespace ffmpegcpp
 
 		// if the source and target pixel format are the same, we don't do any conversions, we just copy
 		// but we use sws_scale anyway because we need to convert to the internal line_size format of frame
-		swsContext = sws_getCachedContext(swsContext,
+		swsContext = sws_getCachedContext(swsContext.get(),
 			frame->width, frame->height, sourcePixelFormat,
 			frame->width, frame->height, (AVPixelFormat)frame->format,
 			0, nullptr, nullptr, nullptr);
-		sws_scale(swsContext, (const uint8_t * const *)&data, in_linesize, 0,
+		sws_scale(swsContext.get(), (const uint8_t * const *)&data, in_linesize, 0,
 			frame->height, frame->data, frame->linesize);
 
 		// send to the output

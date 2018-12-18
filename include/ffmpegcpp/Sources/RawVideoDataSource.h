@@ -15,7 +15,6 @@ namespace ffmpegcpp
 
 		RawVideoDataSource(int width, int height, AVPixelFormat pixelFormat, int framesPerSecond, VideoFrameSink* output);
 		RawVideoDataSource(int width, int height, AVPixelFormat sourcePixelFormat, AVPixelFormat targetPixelFormat, int framesPerSecond, VideoFrameSink* output);
-		virtual ~RawVideoDataSource();
 
 		void WriteFrame(void* data, int bytesPerRow);
 		void Close();
@@ -28,7 +27,6 @@ namespace ffmpegcpp
 	private:
 
 		void Init(int width, int height, AVPixelFormat sourcePixelFormat, AVPixelFormat targetPixelFormat, int framesPerSecond, VideoFrameSink* output);
-		void CleanUp();
 
 		AVPixelFormat sourcePixelFormat;
 		AVRational timeBase;
@@ -36,6 +34,6 @@ namespace ffmpegcpp
 		VideoFrameSink* output;
 
 		FFmpegResource<AVFrame> frame;
-		struct SwsContext* swsContext = nullptr;
+		FFmpegResource<struct SwsContext> swsContext;
 	};
 }
