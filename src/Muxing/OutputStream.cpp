@@ -27,13 +27,13 @@ namespace ffmpegcpp
 		// otherwise, we queue the packet
 		else
 		{
-			AVPacket* tmp_pkt = av_packet_alloc();
+			auto tmp_pkt = MakeFFmpegResource<AVPacket>(av_packet_alloc());
 			if (!tmp_pkt)
 			{
 				throw FFmpegException("Failed to allocate packet");
 			}
-			av_packet_ref(tmp_pkt, pkt);
-			packetQueue.push_back(tmp_pkt);
+			av_packet_ref(tmp_pkt.get(), pkt);
+			packetQueue.emplace_back(std::move(tmp_pkt));
 		}
 	}
 
@@ -42,17 +42,15 @@ namespace ffmpegcpp
 		if (packetQueue.size() > 0) printf("Drain %d packets from the packet queue...", packetQueue.size());
 		for (int i = 0; i < packetQueue.size(); ++i)
 		{
-			AVPacket* tmp_pkt = packetQueue[i];
+			const auto & tmp_pkt = packetQueue[i];
 
 			// Write the compressed frame to the media file
-			PreparePacketForMuxer(tmp_pkt);
-			muxer->WritePacket(tmp_pkt);
+			PreparePacketForMuxer(tmp_pkt.get());
+			muxer->WritePacket(tmp_pkt.get());
 
 			// Release the packet
-			av_packet_unref(tmp_pkt);
-			av_packet_free(&tmp_pkt);
+			av_packet_unref(tmp_pkt.get());
 		}
-
 		packetQueue.clear();
 	}
 }

@@ -7,6 +7,7 @@
 #include "Demuxing/VideoInputStream.h"
 #include "Demuxing/InputStream.h"
 #include "Sources/InputSource.h"
+#include "FFmpegResource.h"
 
 namespace ffmpegcpp
 {
@@ -50,7 +51,7 @@ namespace ffmpegcpp
 		InputStream** inputStreams = nullptr;
 
 		AVFormatContext* containerContext = nullptr;
-		AVPacket* pkt = nullptr;
+		FFmpegResource<AVPacket> pkt;
 
 		void DecodePacket();
 

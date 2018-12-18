@@ -40,13 +40,13 @@ namespace ffmpegcpp
 		}
 
 		// initialize packet, set data to NULL, let the demuxer fill it
-		pkt = av_packet_alloc();
+		pkt = MakeFFmpegResource<AVPacket>(av_packet_alloc());
 		if (!pkt)
 		{
 			CleanUp();
 			throw FFmpegException("Failed to create packet for input stream");
 		}
-		av_init_packet(pkt);
+		av_init_packet(pkt.get());
 		pkt->data = nullptr;
 		pkt->size = 0;
 	}
@@ -74,11 +74,6 @@ namespace ffmpegcpp
 		{
 			avformat_close_input(&containerContext);
 			containerContext = nullptr;
-		}
-		if (pkt != nullptr)
-		{
-			av_packet_free(&pkt);
-			pkt = nullptr;
 		}
 	}
 
@@ -208,7 +203,7 @@ namespace ffmpegcpp
 	void Demuxer::Step()
 	{
 		// read frames from the file
-		int ret = av_read_frame(containerContext, pkt);
+		int ret = av_read_frame(containerContext, pkt.get());
 
 		// EOF
 		if (ret == AVERROR_EOF)
@@ -250,11 +245,11 @@ namespace ffmpegcpp
 
 		if (inputStream != nullptr)
 		{
-			inputStream->DecodePacket(pkt);
+			inputStream->DecodePacket(pkt.get());
 		}
 
 		// We need to unref the packet here because packets might pass by here
 		// that don't have a stream attached to them. We want to dismiss them!
-		av_packet_unref(pkt);
+		av_packet_unref(pkt.get());
 	}
 }

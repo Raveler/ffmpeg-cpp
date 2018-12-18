@@ -36,7 +36,7 @@ namespace ffmpegcpp
 		int bufferSize;
 
 		AVFrame* decoded_frame = nullptr;
-		AVPacket* pkt = nullptr;
+		FFmpegResource<AVPacket> pkt;
 		uint8_t* buffer = nullptr;
 
 		FILE* file;

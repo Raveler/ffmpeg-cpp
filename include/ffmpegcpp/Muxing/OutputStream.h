@@ -3,6 +3,7 @@
 #include "ffmpeg.h"
 #include "Codecs/Codec.h"
 #include "Muxing/Muxer.h"
+#include "FFmpegResource.h"
 
 namespace ffmpegcpp
 {
@@ -26,10 +27,9 @@ namespace ffmpegcpp
 
 		void SendPacketToMuxer(AVPacket* packet);
 
-
 		Codec* codec;
 
-		std::vector<AVPacket*> packetQueue;
+		std::vector<FFmpegResource<AVPacket>> packetQueue;
 
 	private:
 

@@ -45,10 +45,6 @@ namespace ffmpegcpp
 
 	void VideoEncoder::CleanUp()
 	{
-		if (pkt != nullptr)
-		{
-			av_packet_free(&pkt);
-		}
 		if (codec != nullptr)
 		{
 			delete codec;
@@ -89,7 +85,7 @@ namespace ffmpegcpp
 		codec = closedCodec->Open(width, height, &frameRate, format);
 
 		// allocate the packet we'll be using
-		pkt = av_packet_alloc();
+		pkt = MakeFFmpegResource<AVPacket>(av_packet_alloc());
 		if (!pkt)
 		{
 			CleanUp();
@@ -154,7 +150,7 @@ namespace ffmpegcpp
 		int ret = 0;
 		while (ret >= 0)
 		{
-			ret = avcodec_receive_packet(codec->GetContext(), pkt);
+			ret = avcodec_receive_packet(codec->GetContext(), pkt.get());
 			if (ret == AVERROR(EAGAIN) || ret == AVERROR_EOF)
 			{
 				return;
@@ -166,9 +162,9 @@ namespace ffmpegcpp
 
 			//printf("Write packet %3 (size=%5d)\n", data->pkt->pts, data->pkt->size);
 			//fwrite(data->pkt->data, 1, data->pkt->size, data->f);
-			output->WritePacket(pkt, codec);
+			output->WritePacket(pkt.get(), codec);
 
-			av_packet_unref(pkt);
+			av_packet_unref(pkt.get());
 		}
 	}
 

@@ -46,11 +46,6 @@ namespace ffmpegcpp
 			av_frame_free(&decoded_frame);
 			decoded_frame = nullptr;
 		}
-		if (pkt != nullptr)
-		{
-			av_packet_free(&pkt);
-			pkt = nullptr;
-		}
 		if (buffer != nullptr)
 		{
 			delete buffer;
@@ -99,7 +94,7 @@ namespace ffmpegcpp
 			throw FFmpegException("Could not allocate video frame");
 		}
 
-		pkt = av_packet_alloc();
+		pkt = MakeFFmpegResource<AVPacket>(av_packet_alloc());
 		if (!pkt)
 		{
 			throw FFmpegException("Failed to allocate packet");
@@ -168,7 +163,7 @@ namespace ffmpegcpp
 
 			if (pkt->size)
 			{
-				Decode(pkt, decoded_frame);
+				Decode(pkt.get(), decoded_frame);
 			}
 		}
 
@@ -179,7 +174,7 @@ namespace ffmpegcpp
 			/* flush the decoder */
 			pkt->data = nullptr;
 			pkt->size = 0;
-			Decode(pkt, decoded_frame);
+			Decode(pkt.get(), decoded_frame);
 
 			output->Close();
 

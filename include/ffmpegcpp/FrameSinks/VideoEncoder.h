@@ -6,6 +6,7 @@
 #include "Codecs/VideoCodec.h"
 #include "VideoFormatConverter.h"
 #include "Muxing/Muxer.h"
+#include "FFmpegResource.h"
 
 namespace ffmpegcpp
 {
@@ -33,7 +34,7 @@ namespace ffmpegcpp
 
 		VideoFormatConverter* formatConverter = nullptr;
 		OpenCodec* codec = nullptr;
-		AVPacket* pkt = nullptr;
+		FFmpegResource<AVPacket> pkt;
 
 		int frameNumber = 0;
 

@@ -9,6 +9,7 @@
 #include "AudioFormatConverter.h"
 #include "Muxing/Muxer.h"
 #include "Muxing/OutputStream.h"
+#include "FFmpegResource.h"
 
 namespace ffmpegcpp
 {
@@ -40,7 +41,7 @@ namespace ffmpegcpp
 
 		AudioFormatConverter *formatConverter = nullptr;
 		OpenCodec* codec = nullptr;
-		AVPacket* pkt = nullptr;
+		FFmpegResource<AVPacket> pkt;
 
 		int frameNumber = 0;
 

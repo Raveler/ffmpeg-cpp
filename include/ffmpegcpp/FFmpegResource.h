@@ -14,6 +14,11 @@ namespace ffmpegcpp
 		void operator()(AVCodecContext * ptr) { avcodec_free_context(&ptr); }
 	};
 
+    template <>
+	struct Deleter<AVPacket> {
+		void operator()(AVPacket * ptr) { av_packet_free(&ptr); }
+	};
+
 	template <typename value_type>
 	class FFmpegResource : public std::unique_ptr<value_type, Deleter<value_type>>
 	{

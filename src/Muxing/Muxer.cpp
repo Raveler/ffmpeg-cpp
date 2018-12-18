@@ -59,13 +59,6 @@ namespace ffmpegcpp
 			avformat_free_context(containerContext);
 			containerContext = nullptr;
 		}
-
-		// clean up the queue
-		for (int i = 0; i < packetQueue.size(); ++i)
-		{
-			AVPacket* tmp_pkt = packetQueue[i];
-			av_packet_free(&tmp_pkt);
-		}
 	}
 
 	void Muxer::AddOutputStream(OutputStream* outputStream)
@@ -139,17 +132,16 @@ namespace ffmpegcpp
 				// flush the queue
 				for (int i = 0; i < packetQueue.size(); ++i)
 				{
-					AVPacket* tmp_pkt = packetQueue[i];
+					const auto & tmp_pkt = packetQueue[i];
 
 					// Write the compressed frame to the media file.
-					int ret = av_interleaved_write_frame(containerContext, tmp_pkt);
+					int ret = av_interleaved_write_frame(containerContext, tmp_pkt.get());
 					if (ret < 0)
 					{
 						throw FFmpegException("Error while writing frame to output container", ret);
 					}
 
-					av_packet_unref(tmp_pkt);
-					av_packet_free(&tmp_pkt);
+					av_packet_unref(tmp_pkt.get());
 				}
 				packetQueue.clear();
 			}
@@ -157,13 +149,13 @@ namespace ffmpegcpp
 			// not ready - buffer the packet
 			else
 			{
-				AVPacket* tmp_pkt = av_packet_alloc();
+				auto tmp_pkt = MakeFFmpegResource<AVPacket>(av_packet_alloc());
 				if (!tmp_pkt)
 				{
 					throw FFmpegException("Failed to allocate packet");
 				}
-				av_packet_ref(tmp_pkt, pkt);
-				packetQueue.push_back(tmp_pkt);
+				av_packet_ref(tmp_pkt.get(), pkt);
+				packetQueue.emplace_back(std::move(tmp_pkt));
 			}
 		}
 

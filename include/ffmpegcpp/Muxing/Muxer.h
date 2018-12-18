@@ -2,7 +2,7 @@
 
 #include "ffmpeg.h"
 #include "std.h"
-
+#include "FFmpegResource.h"
 
 namespace ffmpegcpp {
 
@@ -29,7 +29,7 @@ namespace ffmpegcpp {
 		void Open();
 		
 		std::vector<OutputStream*> outputStreams;
-		std::vector<AVPacket*> packetQueue;
+		std::vector<FFmpegResource<AVPacket>> packetQueue;
 
 		AVOutputFormat* containerFormat;
 
