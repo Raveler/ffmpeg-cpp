@@ -8,6 +8,8 @@
 #include "Muxing/Muxer.h"
 #include "FFmpegResource.h"
 
+#include <memory>
+
 namespace ffmpegcpp
 {
 	class VideoEncoder : public VideoFrameSink
@@ -17,7 +19,6 @@ namespace ffmpegcpp
 		VideoEncoder(VideoCodec* codec, Muxer* muxer, AVPixelFormat format);
 		VideoEncoder(VideoCodec* codec, Muxer* muxer, AVRational frameRate);
 		VideoEncoder(VideoCodec* codec, Muxer* muxer, AVRational frameRate, AVPixelFormat format);
-		virtual ~VideoEncoder();
 
 		void WriteFrame(AVFrame* frame, AVRational* timeBase) override;
 		void Close() override;
@@ -30,15 +31,13 @@ namespace ffmpegcpp
 		void PollCodecForPackets();
 
 		VideoCodec* closedCodec;
-		OutputStream* output;
+		std::unique_ptr<OutputStream> output;
 
-		VideoFormatConverter* formatConverter = nullptr;
-		OpenCodec* codec = nullptr;
+		std::unique_ptr<VideoFormatConverter> formatConverter;
+		std::unique_ptr<OpenCodec> codec;
 		FFmpegResource<AVPacket> pkt;
 
 		int frameNumber = 0;
-
-		void CleanUp();
 
 		AVPixelFormat finalPixelFormat = AV_PIX_FMT_NONE;
 

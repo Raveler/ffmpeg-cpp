@@ -13,7 +13,6 @@ namespace ffmpegcpp
 		AVInputFormat *file_iformat;
 		if (!(file_iformat = av_find_input_format(inputFormat)))
 		{
-			CleanUp();
 			throw FFmpegException("Unknown input format: " + string(inputFormat));
 		}
 
@@ -25,28 +24,12 @@ namespace ffmpegcpp
 		// create the demuxer
 		try
 		{
-			demuxer = new Demuxer(fileName, file_iformat, format_opts);
+			demuxer = std::make_unique<Demuxer>(fileName, file_iformat, format_opts);
 			demuxer->DecodeBestAudioStream(frameSink);
 		}
 		catch (FFmpegException e)
 		{
-			CleanUp();
 			throw e;
-		}
-	}
-
-
-	RawAudioFileSource::~RawAudioFileSource()
-	{
-		CleanUp();
-	}
-
-	void RawAudioFileSource::CleanUp()
-	{
-		if (demuxer != nullptr)
-		{
-			delete demuxer;
-			demuxer = nullptr;
 		}
 	}
 

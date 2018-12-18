@@ -13,8 +13,8 @@ namespace ffmpegcpp
 		this->closedCodec = codec;
 
 		// create an output stream
-		this->output = new VideoOutputStream(muxer, codec);
-		muxer->AddOutputStream(output);
+		this->output = std::make_unique<VideoOutputStream>(muxer, codec);
+		muxer->AddOutputStream(output.get());
 	}
 
 	VideoEncoder::VideoEncoder(VideoCodec* codec, Muxer* muxer, AVPixelFormat format)
@@ -38,30 +38,6 @@ namespace ffmpegcpp
 		finalFrameRateSet = true;
 	}
 
-	VideoEncoder::~VideoEncoder()
-	{
-		CleanUp();
-	}
-
-	void VideoEncoder::CleanUp()
-	{
-		if (codec != nullptr)
-		{
-			delete codec;
-			codec = nullptr;
-		}
-		if (formatConverter != nullptr)
-		{
-			delete formatConverter;
-			formatConverter = nullptr;
-		}
-		if (output != nullptr)
-		{
-			delete output;
-			output = nullptr;
-		}
-	}
-
 	void VideoEncoder::OpenLazily(AVFrame* frame, AVRational* timeBase)
 	{
 		// configure the parameters for the codec based on the frame and our preferences
@@ -82,24 +58,23 @@ namespace ffmpegcpp
 		if (finalFrameRateSet) frameRate = finalFrameRate;
 
 		// open the codec
-		codec = closedCodec->Open(width, height, &frameRate, format);
-
+		codec = std::unique_ptr<OpenCodec>(closedCodec->Open(width, height, &frameRate, format));
+		// ToDo: make the Open() function return unique_ptr
+		
 		// allocate the packet we'll be using
 		pkt = MakeFFmpegResource<AVPacket>(av_packet_alloc());
 		if (!pkt)
 		{
-			CleanUp();
 			throw FFmpegException("Failed to allocate packet");
 		}
 
 		// set up the format converter
 		try
 		{
-			formatConverter = new VideoFormatConverter(codec->GetContext());
+			formatConverter = std::make_unique<VideoFormatConverter>(codec->GetContext());
 		}
 		catch (FFmpegException e)
 		{
-			CleanUp();
 			throw e;
 		}
 	}
@@ -162,7 +137,7 @@ namespace ffmpegcpp
 
 			//printf("Write packet %3 (size=%5d)\n", data->pkt->pts, data->pkt->size);
 			//fwrite(data->pkt->data, 1, data->pkt->size, data->f);
-			output->WritePacket(pkt.get(), codec);
+			output->WritePacket(pkt.get(), codec.get());
 
 			av_packet_unref(pkt.get());
 		}

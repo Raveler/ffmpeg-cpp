@@ -5,6 +5,7 @@
 #include "Sources/InputSource.h"
 #include "Sources/Demuxer.h"
 
+#include <memory>
 
 namespace ffmpegcpp
 {
@@ -17,7 +18,6 @@ namespace ffmpegcpp
 		// I couldn't get this to work. The thing is that it also crashes weirdly when I run ffmpeg directly,
 		// so I think it's more an issue of ffmpeg than one of my library.
 		//RawVideoFileSource(const char* fileName, int width, int height, const char* frameRate, AVPixelFormat format, VideoFrameSink* frameSink);
-		virtual ~RawVideoFileSource();
 
 		void PreparePipeline() override;
 		bool IsDone() override;
@@ -25,9 +25,7 @@ namespace ffmpegcpp
 
 	private:
 
-		void CleanUp();
-
-		Demuxer* demuxer = nullptr;
+		std::unique_ptr<Demuxer> demuxer;
 	};
 
 

@@ -5,6 +5,7 @@
 #include "Sources/InputSource.h"
 #include "Sources/Demuxer.h"
 
+#include <memory>
 
 namespace ffmpegcpp
 {
@@ -13,7 +14,6 @@ namespace ffmpegcpp
 	public:
 
 		RawAudioFileSource(const char* fileName, const char* inputFormat, int sampleRate, int channels, AudioFrameSink* frameSink);
-		virtual ~RawAudioFileSource();
 
 		void PreparePipeline() override;
 		bool IsDone() override;
@@ -21,9 +21,7 @@ namespace ffmpegcpp
 
 	private:
 
-		void CleanUp();
-
-		Demuxer* demuxer = nullptr;
+		std::unique_ptr<Demuxer> demuxer;
 	};
 
 

@@ -12,12 +12,11 @@ namespace ffmpegcpp
 		// create the demuxer - it can handle figuring out the video type on its own apparently
 		try
 		{
-			demuxer = new Demuxer(fileName, nullptr, nullptr);
+			demuxer = std::make_unique<Demuxer>(fileName, nullptr, nullptr);
 			demuxer->DecodeBestVideoStream(frameSink);
 		}
 		catch (FFmpegException e)
 		{
-			CleanUp();
 			throw e;
 		}
 	}
@@ -59,21 +58,6 @@ namespace ffmpegcpp
 			throw e;
 		}
 	}*/
-
-
-	RawVideoFileSource::~RawVideoFileSource()
-	{
-		CleanUp();
-	}
-
-	void RawVideoFileSource::CleanUp()
-	{
-		if (demuxer != nullptr)
-		{
-			delete demuxer;
-			demuxer = nullptr;
-		}
-	}
 
 	void RawVideoFileSource::PreparePipeline()
 	{

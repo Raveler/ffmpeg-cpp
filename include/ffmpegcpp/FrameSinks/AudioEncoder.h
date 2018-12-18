@@ -11,6 +11,8 @@
 #include "Muxing/OutputStream.h"
 #include "FFmpegResource.h"
 
+#include <memory>
+
 namespace ffmpegcpp
 {
 	class AudioEncoder : public AudioFrameSink, public ConvertedAudioProcessor
@@ -18,7 +20,6 @@ namespace ffmpegcpp
 	public:
 		AudioEncoder(AudioCodec* codec, Muxer* muxer);
 		AudioEncoder(AudioCodec* codec, Muxer* muxer, int bitRate);
-		virtual ~AudioEncoder();
 
 		void WriteFrame(AVFrame* frame, AVRational* timeBase) override;
 		void Close() override;
@@ -31,16 +32,14 @@ namespace ffmpegcpp
 
 		void OpenLazily(AVFrame* frame, AVRational* timeBase);
 
-		void CleanUp();
-
 		void PollCodecForPackets();
 
-		OutputStream* output;
+		std::unique_ptr<OutputStream> output;
 
 		AudioCodec* closedCodec;
 
-		AudioFormatConverter *formatConverter = nullptr;
-		OpenCodec* codec = nullptr;
+		std::unique_ptr<AudioFormatConverter> formatConverter;
+		std::unique_ptr<OpenCodec> codec;
 		FFmpegResource<AVPacket> pkt;
 
 		int frameNumber = 0;

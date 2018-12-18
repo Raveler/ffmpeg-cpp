@@ -13,8 +13,8 @@ namespace ffmpegcpp
 		this->closedCodec = codec;
 
 		// create an output stream
-		output = new AudioOutputStream(muxer, codec);
-		muxer->AddOutputStream(output);
+		output = std::make_unique<AudioOutputStream>(muxer, codec);
+		muxer->AddOutputStream(output.get());
 	}
 
 	AudioEncoder::AudioEncoder(AudioCodec* codec, Muxer* muxer, int bitRate)
@@ -31,47 +31,21 @@ namespace ffmpegcpp
 		int sampleRate = closedCodec->GetDefaultSampleRate();
 		AVSampleFormat format = closedCodec->GetDefaultSampleFormat();
 
-		codec = closedCodec->Open(bitRate, format, sampleRate);
+		codec = std::unique_ptr<OpenCodec>(closedCodec->Open(bitRate, format, sampleRate));
 
 		pkt = MakeFFmpegResource<AVPacket>(av_packet_alloc());
 		if (!pkt)
 		{
-			CleanUp();
 			throw FFmpegException("Failed to allocate packet");
 		}
 
 		try
 		{
-			formatConverter = new AudioFormatConverter(this, codec->GetContext());
+			formatConverter = std::make_unique<AudioFormatConverter>(this, codec->GetContext());
 		}
 		catch (FFmpegException e)
 		{
-			CleanUp();
 			throw e;
-		}
-	}
-
-	AudioEncoder::~AudioEncoder()
-	{
-		CleanUp();
-	}
-
-	void AudioEncoder::CleanUp()
-	{
-		if (formatConverter != nullptr)
-		{
-			delete formatConverter;
-			formatConverter = nullptr;
-		}
-		if (codec != nullptr)
-		{
-			delete codec;
-			codec = nullptr;
-		}
-		if (output != nullptr)
-		{
-			delete output;
-			output = nullptr;
 		}
 	}
 
@@ -135,7 +109,7 @@ namespace ffmpegcpp
 
 			//printf("Write packet %3 (size=%5d)\n", data->pkt->pts, data->pkt->size);
 			//fwrite(data->pkt->data, 1, data->pkt->size, data->f);
-			output->WritePacket(pkt.get(), codec);
+			output->WritePacket(pkt.get(), codec.get());
 
 			av_packet_unref(pkt.get());
 		}
