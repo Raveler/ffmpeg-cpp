@@ -29,7 +29,7 @@ namespace ffmpegcpp
 
 		FrameSink* output;
 		
-		AVCodecParserContext* parser = nullptr;
+		FFmpegResource<AVCodecParserContext> parser;
 
 		FFmpegResource<AVCodecContext> codecContext;
 

@@ -35,6 +35,11 @@ namespace ffmpegcpp
 	};
 
     template <>
+	struct Deleter<AVCodecParserContext> {
+		void operator()(AVCodecParserContext * ptr) { av_parser_close(ptr); }
+	};
+
+    template <>
 	struct Deleter<struct SwsContext> {
 		void operator()(struct SwsContext * ptr) { sws_freeContext(ptr); }
 	};

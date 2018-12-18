@@ -46,11 +46,6 @@ namespace ffmpegcpp
 			delete buffer;
 			buffer = nullptr;
 		}
-		if (parser != nullptr)
-		{
-			av_parser_close(parser);
-			parser = nullptr;
-		}
 
 		fclose(file);
 	}
@@ -147,7 +142,7 @@ namespace ffmpegcpp
 		data = buffer;
 		while (data_size > 0)
 		{
-			ret = av_parser_parse2(parser, codecContext.get(), &pkt->data, &pkt->size,
+			ret = av_parser_parse2(parser.get(), codecContext.get(), &pkt->data, &pkt->size,
 				data, data_size, AV_NOPTS_VALUE, AV_NOPTS_VALUE, 0);
 			if (ret < 0)
 			{
