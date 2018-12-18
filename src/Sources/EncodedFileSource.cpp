@@ -41,11 +41,6 @@ namespace ffmpegcpp
 
 	void EncodedFileSource::CleanUp()
 	{
-		if (decoded_frame != nullptr)
-		{
-			av_frame_free(&decoded_frame);
-			decoded_frame = nullptr;
-		}
 		if (buffer != nullptr)
 		{
 			delete buffer;
@@ -88,7 +83,7 @@ namespace ffmpegcpp
 			throw FFmpegException("Could not open file " + string(inFileName));
 		}
 
-		decoded_frame = av_frame_alloc();
+		decoded_frame = MakeFFmpegResource<AVFrame>(av_frame_alloc());
 		if (!decoded_frame)
 		{
 			throw FFmpegException("Could not allocate video frame");
@@ -163,7 +158,7 @@ namespace ffmpegcpp
 
 			if (pkt->size)
 			{
-				Decode(pkt.get(), decoded_frame);
+				Decode(pkt.get(), decoded_frame.get());
 			}
 		}
 
@@ -174,7 +169,7 @@ namespace ffmpegcpp
 			/* flush the decoder */
 			pkt->data = nullptr;
 			pkt->size = 0;
-			Decode(pkt.get(), decoded_frame);
+			Decode(pkt.get(), decoded_frame.get());
 
 			output->Close();
 

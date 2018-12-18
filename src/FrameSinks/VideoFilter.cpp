@@ -18,7 +18,6 @@ namespace ffmpegcpp
 	void VideoFilter::CleanUp()
 	{
 		avfilter_graph_free(&filter_graph);
-		av_frame_free(&filt_frame);
 	}
 
 	void VideoFilter::InitDelayed(AVFrame* frame, AVRational* timeBase)
@@ -35,7 +34,7 @@ namespace ffmpegcpp
 		const AVFilter *buffersrc = avfilter_get_by_name("buffer");
 		const AVFilter *buffersink = avfilter_get_by_name("buffersink");
 
-		filt_frame = av_frame_alloc();
+		filt_frame = MakeFFmpegResource<AVFrame>(av_frame_alloc());
 		if (!filt_frame)
 		{
 			throw FFmpegException("Could not allocate intermediate video frame for filter");
@@ -171,7 +170,7 @@ namespace ffmpegcpp
 		int ret = 0;
 		while (ret >= 0)
 		{
-			ret = av_buffersink_get_frame(buffersink_ctx, filt_frame);
+			ret = av_buffersink_get_frame(buffersink_ctx, filt_frame.get());
 			if (ret == AVERROR(EAGAIN) || ret == AVERROR_EOF)
 			{
 				return;
@@ -181,9 +180,9 @@ namespace ffmpegcpp
 				throw FFmpegException("Erorr during filtering", ret);
 			}
 
-			target->WriteFrame(filt_frame, timeBase);
+			target->WriteFrame(filt_frame.get(), timeBase);
 
-			av_frame_unref(filt_frame);
+			av_frame_unref(filt_frame.get());
 		}
 	}
 

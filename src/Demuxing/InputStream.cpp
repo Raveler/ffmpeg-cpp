@@ -14,7 +14,6 @@ namespace ffmpegcpp
 		AVCodec* codec = CodecDeducer::DeduceDecoder(stream->codecpar->codec_id);
 		if (!codec)
 		{
-			CleanUp();
 			throw FFmpegException("Failed to find codec for stream " + to_string(stream->index));
 		}
 
@@ -22,16 +21,10 @@ namespace ffmpegcpp
 		codecContext = MakeFFmpegResource<AVCodecContext>(avcodec_alloc_context3(codec));
 		if (!codecContext)
 		{
-			CleanUp();
 			throw FFmpegException("Failed to allocate the codec context for " + string(codec->name));
 		}
 
 		codecContext->framerate = stream->avg_frame_rate;
-	}
-
-	InputStream::~InputStream()
-	{
-		CleanUp();
 	}
 
 	void InputStream::ConfigureCodecContext()
@@ -66,19 +59,10 @@ namespace ffmpegcpp
 		timeBaseCorrectedByTicksPerFrame.num *= codecContext->ticks_per_frame;
 
 		// assign the frame that will be read from the container
-		frame = av_frame_alloc();
+		frame = MakeFFmpegResource<AVFrame>(av_frame_alloc());
 		if (!frame)
 		{
 			throw FFmpegException("Could not allocate frame");
-		}
-	}
-
-	void InputStream::CleanUp()
-	{
-		if (frame != nullptr)
-		{
-			av_frame_free(&frame);
-			frame = nullptr;
 		}
 	}
 
@@ -103,7 +87,7 @@ namespace ffmpegcpp
 		/* read all the output frames (in general there may be any number of them */
 		while (ret >= 0)
 		{
-			ret = avcodec_receive_frame(codecContext.get(), frame);
+			ret = avcodec_receive_frame(codecContext.get(), frame.get());
 			if (ret == AVERROR(EAGAIN) || ret == AVERROR_EOF)
 				return;
 			else if (ret < 0)
@@ -126,7 +110,7 @@ namespace ffmpegcpp
 			// push the frame to the next stage.
 			// The time_base is filled in in the codecContext after the first frame is decoded
 			// so we can fetch it from there.
-			output->WriteFrame(frame, time_base);
+			output->WriteFrame(frame.get(), time_base);
 		}
 	}
 

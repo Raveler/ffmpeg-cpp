@@ -13,7 +13,6 @@ namespace ffmpegcpp
 	public:
 
 		InputStream(AVStream* stream);
-		~InputStream();
 
 		void Open();
 
@@ -38,9 +37,7 @@ namespace ffmpegcpp
 
 		FrameSink* output;
 
-		AVFrame* frame;
-		
-		void CleanUp();
+		FFmpegResource<AVFrame> frame;
 	};
 
 

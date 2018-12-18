@@ -2,6 +2,7 @@
 
 #include "ffmpeg.h"
 #include "FrameSinks/VideoFrameSink.h"
+#include "FFmpegResource.h"
 
 namespace ffmpegcpp
 {
@@ -34,7 +35,7 @@ namespace ffmpegcpp
 
 		VideoFrameSink* output;
 
-		AVFrame* frame = nullptr;
+		FFmpegResource<AVFrame> frame;
 		struct SwsContext* swsContext = nullptr;
 	};
 }

@@ -27,7 +27,7 @@ namespace ffmpegcpp
 		// create the frame
 		int ret;
 
-		frame = av_frame_alloc();
+		frame = MakeFFmpegResource<AVFrame>(av_frame_alloc());
 		if (!frame)
 		{
 			CleanUp();
@@ -39,7 +39,7 @@ namespace ffmpegcpp
 		frame->height = height;
 
 		/* allocate the buffers for the frame data */
-		ret = av_frame_get_buffer(frame, 32);
+		ret = av_frame_get_buffer(frame.get(), 32);
 		if (ret < 0)
 		{
 			CleanUp();
@@ -54,11 +54,6 @@ namespace ffmpegcpp
 
 	void RawVideoDataSource::CleanUp()
 	{
-		if (frame != nullptr)
-		{
-			av_frame_free(&frame);
-			frame = nullptr;
-		}
 		if (swsContext != nullptr)
 		{
 			sws_freeContext(swsContext);
@@ -69,7 +64,7 @@ namespace ffmpegcpp
 	void RawVideoDataSource::WriteFrame(void* data, int bytesPerRow)
 	{
 		// make sure the frame data is writable
-		int ret = av_frame_make_writable(frame);
+		int ret = av_frame_make_writable(frame.get());
 		if (ret < 0)
 		{
 			throw FFmpegException("Error making frame writable", ret);
@@ -87,7 +82,7 @@ namespace ffmpegcpp
 			frame->height, frame->data, frame->linesize);
 
 		// send to the output
-		output->WriteFrame(frame, &this->timeBase);
+		output->WriteFrame(frame.get(), &this->timeBase);
 	}
 
 	void RawVideoDataSource::Close()

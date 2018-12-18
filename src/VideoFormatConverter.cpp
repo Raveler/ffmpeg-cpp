@@ -7,7 +7,7 @@ namespace ffmpegcpp
 	{
 		this->codecContext = codecContext;
 
-		converted_frame = av_frame_alloc();
+		converted_frame = MakeFFmpegResource<AVFrame>(av_frame_alloc());
 		int ret;
 		if (!converted_frame)
 		{
@@ -21,7 +21,7 @@ namespace ffmpegcpp
 		converted_frame->height = codecContext->height;
 
 		/* allocate the buffers for the frame data */
-		ret = av_frame_get_buffer(converted_frame, 32);
+		ret = av_frame_get_buffer(converted_frame.get(), 32);
 		if (ret < 0)
 		{
 			CleanUp();
@@ -36,11 +36,6 @@ namespace ffmpegcpp
 
 	void VideoFormatConverter::CleanUp()
 	{
-		if (converted_frame != nullptr)
-		{
-			av_frame_free(&converted_frame);
-			converted_frame = nullptr;
-		}
 		if (swsContext != nullptr)
 		{
 			sws_freeContext(swsContext);
@@ -71,9 +66,9 @@ namespace ffmpegcpp
 		sws_scale(swsContext, frame->data, frame->linesize, 0,
 			frame->height, converted_frame->data, converted_frame->linesize);
 
-		av_frame_copy_props(converted_frame, frame); // remember all the other data
+		av_frame_copy_props(converted_frame.get(), frame); // remember all the other data
 
-		return converted_frame;
+		return converted_frame.get();
 	}
 }
 

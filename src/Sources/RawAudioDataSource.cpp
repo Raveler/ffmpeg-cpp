@@ -16,10 +16,9 @@ namespace ffmpegcpp
 		// create the frame
 		int ret;
 
-		frame = av_frame_alloc();
+		frame = MakeFFmpegResource<AVFrame>(av_frame_alloc());
 		if (!frame)
 		{
-			CleanUp();
 			throw FFmpegException("Could not allocate video frame");
 		}
 
@@ -30,27 +29,12 @@ namespace ffmpegcpp
 		frame->nb_samples = 735;
 
 		// allocate the buffers for the frame data
-		ret = av_frame_get_buffer(frame, 0);
+		ret = av_frame_get_buffer(frame.get(), 0);
 		if (ret < 0)
 		{
-			CleanUp();
 			throw FFmpegException("Could not allocate the video frame data", ret);
 		}
 
-	}
-
-	RawAudioDataSource::~RawAudioDataSource()
-	{
-		CleanUp();
-	}
-
-	void RawAudioDataSource::CleanUp()
-	{
-		if (frame != nullptr)
-		{
-			av_frame_free(&frame);
-			frame = nullptr;
-		}
 	}
 
 	void RawAudioDataSource::WriteData(void* data, int sampleCount)
@@ -58,7 +42,7 @@ namespace ffmpegcpp
 		// resize the frame to the input
 		frame->nb_samples = sampleCount;
 
-		int ret = av_frame_make_writable(frame);
+		int ret = av_frame_make_writable(frame.get());
 		if (ret < 0)
 		{
 			throw FFmpegException("Failed to make audio frame writable", ret);
@@ -70,7 +54,7 @@ namespace ffmpegcpp
 
 		// pass on to the sink
 		// we don't have a time_base so we pass NULL and hope that it gets handled later...
-		output->WriteFrame(frame, nullptr);
+		output->WriteFrame(frame.get(), nullptr);
 	}
 
 	void RawAudioDataSource::Close()

@@ -3,6 +3,7 @@
 #include "ffmpeg.h"
 
 #include "FrameSinks/VideoFrameSink.h"
+#include "FFmpegResource.h"
 
 namespace ffmpegcpp
 {
@@ -32,7 +33,7 @@ namespace ffmpegcpp
 		AVFilterGraph *filter_graph = nullptr;
 		AVFilterContext *buffersink_ctx = nullptr;
 		AVFilterContext *buffersrc_ctx = nullptr;
-		AVFrame* filt_frame = nullptr;
+		FFmpegResource<AVFrame> filt_frame;
 
 		bool initialized = false;
 

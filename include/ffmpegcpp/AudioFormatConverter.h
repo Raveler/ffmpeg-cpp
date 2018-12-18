@@ -2,6 +2,7 @@
 
 #include "ffmpeg.h"
 #include "ConvertedAudioProcessor.h"
+#include "FFmpegResource.h"
 
 namespace ffmpegcpp
 {
@@ -34,8 +35,8 @@ namespace ffmpegcpp
 		bool initialized = false;
 
 		AVAudioFifo* fifo = nullptr;
-		AVFrame* tmp_frame = nullptr;
-		AVFrame* converted_frame = nullptr;
+		FFmpegResource<AVFrame> tmp_frame;
+		FFmpegResource<AVFrame> converted_frame;
 		struct SwrContext* swr_ctx = nullptr;
 
 		int in_sample_rate, out_sample_rate;

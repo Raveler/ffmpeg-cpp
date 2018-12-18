@@ -2,6 +2,7 @@
 
 #include "ffmpeg.h"
 #include "ConvertedAudioProcessor.h"
+#include "FFmpegResource.h"
 
 namespace ffmpegcpp
 {
@@ -27,7 +28,7 @@ namespace ffmpegcpp
 
 		bool initialized = false;
 
-		AVFrame* converted_frame = nullptr;
+		FFmpegResource<AVFrame> converted_frame;
 		struct SwsContext* swsContext = nullptr;
 	};
 

@@ -8,7 +8,7 @@ namespace ffmpegcpp
 		this->output = writer;
 		this->codecContext = codecContext;
 
-		converted_frame = av_frame_alloc();
+		converted_frame = MakeFFmpegResource<AVFrame>(av_frame_alloc());
 		int ret;
 		if (!converted_frame)
 		{
@@ -30,7 +30,7 @@ namespace ffmpegcpp
 		converted_frame->nb_samples = nb_samples;
 		if (nb_samples)
 		{
-			ret = av_frame_get_buffer(converted_frame, 0);
+			ret = av_frame_get_buffer(converted_frame.get(), 0);
 			if (ret < 0)
 			{
 				CleanUp();
@@ -40,7 +40,7 @@ namespace ffmpegcpp
 
 		// create the temporary frame that will hold parts of the converted data
 		// this data will later be assembled in a complete converted_frame.
-		tmp_frame = av_frame_alloc();
+		tmp_frame = MakeFFmpegResource<AVFrame>(av_frame_alloc());
 		if (!tmp_frame)
 		{
 			CleanUp();
@@ -67,16 +67,6 @@ namespace ffmpegcpp
 
 	void AudioFormatConverter::CleanUp()
 	{
-		if (converted_frame != nullptr)
-		{
-			av_frame_free(&converted_frame);
-			converted_frame = nullptr;
-		}
-		if (tmp_frame != nullptr)
-		{
-			av_frame_free(&tmp_frame);
-			tmp_frame = nullptr;
-		}
 		if (swr_ctx != nullptr)
 		{
 			swr_free(&swr_ctx);
@@ -126,7 +116,7 @@ namespace ffmpegcpp
 		}
 
 		int ret;
-		ret = swr_convert_frame(swr_ctx, tmp_frame, frame);
+		ret = swr_convert_frame(swr_ctx, tmp_frame.get(), frame);
 		if (ret < 0)
 		{
 			throw FFmpegException("Error while converting audio frame to destination format", ret);
@@ -134,8 +124,8 @@ namespace ffmpegcpp
 
 		while (tmp_frame->nb_samples > 0)
 		{
-			AddToFifo(tmp_frame);
-			ret = swr_convert_frame(swr_ctx, tmp_frame, nullptr);
+			AddToFifo(tmp_frame.get());
+			ret = swr_convert_frame(swr_ctx, tmp_frame.get(), nullptr);
 			if (ret < 0)
 			{
 				throw FFmpegException("Error while converting audio frame to destination format", ret);
@@ -203,10 +193,10 @@ namespace ffmpegcpp
 		converted_frame->pts = av_rescale_q(samples_count, inv_sample_rate, codecContext->time_base);
 		samples_count += converted_frame->nb_samples;
 
-		output->WriteConvertedFrame(converted_frame);
+		output->WriteConvertedFrame(converted_frame.get());
 
 		samplesInCurrentFrame = 0;
-		int ret = av_frame_make_writable(converted_frame);
+		int ret = av_frame_make_writable(converted_frame.get());
 		if (ret < 0)
 		{
 			throw FFmpegException("Failed to make audio frame writable", ret);
