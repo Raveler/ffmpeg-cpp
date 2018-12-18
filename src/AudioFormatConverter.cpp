@@ -52,7 +52,7 @@ namespace ffmpegcpp
 		tmp_frame->nb_samples = 0;
 
 		// Create the FIFO buffer based on the specified output sample format
-		fifo = av_audio_fifo_alloc(codecContext->sample_fmt, codecContext->channels, nb_samples);
+		fifo = MakeFFmpegResource<AVAudioFifo>(av_audio_fifo_alloc(codecContext->sample_fmt, codecContext->channels, nb_samples));
 		if (!fifo)
 		{
 			CleanUp();
@@ -71,11 +71,6 @@ namespace ffmpegcpp
 		{
 			swr_free(&swr_ctx);
 			swr_ctx = nullptr;
-		}
-		if (fifo != nullptr)
-		{
-			av_audio_fifo_free(fifo);
-			fifo = nullptr;
 		}
 	}
 
@@ -136,14 +131,14 @@ namespace ffmpegcpp
 		* At the end of the file, we pass the remaining samples to
 		* the encoder. */
 		bool finished = (frame == nullptr);
-		int fifoSize = av_audio_fifo_size(fifo);
+		int fifoSize = av_audio_fifo_size(fifo.get());
 		while (fifoSize >= converted_frame->nb_samples ||
 			(finished && fifoSize > 0))
 		{
 			// Take one frame worth of audio samples from the FIFO buffer,
 			 // encode it and write it to the output file. 
 			PullConvertedFrameFromFifo();
-			fifoSize = av_audio_fifo_size(fifo);
+			fifoSize = av_audio_fifo_size(fifo.get());
 		}
 	}
 
@@ -151,13 +146,13 @@ namespace ffmpegcpp
 	{
 		// Make the FIFO as large as it needs to be to hold both, the old and the new samples.
 		int ret;
-		if ((ret = av_audio_fifo_realloc(fifo, av_audio_fifo_size(fifo) + frame->nb_samples)) < 0)
+		if ((ret = av_audio_fifo_realloc(fifo.get(), av_audio_fifo_size(fifo.get()) + frame->nb_samples)) < 0)
 		{
 			throw FFmpegException("Could not reallocate FIFO", ret);
 		}
 
 		/* Store the new samples in the FIFO buffer. */
-		if (av_audio_fifo_write(fifo, (void **)frame->extended_data, frame->nb_samples) < frame->nb_samples)
+		if (av_audio_fifo_write(fifo.get(), (void **)frame->extended_data, frame->nb_samples) < frame->nb_samples)
 		{
 			throw FFmpegException("Could not write data to FIFO");
 		}
@@ -168,14 +163,14 @@ namespace ffmpegcpp
 		/* Use the maximum number of possible samples per frame.
 		 * If there is less than the maximum possible frame size in the FIFO
 		 * buffer use this number. Otherwise, use the maximum possible frame size. */
-		const int frame_size = FFMIN(av_audio_fifo_size(fifo), converted_frame->nb_samples);
+		const int frame_size = FFMIN(av_audio_fifo_size(fifo.get()), converted_frame->nb_samples);
 		int data_written;
 		converted_frame->nb_samples = frame_size;
 
 		/* Read as many samples from the FIFO buffer as required to fill the frame.
 		 * The samples are stored in the frame temporarily. */
 		int ret;
-		if ((ret = av_audio_fifo_read(fifo, (void **)converted_frame->data, frame_size)) < frame_size)
+		if ((ret = av_audio_fifo_read(fifo.get(), (void **)converted_frame->data, frame_size)) < frame_size)
 		{
 			throw FFmpegException("Could not read data from FIFO", ret);
 		}

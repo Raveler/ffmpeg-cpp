@@ -24,12 +24,15 @@ namespace ffmpegcpp
 		void operator()(AVFrame * ptr) { av_frame_free(&ptr); }
 	};
 
-
     template <>
 	struct Deleter<AVFilterGraph> {
 		void operator()(AVFilterGraph * ptr) { avfilter_graph_free(&ptr); }
 	};
 
+    template <>
+	struct Deleter<AVAudioFifo> {
+		void operator()(AVAudioFifo * ptr) { av_audio_fifo_free(ptr); }
+	};
 
 	template <typename value_type>
 	class FFmpegResource : public std::unique_ptr<value_type, Deleter<value_type>>

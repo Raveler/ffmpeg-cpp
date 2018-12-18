@@ -34,7 +34,7 @@ namespace ffmpegcpp
 		
 		bool initialized = false;
 
-		AVAudioFifo* fifo = nullptr;
+		FFmpegResource<AVAudioFifo> fifo;
 		FFmpegResource<AVFrame> tmp_frame;
 		FFmpegResource<AVFrame> converted_frame;
 		struct SwrContext* swr_ctx = nullptr;
