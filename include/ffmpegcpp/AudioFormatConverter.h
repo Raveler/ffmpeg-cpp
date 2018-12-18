@@ -11,15 +11,10 @@ namespace ffmpegcpp
 	public:
 
 		AudioFormatConverter(ConvertedAudioProcessor* output, AVCodecContext* codecContext);
-		~AudioFormatConverter();
 
 		void ProcessFrame(AVFrame* frame);
 
-
-
 	private:
-
-		void CleanUp();
 
 		void InitDelayed(AVFrame* frame);
 
@@ -37,7 +32,7 @@ namespace ffmpegcpp
 		FFmpegResource<AVAudioFifo> fifo;
 		FFmpegResource<AVFrame> tmp_frame;
 		FFmpegResource<AVFrame> converted_frame;
-		struct SwrContext* swr_ctx = nullptr;
+		FFmpegResource<struct SwrContext> swr_ctx;
 
 		int in_sample_rate, out_sample_rate;
 

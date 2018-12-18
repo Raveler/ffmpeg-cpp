@@ -39,6 +39,11 @@ namespace ffmpegcpp
 		void operator()(struct SwsContext * ptr) { sws_freeContext(ptr); }
 	};
 
+    template <>
+	struct Deleter<struct SwrContext> {
+		void operator()(struct SwrContext * ptr) { swr_free(&ptr); }
+	};
+
 	template <typename value_type>
 	class FFmpegResource : public std::unique_ptr<value_type, Deleter<value_type>>
 	{

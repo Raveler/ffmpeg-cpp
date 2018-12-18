@@ -12,7 +12,6 @@ namespace ffmpegcpp
 		int ret;
 		if (!converted_frame)
 		{
-			CleanUp();
 			throw FFmpegException("Error allocating an audio frame");
 		}
 
@@ -33,7 +32,6 @@ namespace ffmpegcpp
 			ret = av_frame_get_buffer(converted_frame.get(), 0);
 			if (ret < 0)
 			{
-				CleanUp();
 				throw FFmpegException("Error allocating an audio buffer", ret);
 			}
 		}
@@ -43,7 +41,6 @@ namespace ffmpegcpp
 		tmp_frame = MakeFFmpegResource<AVFrame>(av_frame_alloc());
 		if (!tmp_frame)
 		{
-			CleanUp();
 			throw FFmpegException("Error allocating an audio frame");
 		}
 		tmp_frame->format = codecContext->sample_fmt;
@@ -55,22 +52,7 @@ namespace ffmpegcpp
 		fifo = MakeFFmpegResource<AVAudioFifo>(av_audio_fifo_alloc(codecContext->sample_fmt, codecContext->channels, nb_samples));
 		if (!fifo)
 		{
-			CleanUp();
 			throw FFmpegException("Failed to create FIFO queue for audio format converter");
-		}
-	}
-
-	AudioFormatConverter::~AudioFormatConverter()
-	{
-		CleanUp();
-	}
-
-	void AudioFormatConverter::CleanUp()
-	{
-		if (swr_ctx != nullptr)
-		{
-			swr_free(&swr_ctx);
-			swr_ctx = nullptr;
 		}
 	}
 
@@ -85,16 +67,16 @@ namespace ffmpegcpp
 		// set options
 		in_sample_rate = frame->sample_rate;
 		out_sample_rate = codecContext->sample_rate;
-		av_opt_set_int(swr_ctx, "in_channel_count", frame->channels, 0);
-		av_opt_set_int(swr_ctx, "in_sample_rate", frame->sample_rate, 0);
-		av_opt_set_sample_fmt(swr_ctx, "in_sample_fmt", (AVSampleFormat)frame->format, 0);
-		av_opt_set_int(swr_ctx, "out_channel_count", codecContext->channels, 0);
-		av_opt_set_int(swr_ctx, "out_sample_rate", codecContext->sample_rate, 0);
-		av_opt_set_sample_fmt(swr_ctx, "out_sample_fmt", codecContext->sample_fmt, 0);
+		av_opt_set_int(swr_ctx.get(), "in_channel_count", frame->channels, 0);
+		av_opt_set_int(swr_ctx.get(), "in_sample_rate", frame->sample_rate, 0);
+		av_opt_set_sample_fmt(swr_ctx.get(), "in_sample_fmt", (AVSampleFormat)frame->format, 0);
+		av_opt_set_int(swr_ctx.get(), "out_channel_count", codecContext->channels, 0);
+		av_opt_set_int(swr_ctx.get(), "out_sample_rate", codecContext->sample_rate, 0);
+		av_opt_set_sample_fmt(swr_ctx.get(), "out_sample_fmt", codecContext->sample_fmt, 0);
 
 		// initialize the resampling context
 		int ret;
-		if ((ret = swr_init(swr_ctx)) < 0)
+		if ((ret = swr_init(swr_ctx.get())) < 0)
 		{
 			throw FFmpegException("Failed to initialize the resampling context", ret);
 		}
@@ -111,7 +93,7 @@ namespace ffmpegcpp
 		}
 
 		int ret;
-		ret = swr_convert_frame(swr_ctx, tmp_frame.get(), frame);
+		ret = swr_convert_frame(swr_ctx.get(), tmp_frame.get(), frame);
 		if (ret < 0)
 		{
 			throw FFmpegException("Error while converting audio frame to destination format", ret);
@@ -120,7 +102,7 @@ namespace ffmpegcpp
 		while (tmp_frame->nb_samples > 0)
 		{
 			AddToFifo(tmp_frame.get());
-			ret = swr_convert_frame(swr_ctx, tmp_frame.get(), nullptr);
+			ret = swr_convert_frame(swr_ctx.get(), tmp_frame.get(), nullptr);
 			if (ret < 0)
 			{
 				throw FFmpegException("Error while converting audio frame to destination format", ret);
