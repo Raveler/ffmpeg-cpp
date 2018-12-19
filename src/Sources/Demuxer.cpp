@@ -29,54 +29,29 @@ namespace ffmpegcpp
         auto container_ctx = containerContext.get();
 		if ((ret = avformat_open_input(&container_ctx, fileName, inputFormat, &format_opts)) < 0)
 		{
-			CleanUp();
 			throw FFmpegException("Failed to open input container " + string(fileName), ret);
 		}
 
 		// retrieve stream information
 		if (ret = (avformat_find_stream_info(containerContext.get(), nullptr)) < 0)
 		{
-			CleanUp();
 			throw FFmpegException("Failed to read streams from " + string(fileName), ret);
 		}
 
-		inputStreams = new InputStream*[containerContext->nb_streams];
-		for (int i = 0; i < containerContext->nb_streams; ++i)
-		{
-			inputStreams[i] = nullptr;
-		}
+        for (int i = 0; i < containerContext->nb_streams; ++i)
+        {
+            inputStreams.emplace_back(nullptr);
+        }
 
 		// initialize packet, set data to NULL, let the demuxer fill it
 		pkt = MakeFFmpegResource<AVPacket>(av_packet_alloc());
 		if (!pkt)
 		{
-			CleanUp();
 			throw FFmpegException("Failed to create packet for input stream");
 		}
 		av_init_packet(pkt.get());
 		pkt->data = nullptr;
 		pkt->size = 0;
-	}
-
-	Demuxer::~Demuxer()
-	{
-		CleanUp();
-	}
-
-	void Demuxer::CleanUp()
-	{
-		if (inputStreams != nullptr)
-		{
-			for (int i = 0; i < containerContext->nb_streams; ++i)
-			{
-				if (inputStreams[i] != nullptr)
-				{
-					delete inputStreams[i];
-				}
-			}
-			delete inputStreams;
-			inputStreams = nullptr;
-		}
 	}
 
 	vector<StreamInfo> Demuxer::GetAudioStreamInfo()
@@ -152,11 +127,11 @@ namespace ffmpegcpp
 
 		// create the stream
 		AVStream* stream = containerContext->streams[streamIndex];
-		AudioInputStream* inputStream = new AudioInputStream(frameSink, stream);
+		auto inputStream = std::make_unique<AudioInputStream>(frameSink, stream);
 		inputStream->Open();
 
 		// remember and return
-		inputStreams[streamIndex] = inputStream;
+		inputStreams[streamIndex] = std::move(inputStream);
 	}
 
 	void Demuxer::DecodeVideoStream(int streamIndex, VideoFrameSink* frameSink)
@@ -169,11 +144,11 @@ namespace ffmpegcpp
 
 		// create the stream
 		AVStream* stream = containerContext->streams[streamIndex];
-		VideoInputStream* inputStream = new VideoInputStream(frameSink, stream);
+		auto inputStream = std::make_unique<VideoInputStream>(frameSink, stream);
 		inputStream->Open();
 
 		// remember and return
-		inputStreams[streamIndex] = inputStream;
+		inputStreams[streamIndex] = std::move(inputStream);
 	}
 
 	void Demuxer::PreparePipeline()
@@ -187,7 +162,7 @@ namespace ffmpegcpp
 			allPrimed = true;
 			for (int i = 0; i < containerContext->nb_streams; ++i)
 			{
-				InputStream* stream = inputStreams[i];
+				const auto & stream = inputStreams[i];
 				if (stream != nullptr)
 				{
 					if (!stream->IsPrimed()) allPrimed = false;
@@ -214,7 +189,7 @@ namespace ffmpegcpp
 			pkt->size = 0;
 			for (int i = 0; i < containerContext->nb_streams; ++i)
 			{
-				InputStream* stream = inputStreams[i];
+				const auto & stream = inputStreams[i];
 				if (stream != nullptr)
 				{
 					pkt->stream_index = i;
@@ -243,7 +218,7 @@ namespace ffmpegcpp
 	void Demuxer::DecodePacket()
 	{
 		int streamIndex = pkt->stream_index;
-		InputStream* inputStream = inputStreams[streamIndex];
+		const auto & inputStream = inputStreams[streamIndex];
 
 		if (inputStream != nullptr)
 		{
