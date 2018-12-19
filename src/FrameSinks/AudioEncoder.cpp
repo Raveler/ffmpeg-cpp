@@ -31,7 +31,7 @@ namespace ffmpegcpp
 		int sampleRate = closedCodec->GetDefaultSampleRate();
 		AVSampleFormat format = closedCodec->GetDefaultSampleFormat();
 
-		codec = std::unique_ptr<OpenCodec>(closedCodec->Open(bitRate, format, sampleRate));
+		codec = closedCodec->Open(bitRate, format, sampleRate);
 
 		pkt = MakeFFmpegResource<AVPacket>(av_packet_alloc());
 		if (!pkt)

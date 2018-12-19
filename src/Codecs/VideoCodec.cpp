@@ -50,7 +50,7 @@ namespace ffmpegcpp
 		return false;
 	}
 
-	OpenCodec* VideoCodec::Open(int width, int height, AVRational* frameRate, AVPixelFormat format)
+    std::unique_ptr<OpenCodec> VideoCodec::Open(int width, int height, AVRational* frameRate, AVPixelFormat format)
 	{
 
 		// sanity checks

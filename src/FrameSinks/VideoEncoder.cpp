@@ -58,8 +58,7 @@ namespace ffmpegcpp
 		if (finalFrameRateSet) frameRate = finalFrameRate;
 
 		// open the codec
-		codec = std::unique_ptr<OpenCodec>(closedCodec->Open(width, height, &frameRate, format));
-		// ToDo: make the Open() function return unique_ptr
+		codec = closedCodec->Open(width, height, &frameRate, format);
 		
 		// allocate the packet we'll be using
 		pkt = MakeFFmpegResource<AVPacket>(av_packet_alloc());

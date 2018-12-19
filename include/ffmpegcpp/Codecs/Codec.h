@@ -1,10 +1,11 @@
 #pragma once
 
 #include "ffmpeg.h"
-#include "std.h"
 
 #include "OpenCodec.h"
 #include "FFmpegResource.h"
+
+#include <memory>
 
 namespace ffmpegcpp
 {
@@ -26,7 +27,7 @@ namespace ffmpegcpp
 
 		FFmpegResource<AVCodecContext> codecContext;
 
-		OpenCodec* Open();
+		std::unique_ptr<OpenCodec> Open();
 
 	private:
 

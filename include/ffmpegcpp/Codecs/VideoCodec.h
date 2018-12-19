@@ -14,7 +14,7 @@ namespace ffmpegcpp
 		VideoCodec(AVCodecID codecId);
 		virtual ~VideoCodec();
 
-		OpenCodec* Open(int width, int height, AVRational* frameRate, AVPixelFormat format);
+        std::unique_ptr<OpenCodec> Open(int width, int height, AVRational* frameRate, AVPixelFormat format);
 
 		// This maps to the qscale parameter so should be in the range [0,31].
 		void SetQualityScale(int qscale);

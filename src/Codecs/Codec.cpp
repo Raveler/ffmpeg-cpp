@@ -53,7 +53,7 @@ namespace ffmpegcpp
 		av_opt_set_double(codecContext->priv_data, name, value, 0);
 	}
 
-	OpenCodec* Codec::Open()
+    std::unique_ptr<OpenCodec> Codec::Open()
 	{
 		if (opened)
 		{
@@ -68,7 +68,7 @@ namespace ffmpegcpp
 
 		opened = true;
 
-		return new OpenCodec(codecContext.get());
+		return std::make_unique<OpenCodec>(codecContext.get());
 	}
 
 	void Codec::SetGlobalContainerHeader()

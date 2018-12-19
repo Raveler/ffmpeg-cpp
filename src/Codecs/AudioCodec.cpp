@@ -125,7 +125,7 @@ namespace ffmpegcpp
 		return select_sample_rate(codecContext->codec);
 	}
 
-	OpenCodec* AudioCodec::Open(int bitRate, AVSampleFormat format, int sampleRate)
+    std::unique_ptr<OpenCodec> AudioCodec::Open(int bitRate, AVSampleFormat format, int sampleRate)
 	{
 
 		// do some sanity checks
