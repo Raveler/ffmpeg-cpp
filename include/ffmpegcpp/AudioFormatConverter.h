@@ -1,11 +1,16 @@
 #pragma once
 
-#include "ffmpeg.h"
-#include "ConvertedAudioProcessor.h"
+
 #include "FFmpegResource.h"
+
+struct AVCodecContext;
+struct AVFrame;
+struct AVAudioFifo;
 
 namespace ffmpegcpp
 {
+	class ConvertedAudioProcessor;
+
 	class AudioFormatConverter
 	{
 	public:

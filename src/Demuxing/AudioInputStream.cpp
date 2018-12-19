@@ -1,5 +1,8 @@
 #include "Demuxing/AudioInputStream.h"
 
+#include "ffmpeg.h"
+#include "FrameSinks/AudioFrameSink.h"
+
 namespace ffmpegcpp
 {
 	AudioInputStream::AudioInputStream(AudioFrameSink* frameSink, AVStream* stream)

@@ -1,5 +1,9 @@
 #include "Muxing/OutputStream.h"
+
+#include "Codecs/Codec.h"
+#include "ffmpeg.h"
 #include "FFmpegException.h"
+#include "Muxing/Muxer.h"
 
 using namespace std;
 

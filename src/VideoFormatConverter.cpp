@@ -1,4 +1,7 @@
 #include "VideoFormatConverter.h"
+
+#include "ConvertedAudioProcessor.h"
+#include "ffmpeg.h"
 #include "FFmpegException.h"
 
 namespace ffmpegcpp

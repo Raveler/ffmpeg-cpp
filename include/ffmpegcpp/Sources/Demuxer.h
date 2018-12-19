@@ -1,16 +1,24 @@
 #pragma once
 
-#include "ffmpeg.h"
-#include "std.h"
-
-#include "Demuxing/AudioInputStream.h"
-#include "Demuxing/VideoInputStream.h"
-#include "Demuxing/InputStream.h"
 #include "Sources/InputSource.h"
 #include "FFmpegResource.h"
 
+#include <vector>
+
+enum AVMediaType;
+struct AVCodec;
+struct AVDictionary;
+struct AVFormatContext;
+struct AVInputFormat;
+struct AVPacket;
+struct AVStream;
+
 namespace ffmpegcpp
 {
+	class AudioFrameSink;
+	class InputStream;
+	class VideoFrameSink;
+
 	struct StreamInfo
 	{
 		int streamId;

@@ -1,14 +1,14 @@
 #pragma once
 
-#include "ffmpeg.h"
-
 #include "Sources/InputSource.h"
-#include "Sources/Demuxer.h"
 
 #include <memory>
 
 namespace ffmpegcpp
 {
+	class AudioFrameSink;
+	class Demuxer;
+
 	class RawAudioFileSource : public InputSource
 	{
 	public:

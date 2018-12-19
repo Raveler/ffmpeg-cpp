@@ -1,9 +1,13 @@
 #pragma once
 
-#include "ffmpeg.h"
-
 #include "FrameSinks/VideoFrameSink.h"
 #include "FFmpegResource.h"
+
+struct AVFilterContext;
+struct AVFilterGraph;
+struct AVFrame;
+struct AVFrame;
+struct AVRational;
 
 namespace ffmpegcpp
 {

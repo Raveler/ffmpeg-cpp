@@ -1,20 +1,23 @@
 #pragma once
 
-#include "ffmpeg.h"
-#include "std.h"
-
-#include "FrameSinks/AudioFrameSink.h"
-#include "Codecs/AudioCodec.h"
-#include "ConvertedAudioProcessor.h"
-#include "AudioFormatConverter.h"
-#include "Muxing/Muxer.h"
-#include "Muxing/OutputStream.h"
 #include "FFmpegResource.h"
+#include "FrameSinks/AudioFrameSink.h"
+#include "ConvertedAudioProcessor.h"
 
 #include <memory>
 
+struct AVFrame;
+struct AVPacket;
+struct AVRational;
+
 namespace ffmpegcpp
 {
+	class AudioCodec;
+	class AudioFormatConverter;
+	class Muxer;
+	class OpenCodec;
+	class OutputStream;
+
 	class AudioEncoder : public AudioFrameSink, public ConvertedAudioProcessor
 	{
 	public:

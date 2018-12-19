@@ -1,17 +1,24 @@
 #pragma once
 
-#include "ffmpeg.h"
-
-#include "FrameSinks/VideoFrameSink.h"
-#include "Codecs/VideoCodec.h"
-#include "VideoFormatConverter.h"
-#include "Muxing/Muxer.h"
 #include "FFmpegResource.h"
+#include "FrameSinks/VideoFrameSink.h"
 
 #include <memory>
 
+enum AVPixelFormat;
+struct AVRational;
+struct AVFrame;
+struct AVPacket;
+
 namespace ffmpegcpp
 {
+	class VideoCodec;
+	class Muxer;
+	class OutputStream;
+	class VideoFormatConverter;
+	class OpenCodec;
+
+
 	class VideoEncoder : public VideoFrameSink
 	{
 	public:

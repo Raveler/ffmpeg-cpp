@@ -1,8 +1,13 @@
 #pragma once
 
-#include "ffmpeg.h"
-#include "std.h"
 #include "FFmpegResource.h"
+
+#include <string>
+#include <vector>
+
+struct AVFormatContext;
+struct AVOutputFormat;
+struct AVPacket;
 
 namespace ffmpegcpp {
 

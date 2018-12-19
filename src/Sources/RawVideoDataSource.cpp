@@ -1,5 +1,8 @@
 #include "Sources/RawVideoDataSource.h"
+
+#include "ffmpeg.h"
 #include "FFmpegException.h"
+#include "FrameSinks/VideoFrameSink.h"
 
 namespace ffmpegcpp
 {

@@ -1,14 +1,14 @@
 #pragma once
 
-#include "ffmpeg.h"
-
 #include "Sources/InputSource.h"
-#include "Sources/Demuxer.h"
 
 #include <memory>
 
 namespace ffmpegcpp
 {
+	class Demuxer;
+	class VideoFrameSink;
+
 	class RawVideoFileSource : public InputSource
 	{
 	public:

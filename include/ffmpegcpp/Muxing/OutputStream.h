@@ -1,12 +1,18 @@
 #pragma once
 
-#include "ffmpeg.h"
-#include "Codecs/Codec.h"
-#include "Muxing/Muxer.h"
 #include "FFmpegResource.h"
+
+#include <vector>
+
+struct AVPacket;
+struct AVStream;
 
 namespace ffmpegcpp
 {
+	class Codec;
+	class Muxer;
+	class OpenCodec;
+
 	class OutputStream
 	{
 	public:

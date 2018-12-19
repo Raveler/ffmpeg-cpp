@@ -1,11 +1,13 @@
 #pragma once
 
-#include "ffmpeg.h"
 #include "Demuxing/InputStream.h"
-#include "FrameSinks/AudioFrameSink.h"
+
+struct AVStream;
 
 namespace ffmpegcpp
 {
+	class AudioFrameSink;
+
 	class AudioInputStream : public InputStream
 	{
 

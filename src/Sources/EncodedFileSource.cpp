@@ -1,6 +1,9 @@
 #include "Sources/EncodedFileSource.h"
-#include "FFmpegException.h"
+
 #include "CodecDeducer.h"
+#include "ffmpeg.h"
+#include "FFmpegException.h"
+#include "FrameSinks/FrameSink.h"
 
 using namespace std;
 

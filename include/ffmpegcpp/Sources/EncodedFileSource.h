@@ -1,12 +1,20 @@
 #pragma once
 
-#include "ffmpeg.h"
-#include "FrameSinks/FrameSink.h"
 #include "Sources/InputSource.h"
 #include "FFmpegResource.h"
 
+enum AVCodecID;
+struct AVCodec;
+struct AVCodecContext;
+struct AVCodecParserContext;
+struct AVFrame;
+struct AVPacket;
+struct AVRational;
+
 namespace ffmpegcpp
 {
+	class FrameSink;
+
 	// EncodedFileSource takes a file that is already encoded but not in a container (ie .mp3, .h264)
 	// and feeds it to the system.
 	class EncodedFileSource : public InputSource

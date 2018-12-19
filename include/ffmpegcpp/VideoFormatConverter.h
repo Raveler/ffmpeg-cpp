@@ -1,8 +1,9 @@
 #pragma once
 
-#include "ffmpeg.h"
-#include "ConvertedAudioProcessor.h"
 #include "FFmpegResource.h"
+
+struct AVCodecContext;
+struct AVFrame;
 
 namespace ffmpegcpp
 {

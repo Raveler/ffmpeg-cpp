@@ -1,6 +1,9 @@
-#include "Codecs/Codec.h"
-#include "FFmpegException.h"
+
 #include "CodecDeducer.h"
+#include "Codecs/Codec.h"
+#include "ffmpeg.h"
+#include "FFmpegException.h"
+#include "OpenCodec.h"
 
 using namespace std;
 

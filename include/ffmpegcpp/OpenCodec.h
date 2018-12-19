@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ffmpeg.h"
+struct AVCodecContext;
 
 namespace ffmpegcpp
 {

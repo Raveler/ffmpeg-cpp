@@ -1,11 +1,13 @@
 #pragma once
 
-#include "ffmpeg.h"
 #include "Demuxing/InputStream.h"
-#include "FrameSinks/VideoFrameSink.h"
+
+struct AVStream;
 
 namespace ffmpegcpp
 {
+	class VideoFrameSink;
+
 	class VideoInputStream : public InputStream
 	{
 

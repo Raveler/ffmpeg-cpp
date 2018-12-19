@@ -1,7 +1,14 @@
 #include "FrameSinks/AudioEncoder.h"
-#include "Muxing/AudioOutputStream.h"
 
+#include "AudioFormatConverter.h"
+#include "Codecs/AudioCodec.h"
+#include "ffmpeg.h"
 #include "FFmpegException.h"
+#include "Muxing/AudioOutputStream.h"
+#include "Muxing/Muxer.h"
+#include "Muxing/OutputStream.h"
+#include "OpenCodec.h"
+#include "std.h"
 
 using namespace std;
 

@@ -1,5 +1,8 @@
 #include "Sources/RawAudioFileSource.h"
+
+#include "ffmpeg.h"
 #include "FFmpegException.h"
+#include "Sources/Demuxer.h"
 #include "std.h"
 
 using namespace std;

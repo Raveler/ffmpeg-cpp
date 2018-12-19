@@ -1,5 +1,7 @@
 #include "Codecs/VideoCodec.h"
 #include "FFmpegException.h"
+#include "ffmpeg.h"
+#include "OpenCodec.h"
 
 using namespace std;
 

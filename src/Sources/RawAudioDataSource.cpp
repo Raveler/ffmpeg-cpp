@@ -1,5 +1,8 @@
 #include "Sources/RawAudioDataSource.h"
+
+#include "ffmpeg.h"
 #include "FFmpegException.h"
+#include "FrameSinks/AudioFrameSink.h"
 
 namespace ffmpegcpp
 {

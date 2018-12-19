@@ -1,12 +1,17 @@
 #pragma once
 
-#include "ffmpeg.h"
-#include "std.h"
-#include "FrameSinks/FrameSink.h"
 #include "FFmpegResource.h"
+
+struct AVCodecContext;
+struct AVFrame;
+struct AVPacket;
+struct AVRational;
+struct AVStream;
 
 namespace ffmpegcpp
 {
+	class FrameSink;
+
 	class InputStream
 	{
 

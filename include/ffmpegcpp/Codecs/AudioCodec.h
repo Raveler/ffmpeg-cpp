@@ -1,10 +1,13 @@
 #pragma once
 
 #include "Codecs/Codec.h"
-#include "OpenCodec.h"
+
+enum AVCodecID;
+enum AVSampleFormat;
 
 namespace ffmpegcpp
 {
+	class OpenCodec;
 
 	class AudioCodec : public Codec
 	{

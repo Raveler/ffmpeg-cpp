@@ -1,6 +1,12 @@
 #include "Sources/Demuxer.h"
-#include "FFmpegException.h"
+
 #include "CodecDeducer.h"
+#include "Demuxing/AudioInputStream.h"
+#include "Demuxing/InputStream.h"
+#include "Demuxing/VideoInputStream.h"
+#include "ffmpeg.h"
+#include "FFmpegException.h"
+#include "std.h"
 
 #include <string>
 

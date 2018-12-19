@@ -1,6 +1,7 @@
 #pragma once
 
-#include "ffmpeg.h"
+enum AVCodecID;
+struct AVCodec;
 
 namespace ffmpegcpp
 {

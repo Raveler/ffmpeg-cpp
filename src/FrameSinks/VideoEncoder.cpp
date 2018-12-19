@@ -1,7 +1,13 @@
 #include "FrameSinks/VideoEncoder.h"
 
+
+#include "Codecs/VideoCodec.h"
+#include "ffmpeg.h"
 #include "FFmpegException.h"
+#include "Muxing/Muxer.h"
 #include "Muxing/VideoOutputStream.h"
+#include "VideoFormatConverter.h"
+#include "OpenCodec.h"
 
 using namespace std;
 

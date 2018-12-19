@@ -1,11 +1,15 @@
 #pragma once
 
-#include "ffmpeg.h"
-#include "FrameSinks/VideoFrameSink.h"
 #include "FFmpegResource.h"
+
+enum AVPixelFormat;
+struct AVFrame;
+struct AVRational;
 
 namespace ffmpegcpp
 {
+	class VideoFrameSink;
+
 	// RawVideoDataSource is used to feed raw memory to the system and process it.
 	// You can use this if the video data comes from another source than the file system (ie rendering).
 	class RawVideoDataSource

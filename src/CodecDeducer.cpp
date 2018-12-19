@@ -1,4 +1,6 @@
 #include "CodecDeducer.h"
+
+#include "ffmpeg.h"
 #include "FFmpegException.h"
 
 using namespace std;

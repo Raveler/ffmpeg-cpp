@@ -1,5 +1,10 @@
 #include "Muxing/AudioOutputStream.h"
+
+#include "Codecs/Codec.h"
+#include "ffmpeg.h"
 #include "FFmpegException.h"
+#include "Muxing/Muxer.h"
+#include "OpenCodec.h"
 
 using namespace std;
 namespace ffmpegcpp
