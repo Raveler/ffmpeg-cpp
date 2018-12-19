@@ -5,6 +5,8 @@
 #include "FFmpegException.h"
 #include "Muxing/Muxer.h"
 
+#include <algorithm>
+
 using namespace std;
 
 namespace ffmpegcpp
@@ -44,17 +46,15 @@ namespace ffmpegcpp
 	void OutputStream::DrainPacketQueue()
 	{
 		if (packetQueue.size() > 0) printf("Drain %d packets from the packet queue...", packetQueue.size());
-		for (int i = 0; i < packetQueue.size(); ++i)
+		std::for_each(begin(packetQueue), end(packetQueue), [this](auto & tmp_pkt)
 		{
-			const auto & tmp_pkt = packetQueue[i];
-
 			// Write the compressed frame to the media file
 			PreparePacketForMuxer(tmp_pkt.get());
 			muxer->WritePacket(tmp_pkt.get());
 
 			// Release the packet
 			av_packet_unref(tmp_pkt.get());
-		}
+		});
 		packetQueue.clear();
 	}
 }

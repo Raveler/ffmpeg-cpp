@@ -8,6 +8,7 @@
 #include "FFmpegException.h"
 #include "std.h"
 
+#include <algorithm>
 #include <string>
 
 using namespace std;
@@ -159,16 +160,10 @@ namespace ffmpegcpp
 			Step();
 
 			// see if all input streams are primed
-			allPrimed = true;
-			for (int i = 0; i < containerContext->nb_streams; ++i)
-			{
-				const auto & stream = inputStreams[i];
-				if (stream != nullptr)
-				{
-					if (!stream->IsPrimed()) allPrimed = false;
-				}
-			}
-			
+			allPrimed = std::all_of(cbegin(inputStreams), cend(inputStreams), [](const auto & stream){
+				return stream->IsPrimed();
+			});
+
 		} while (!allPrimed && !IsDone());
 	}
 
@@ -189,7 +184,7 @@ namespace ffmpegcpp
 			pkt->size = 0;
 			for (int i = 0; i < containerContext->nb_streams; ++i)
 			{
-				const auto & stream = inputStreams[i];
+				auto & stream = inputStreams[i];
 				if (stream != nullptr)
 				{
 					pkt->stream_index = i;

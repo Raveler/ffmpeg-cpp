@@ -5,6 +5,8 @@
 #include "Muxing/OutputStream.h"
 #include "std.h"
 
+#include <algorithm>
+
 using namespace std;
 
 namespace ffmpegcpp
@@ -83,11 +85,10 @@ namespace ffmpegcpp
 	bool Muxer::IsPrimed()
 	{
 		if (opened) return true; // we were already opened before - always primed from now on!
-		bool allPrimed = true;
-		for (int i = 0; i < outputStreams.size(); ++i)
-		{
-			if (!outputStreams[i]->IsPrimed()) allPrimed = false;
-		}
+
+		bool allPrimed = std::all_of(cbegin(outputStreams), cend(outputStreams), [](const auto & stream){
+			return stream->IsPrimed();
+		});
 
 		// we are finally primed - open ourselves before we continue.
 		if (allPrimed)
@@ -131,10 +132,8 @@ namespace ffmpegcpp
 				printf("After %d cached packets, we can finally open the container\n", packetQueue.size());
 
 				// flush the queue
-				for (int i = 0; i < packetQueue.size(); ++i)
+				std::for_each(begin(packetQueue), end(packetQueue), [this](const auto & tmp_pkt)
 				{
-					const auto & tmp_pkt = packetQueue[i];
-
 					// Write the compressed frame to the media file.
 					int ret = av_interleaved_write_frame(containerContext, tmp_pkt.get());
 					if (ret < 0)
@@ -143,7 +142,7 @@ namespace ffmpegcpp
 					}
 
 					av_packet_unref(tmp_pkt.get());
-				}
+				});
 				packetQueue.clear();
 			}
 
@@ -198,10 +197,9 @@ namespace ffmpegcpp
 		// We must be sure to do this because in an extreme case, one entire stream
 		// might be queueing all its packets before we are opened, so it might not
 		// be draining them at all.
-		for (int i = 0; i < outputStreams.size(); ++i)
-		{
-			outputStreams[i]->DrainPacketQueue();
-		}
+		std::for_each(begin(outputStreams), end(outputStreams), [](auto * stream){
+			stream->DrainPacketQueue();
+		});
 
 		// free the stream
 		CleanUp();
