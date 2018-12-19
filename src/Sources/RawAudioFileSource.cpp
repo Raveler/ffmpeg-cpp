@@ -41,7 +41,7 @@ namespace ffmpegcpp
 		demuxer->PreparePipeline();
 	}
 
-	bool RawAudioFileSource::IsDone()
+	bool RawAudioFileSource::IsDone() const
 	{
 		return demuxer->IsDone();
 	}

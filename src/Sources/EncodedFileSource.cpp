@@ -124,7 +124,7 @@ namespace ffmpegcpp
 		}
 	}
 
-	bool EncodedFileSource::IsDone()
+	bool EncodedFileSource::IsDone() const
 	{
 		return done;
 	}

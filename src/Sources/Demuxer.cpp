@@ -55,17 +55,17 @@ namespace ffmpegcpp
 		pkt->size = 0;
 	}
 
-	vector<StreamInfo> Demuxer::GetAudioStreamInfo()
+	vector<StreamInfo> Demuxer::GetAudioStreamInfo() const
 	{
 		return GetStreamInfo(AVMEDIA_TYPE_AUDIO);
 	}
 
-	vector<StreamInfo> Demuxer::GetVideoStreamInfo()
+	vector<StreamInfo> Demuxer::GetVideoStreamInfo() const
 	{
 		return GetStreamInfo(AVMEDIA_TYPE_VIDEO);
 	}
 
-	vector<StreamInfo> Demuxer::GetStreamInfo(AVMediaType mediaType)
+	vector<StreamInfo> Demuxer::GetStreamInfo(AVMediaType mediaType) const
 	{
 		vector<StreamInfo> streamInfo;
 		for (int i = 0; i < containerContext->nb_streams; ++i)
@@ -87,7 +87,7 @@ namespace ffmpegcpp
 		return streamInfo;
 	}
 
-	StreamInfo Demuxer::CreateInfo(int streamIndex, AVStream* stream, AVCodec* codec)
+	StreamInfo Demuxer::CreateInfo(int streamIndex, AVStream* stream, AVCodec* codec) const
 	{
 		StreamInfo info;
 		info.streamId = streamIndex;
@@ -167,7 +167,7 @@ namespace ffmpegcpp
 		} while (!allPrimed && !IsDone());
 	}
 
-	bool Demuxer::IsDone()
+	bool Demuxer::IsDone() const
 	{
 		return done;
 	}

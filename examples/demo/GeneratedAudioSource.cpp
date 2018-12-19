@@ -27,7 +27,7 @@ void GeneratedAudioSource::PreparePipeline()
 	}
 }
 
-bool GeneratedAudioSource::IsDone()
+bool GeneratedAudioSource::IsDone() const
 {
 	return frameNumber >= 120;
 }

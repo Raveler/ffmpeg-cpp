@@ -122,7 +122,7 @@ namespace ffmpegcpp
 		}
 	}
 
-	bool AudioEncoder::IsPrimed()
+	bool AudioEncoder::IsPrimed() const
 	{
 		return output->IsPrimed();
 	}

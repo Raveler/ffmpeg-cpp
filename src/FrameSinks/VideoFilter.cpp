@@ -179,7 +179,7 @@ namespace ffmpegcpp
 	}
 
 
-	bool VideoFilter::IsPrimed()
+	bool VideoFilter::IsPrimed() const
 	{
 		return target->IsPrimed();
 	}

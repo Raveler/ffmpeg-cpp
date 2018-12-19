@@ -87,7 +87,7 @@ namespace ffmpegcpp
 		pkt->duration = stream->time_base.den / stream->time_base.num / stream->avg_frame_rate.num * stream->avg_frame_rate.den;
 	}
 
-	bool VideoOutputStream::IsPrimed()
+	bool VideoOutputStream::IsPrimed() const
 	{
 		return initialized;
 	}

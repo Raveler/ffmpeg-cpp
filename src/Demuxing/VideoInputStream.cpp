@@ -11,10 +11,6 @@ namespace ffmpegcpp
 		SetFrameSink(frameSink);
 	}
 
-	VideoInputStream::~VideoInputStream()
-	{
-	}
-
 	void VideoInputStream::ConfigureCodecContext()
 	{
 

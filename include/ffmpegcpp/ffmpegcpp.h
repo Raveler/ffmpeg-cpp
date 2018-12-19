@@ -24,6 +24,8 @@
 #include "Codecs/JPGCodec.h"
 #include "Codecs/Codec.h"
 
+#include "Demuxing/InputStream.h"
 
 #include "FFmpegException.h"
 #include "FFmpegResource.h"
+

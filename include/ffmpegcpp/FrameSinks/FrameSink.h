@@ -12,7 +12,7 @@ namespace ffmpegcpp
 
 		virtual void Close() = 0;
 
-		virtual bool IsPrimed() = 0;
+		virtual bool IsPrimed() const = 0;
 		
 		virtual ~FrameSink() {}
 	};

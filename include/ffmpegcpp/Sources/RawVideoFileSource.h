@@ -20,7 +20,7 @@ namespace ffmpegcpp
 		//RawVideoFileSource(const char* fileName, int width, int height, const char* frameRate, AVPixelFormat format, VideoFrameSink* frameSink);
 
 		void PreparePipeline() override;
-		bool IsDone() override;
+		bool IsDone() const override;
 		void Step() override;
 
 	private:

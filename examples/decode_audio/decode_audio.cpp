@@ -31,7 +31,7 @@ public:
 		fclose(file);
 	}
 
-	bool IsPrimed() override
+	bool IsPrimed() const override
 	{
 		// Return whether we have all information we need to start writing out data.
 		// Since we don't really need any data in this use case, we are always ready.

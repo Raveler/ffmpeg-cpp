@@ -90,7 +90,7 @@ namespace ffmpegcpp
 		}
 	}
 
-	bool AudioOutputStream::IsPrimed()
+	bool AudioOutputStream::IsPrimed() const
 	{
 		return initialized;
 	}

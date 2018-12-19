@@ -22,7 +22,7 @@ namespace ffmpegcpp
 		void WriteData(void* data, int sampleCount);
 		void Close();
 
-		bool IsPrimed();
+		bool IsPrimed() const;
 
 	private:
 

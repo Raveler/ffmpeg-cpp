@@ -67,7 +67,7 @@ namespace ffmpegcpp
 		demuxer->PreparePipeline();
 	}
 
-	bool RawVideoFileSource::IsDone()
+	bool RawVideoFileSource::IsDone() const
 	{
 		return demuxer->IsDone();
 	}

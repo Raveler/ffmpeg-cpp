@@ -23,10 +23,10 @@ namespace ffmpegcpp
 		void WriteFrame(void* data, int bytesPerRow);
 		void Close();
 
-		int GetWidth();
-		int GetHeight();
+		int GetWidth() const;
+		int GetHeight() const;
 
-		bool IsPrimed();
+		bool IsPrimed() const;
 
 	private:
 

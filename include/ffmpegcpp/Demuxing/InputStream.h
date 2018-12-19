@@ -24,7 +24,7 @@ namespace ffmpegcpp
 		virtual void DecodePacket(AVPacket* pkt);
 		void Close();
 
-		bool IsPrimed();
+		bool IsPrimed() const;
 
 	protected:
 

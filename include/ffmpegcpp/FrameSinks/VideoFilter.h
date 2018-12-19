@@ -21,7 +21,7 @@ namespace ffmpegcpp
 		void WriteFrame(AVFrame* frame, AVRational* timeBase) override;
 		void Close() override;
 
-		bool IsPrimed() override;
+		bool IsPrimed() const override;
 
 	private:
 

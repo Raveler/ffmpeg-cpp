@@ -148,7 +148,7 @@ namespace ffmpegcpp
 		}
 	}
 
-	bool VideoEncoder::IsPrimed()
+	bool VideoEncoder::IsPrimed() const
 	{
 		return output->IsPrimed();
 	}

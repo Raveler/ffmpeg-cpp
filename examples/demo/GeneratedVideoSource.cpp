@@ -34,7 +34,7 @@ void GeneratedVideoSource::Step()
 	}
 }
 
-bool GeneratedVideoSource::IsDone()
+bool GeneratedVideoSource::IsDone() const
 {
 	return frameNumber >= 100;
 }

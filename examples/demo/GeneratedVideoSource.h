@@ -12,7 +12,7 @@ public:
 	~GeneratedVideoSource() override;
 
 	void PreparePipeline() override;
-	bool IsDone() override;
+	bool IsDone() const override;
 	void Step() override;
 
 private:

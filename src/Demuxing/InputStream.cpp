@@ -122,7 +122,7 @@ namespace ffmpegcpp
 		output->Close();
 	}
 
-	bool InputStream::IsPrimed()
+	bool InputStream::IsPrimed() const
 	{
 		return output->IsPrimed();
 	}

@@ -22,7 +22,7 @@ namespace ffmpegcpp
 
 		void WritePacket(AVPacket* pkt, OpenCodec* openCodec) override;
 
-		bool IsPrimed() override;
+		bool IsPrimed()  const override;
 
 	protected:
 

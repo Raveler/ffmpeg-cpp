@@ -77,17 +77,17 @@ namespace ffmpegcpp
 		output->Close();
 	}
 
-	int RawVideoDataSource::GetWidth()
+	int RawVideoDataSource::GetWidth() const
 	{
 		return frame->width;
 	}
 
-	int RawVideoDataSource::GetHeight()
+	int RawVideoDataSource::GetHeight() const
 	{
 		return frame->height;
 	}
 
-	bool RawVideoDataSource::IsPrimed()
+	bool RawVideoDataSource::IsPrimed() const
 	{
 		return output->IsPrimed();
 	}

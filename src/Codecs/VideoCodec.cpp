@@ -28,7 +28,7 @@ namespace ffmpegcpp
 		codecContext->global_quality = FF_QP2LAMBDA * 0;
 	}
 
-	bool VideoCodec::IsPixelFormatSupported(AVPixelFormat format)
+	bool VideoCodec::IsPixelFormatSupported(AVPixelFormat format) const
 	{
 		if (format == AV_PIX_FMT_NONE) return true; // let the codec deal with this
 		const enum AVPixelFormat *p = codecContext->codec->pix_fmts;
@@ -40,7 +40,7 @@ namespace ffmpegcpp
 		return false;
 	}
 
-	bool VideoCodec::IsFrameRateSupported(AVRational* frameRate)
+	bool VideoCodec::IsFrameRateSupported(AVRational* frameRate) const
 	{
 		if (!codecContext->codec->supported_framerates) return true; // all frame rates are fair game
 		const AVRational *p = codecContext->codec->supported_framerates;
@@ -80,14 +80,14 @@ namespace ffmpegcpp
 		return Codec::Open();
 	}
 
-	AVPixelFormat VideoCodec::GetDefaultPixelFormat()
+	AVPixelFormat VideoCodec::GetDefaultPixelFormat() const
 	{
 		const enum AVPixelFormat *p = codecContext->codec->pix_fmts;
 		if (*p == AV_PIX_FMT_NONE) throw FFmpegException("Codec " + string(codecContext->codec->name) + " does not have a default pixel format, you have to specify one");
 		return *p;
 	}
 
-	AVRational VideoCodec::GetClosestSupportedFrameRate(AVRational originalFrameRate)
+	AVRational VideoCodec::GetClosestSupportedFrameRate(AVRational originalFrameRate) const
 	{
 		if (!codecContext->codec->supported_framerates)
 		{

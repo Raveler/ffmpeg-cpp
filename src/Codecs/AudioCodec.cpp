@@ -17,10 +17,6 @@ namespace ffmpegcpp
 	{
 	}
 
-	AudioCodec::~AudioCodec()
-	{
-	}
-
 	/* check that a given sample format is supported by the encoder */
 	static int check_sample_fmt(const AVCodec *codec, enum AVSampleFormat sample_fmt)
 	{
@@ -79,7 +75,7 @@ namespace ffmpegcpp
 		return best_ch_layout;
 	}
 
-	bool AudioCodec::IsChannelsSupported(int channels)
+	bool AudioCodec::IsChannelsSupported(int channels) const
 	{
 		int64_t channelLayout = av_get_default_channel_layout(channels);
 		const uint64_t *p = codecContext->codec->channel_layouts;
@@ -91,7 +87,7 @@ namespace ffmpegcpp
 		return false;
 	}
 
-	bool AudioCodec::IsFormatSupported(AVSampleFormat format)
+	bool AudioCodec::IsFormatSupported(AVSampleFormat format) const
 	{
 		const enum AVSampleFormat *p = codecContext->codec->sample_fmts;
 
@@ -103,7 +99,7 @@ namespace ffmpegcpp
 		return false;
 	}
 
-	bool AudioCodec::IsSampleRateSupported(int sampleRate)
+	bool AudioCodec::IsSampleRateSupported(int sampleRate) const
 	{
 		const int *p;
 		if (!codecContext->codec->supported_samplerates) return true; // all sample rates are fair game
@@ -116,13 +112,13 @@ namespace ffmpegcpp
 		return false;
 	}
 
-	AVSampleFormat AudioCodec::GetDefaultSampleFormat()
+	AVSampleFormat AudioCodec::GetDefaultSampleFormat() const
 	{
 		AVSampleFormat format = (codecContext->codec->sample_fmts ? codecContext->codec->sample_fmts[0] : AV_SAMPLE_FMT_FLTP);
 		return format;
 	}
 
-	int AudioCodec::GetDefaultSampleRate()
+	int AudioCodec::GetDefaultSampleRate() const
 	{
 		return select_sample_rate(codecContext->codec);
 	}

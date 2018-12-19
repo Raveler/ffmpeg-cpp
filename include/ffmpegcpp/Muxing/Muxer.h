@@ -26,7 +26,7 @@ namespace ffmpegcpp {
 
 		void Close();
 		
-		bool IsPrimed();
+		bool IsPrimed(); // ToDo: this should be const...
 
 
 	private:

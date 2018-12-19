@@ -23,7 +23,7 @@ namespace ffmpegcpp
 
 		virtual void WritePacket(AVPacket* pkt, OpenCodec* openCodec) = 0;
 
-		virtual bool IsPrimed() = 0;
+		virtual bool IsPrimed() const = 0;
 
 		void DrainPacketQueue();
 

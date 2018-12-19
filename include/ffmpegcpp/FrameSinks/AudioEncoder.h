@@ -29,7 +29,7 @@ namespace ffmpegcpp
 
 		void WriteConvertedFrame(AVFrame* frame) override;
 
-		bool IsPrimed() override;
+		bool IsPrimed() const override;
 
 	private:
 

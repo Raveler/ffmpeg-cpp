@@ -15,16 +15,15 @@ namespace ffmpegcpp
 
 		AudioCodec(const char* codecName);
 		AudioCodec(AVCodecID codecId);
-		virtual ~AudioCodec();
 
         std::unique_ptr<OpenCodec> Open(int bitRate, AVSampleFormat format, int sampleRate);
 
-		bool IsFormatSupported(AVSampleFormat format);
-		bool IsChannelsSupported(int channels);
-		bool IsSampleRateSupported(int sampleRate);
+		bool IsFormatSupported(AVSampleFormat format) const;
+		bool IsChannelsSupported(int channels) const;
+		bool IsSampleRateSupported(int sampleRate) const;
 
-		AVSampleFormat GetDefaultSampleFormat();
-		int GetDefaultSampleRate();
+		AVSampleFormat GetDefaultSampleFormat() const;
+		int GetDefaultSampleRate() const;
 
 	};
 

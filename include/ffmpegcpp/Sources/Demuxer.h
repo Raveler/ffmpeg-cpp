@@ -3,6 +3,7 @@
 #include "Sources/InputSource.h"
 #include "FFmpegResource.h"
 
+#include <memory>
 #include <vector>
 
 enum AVMediaType;
@@ -39,11 +40,11 @@ namespace ffmpegcpp
 		void DecodeAudioStream(int streamId, AudioFrameSink* frameSink);
 		void DecodeVideoStream(int streamId, VideoFrameSink* frameSink);
 
-		std::vector<StreamInfo> GetAudioStreamInfo();
-		std::vector<StreamInfo> GetVideoStreamInfo();
+		std::vector<StreamInfo> GetAudioStreamInfo() const;
+		std::vector<StreamInfo> GetVideoStreamInfo() const;
 
 		void PreparePipeline() override;
-		bool IsDone() override;
+		bool IsDone() const override;
 		void Step() override;
 
 	private:
@@ -52,8 +53,8 @@ namespace ffmpegcpp
 
 		const char* fileName;
 
-		std::vector<StreamInfo> GetStreamInfo(AVMediaType mediaType);
-		StreamInfo CreateInfo(int streamIndex, AVStream* stream, AVCodec* codec);
+		std::vector<StreamInfo> GetStreamInfo(AVMediaType mediaType) const;
+		StreamInfo CreateInfo(int streamIndex, AVStream* stream, AVCodec* codec) const;
 
 		std::vector<std::unique_ptr<InputStream>> inputStreams;
 

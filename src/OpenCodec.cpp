@@ -22,7 +22,7 @@ namespace ffmpegcpp
 		avcodec_free_context(&context);
 	}
 
-	AVCodecContext* OpenCodec::GetContext()
+	AVCodecContext* OpenCodec::GetContext() const
 	{
 		return context;
 	}

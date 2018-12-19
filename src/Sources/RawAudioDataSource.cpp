@@ -65,7 +65,7 @@ namespace ffmpegcpp
 		output->Close();
 	}
 
-	bool RawAudioDataSource::IsPrimed()
+	bool RawAudioDataSource::IsPrimed() const
 	{
 		return output->IsPrimed();
 	}

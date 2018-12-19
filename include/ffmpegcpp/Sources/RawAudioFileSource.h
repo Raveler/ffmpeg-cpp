@@ -16,7 +16,7 @@ namespace ffmpegcpp
 		RawAudioFileSource(const char* fileName, const char* inputFormat, int sampleRate, int channels, AudioFrameSink* frameSink);
 
 		void PreparePipeline() override;
-		bool IsDone() override;
+		bool IsDone() const override;
 		void Step() override;
 
 	private:
