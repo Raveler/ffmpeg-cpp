@@ -6,6 +6,7 @@
 #include "Muxing/Muxer.h"
 
 #include <algorithm>
+#include <iostream>
 
 using namespace std;
 
@@ -45,7 +46,9 @@ namespace ffmpegcpp
 
 	void OutputStream::DrainPacketQueue()
 	{
-		if (packetQueue.size() > 0) printf("Drain %d packets from the packet queue...", packetQueue.size());
+		if (packetQueue.size() > 0)
+            std::cout << "Drain " << packetQueue.size() << " packets from the packet queue...";
+
 		std::for_each(begin(packetQueue), end(packetQueue), [this](auto & tmp_pkt)
 		{
 			// Write the compressed frame to the media file

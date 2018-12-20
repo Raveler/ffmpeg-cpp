@@ -146,7 +146,7 @@ namespace ffmpegcpp
 		while (data_size > 0)
 		{
 			ret = av_parser_parse2(parser.get(), codecContext.get(), &pkt->data, &pkt->size,
-				data, data_size, AV_NOPTS_VALUE, AV_NOPTS_VALUE, 0);
+				data, static_cast<int>(data_size), AV_NOPTS_VALUE, AV_NOPTS_VALUE, 0);
 			if (ret < 0)
 			{
 				throw FFmpegException("Error while parsing file", ret);

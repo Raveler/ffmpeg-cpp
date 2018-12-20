@@ -5,6 +5,7 @@
 #include "Muxing/OutputStream.h"
 
 #include <algorithm>
+#include <iostream>
 
 using namespace std;
 
@@ -128,7 +129,7 @@ namespace ffmpegcpp
 			{
 				Open();
 				opened = true;
-				printf("After %d cached packets, we can finally open the container\n", packetQueue.size());
+				std::cout << "After " << packetQueue.size() << " cached packets, we can finally open the container\n";
 
 				// flush the queue
 				std::for_each(begin(packetQueue), end(packetQueue), [this](const auto & tmp_pkt)

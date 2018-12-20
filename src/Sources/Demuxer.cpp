@@ -67,7 +67,7 @@ namespace ffmpegcpp
 	vector<StreamInfo> Demuxer::GetStreamInfo(AVMediaType mediaType) const
 	{
 		vector<StreamInfo> streamInfo;
-		for (int i = 0; i < containerContext->nb_streams; ++i)
+		for (unsigned int i = 0; i < containerContext->nb_streams; ++i)
 		{
 			AVStream* stream = containerContext->streams[i];
 
@@ -181,7 +181,7 @@ namespace ffmpegcpp
 		{
 			pkt->data = nullptr;
 			pkt->size = 0;
-			for (int i = 0; i < containerContext->nb_streams; ++i)
+			for (unsigned int i = 0; i < containerContext->nb_streams; ++i)
 			{
 				auto & stream = inputStreams[i];
 				if (stream != nullptr)

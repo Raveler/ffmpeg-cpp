@@ -149,7 +149,6 @@ namespace ffmpegcpp
 		 * If there is less than the maximum possible frame size in the FIFO
 		 * buffer use this number. Otherwise, use the maximum possible frame size. */
 		const int frame_size = FFMIN(av_audio_fifo_size(fifo.get()), converted_frame->nb_samples);
-		int data_written;
 		converted_frame->nb_samples = frame_size;
 
 		/* Read as many samples from the FIFO buffer as required to fill the frame.
