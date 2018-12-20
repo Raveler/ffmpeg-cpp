@@ -3,7 +3,6 @@
 #include "ffmpeg.h"
 #include "FFmpegException.h"
 #include "Muxing/OutputStream.h"
-#include "std.h"
 
 #include <algorithm>
 

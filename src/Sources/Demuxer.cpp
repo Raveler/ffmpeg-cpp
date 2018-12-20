@@ -6,7 +6,6 @@
 #include "Demuxing/VideoInputStream.h"
 #include "ffmpeg.h"
 #include "FFmpegException.h"
-#include "std.h"
 
 #include <algorithm>
 #include <string>

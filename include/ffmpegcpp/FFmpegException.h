@@ -2,7 +2,8 @@
 
 #include "ffmpeg.h"
 
-#include "std.h"
+#include <exception>
+#include <string>
 
 namespace ffmpegcpp
 {
@@ -15,11 +16,10 @@ namespace ffmpegcpp
 
 		FFmpegException(std::string error, int returnValue);
 
-		virtual char const* what() const
+		char const* what() const override
 		{
 			return std::exception::what();
 		}
-
 
 	private:
 

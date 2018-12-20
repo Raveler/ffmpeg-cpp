@@ -3,7 +3,6 @@
 #include "ffmpeg.h"
 #include "FFmpegException.h"
 #include "FrameSinks/FrameSink.h"
-#include "std.h"
 
 using namespace std;
 

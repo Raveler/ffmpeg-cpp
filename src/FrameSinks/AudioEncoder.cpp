@@ -8,7 +8,6 @@
 #include "Muxing/Muxer.h"
 #include "Muxing/OutputStream.h"
 #include "OpenCodec.h"
-#include "std.h"
 
 using namespace std;
 
