@@ -7,7 +7,7 @@ using namespace std;
 
 namespace ffmpegcpp
 {
-	AudioCodec::AudioCodec(const char* codecName)
+	AudioCodec::AudioCodec(const std::string & codecName)
 		: Codec(codecName)
 	{
 	}

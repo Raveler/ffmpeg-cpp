@@ -12,9 +12,9 @@ namespace ffmpegcpp
 
 	public:
 
-		FFmpegException(std::string error);
+		FFmpegException(const std::string & error);
 
-		FFmpegException(std::string error, int returnValue);
+		FFmpegException(const std::string & error, int returnValue);
 
 		char const* what() const override
 		{

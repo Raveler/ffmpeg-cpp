@@ -3,6 +3,8 @@
 #include "Sources/InputSource.h"
 #include "FFmpegResource.h"
 
+#include <string>
+
 enum AVCodecID;
 struct AVCodec;
 struct AVCodecContext;
@@ -21,8 +23,8 @@ namespace ffmpegcpp
 	{
 
 	public:
-		EncodedFileSource(const char* inFileName, AVCodecID codecId, FrameSink* output);
-		EncodedFileSource(const char* inFileName, const char* codecName, FrameSink* output);
+		EncodedFileSource(const std::string & inFileName, AVCodecID codecId, FrameSink* output);
+		EncodedFileSource(const std::string & inFileName, const std::string & codecName, FrameSink* output);
 		virtual ~EncodedFileSource();
 
 		void PreparePipeline() override;
@@ -49,7 +51,7 @@ namespace ffmpegcpp
 
 		FILE* file;
 
-		void Init(const char* inFileName, AVCodec* codec, FrameSink* output);
+		void Init(const std::string & inFileName, AVCodec* codec, FrameSink* output);
 
 		void Decode(AVPacket *packet, AVFrame* targetFrame);
 

@@ -8,9 +8,9 @@ class RawAudioFileSink : public ffmpegcpp::AudioFrameSink
 {
 public:
 
-	RawAudioFileSink(const char* fileName)
+	RawAudioFileSink(const std::string & fileName)
 	{
-		file = fopen(fileName, "wb");
+		file = fopen(fileName.c_str(), "wb");
 	}
 
 	void WriteFrame(AVFrame* frame, AVRational* timeBase) override

@@ -31,8 +31,8 @@ namespace ffmpegcpp
 	{
 	public:
 
-		Demuxer(const char* fileName);
-		Demuxer(const char* fileName, AVInputFormat* inputFormat, AVDictionary *inputFormatOptions);
+		Demuxer(const std::string & fileName);
+		Demuxer(const std::string & fileName, AVInputFormat* inputFormat, AVDictionary *inputFormatOptions);
 
 		void DecodeBestAudioStream(AudioFrameSink* frameSink);
 		void DecodeBestVideoStream(VideoFrameSink* frameSink);
@@ -51,7 +51,7 @@ namespace ffmpegcpp
 
 		bool done = false;
 
-		const char* fileName;
+		std::string fileName;
 
 		std::vector<StreamInfo> GetStreamInfo(AVMediaType mediaType) const;
 		StreamInfo CreateInfo(int streamIndex, AVStream* stream, AVCodec* codec) const;

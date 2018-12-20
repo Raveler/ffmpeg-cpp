@@ -12,16 +12,16 @@ using namespace std;
 namespace ffmpegcpp
 {
 
-	Muxer::Muxer(const char* fileName)
+	Muxer::Muxer(const std::string & fileName)
 	{
 		this->fileName = fileName;
 
 		/* allocate the output media context */
-		avformat_alloc_output_context2(&containerContext, nullptr, nullptr, fileName);
+		avformat_alloc_output_context2(&containerContext, nullptr, nullptr, fileName.c_str());
 		if (!containerContext)
 		{
 			printf("WARNING: Could not deduce output format from file extension: using MP4. as default\n");
-			avformat_alloc_output_context2(&containerContext, nullptr, "mp4", fileName);
+			avformat_alloc_output_context2(&containerContext, nullptr, "mp4", fileName.c_str());
 		}
 		if (!containerContext)
 		{

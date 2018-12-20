@@ -7,9 +7,9 @@ using namespace std;
 
 namespace ffmpegcpp
 {
-	AVCodec* CodecDeducer::DeduceEncoder(const char* codecName)
+	AVCodec* CodecDeducer::DeduceEncoder(const std::string & codecName)
 	{
-		AVCodec* codec = avcodec_find_encoder_by_name(codecName);
+		AVCodec* codec = avcodec_find_encoder_by_name(codecName.c_str());
 		if (!codec)
 		{
 			throw FFmpegException("Codec " + string(codecName) + " not found");
@@ -27,9 +27,9 @@ namespace ffmpegcpp
 		return codec;
 	}
 
-	AVCodec* CodecDeducer::DeduceDecoder(const char* codecName)
+	AVCodec* CodecDeducer::DeduceDecoder(const std::string & codecName)
 	{
-		AVCodec* codec = avcodec_find_decoder_by_name(codecName);
+		AVCodec* codec = avcodec_find_decoder_by_name(codecName.c_str());
 		if (!codec)
 		{
 			throw FFmpegException("Codec " + string(codecName) + " not found");
@@ -47,7 +47,7 @@ namespace ffmpegcpp
 		return codec;
 	}
 
-	AVCodec* CodecDeducer::DeduceEncoderFromFilename(const char* fileName)
+	AVCodec* CodecDeducer::DeduceEncoderFromFilename(const std::string & fileName)
 	{
 		throw FFmpegException("Not implemented yet");
 	}

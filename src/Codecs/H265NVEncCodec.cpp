@@ -9,7 +9,7 @@ namespace ffmpegcpp
 
 	}
 
-	void H265NVEncCodec::SetPreset(const char* preset)
+	void H265NVEncCodec::SetPreset(const std::string & preset)
 	{
 		SetOption("preset", preset);
 	}

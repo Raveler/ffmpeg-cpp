@@ -2,6 +2,8 @@
 
 #include "Codec.h"
 
+#include <string>
+
 enum AVCodecID;
 enum AVSampleFormat;
 struct AVRational;
@@ -14,7 +16,7 @@ namespace ffmpegcpp
 	{
 	public:
 
-		VideoCodec(const char* codecName);
+		VideoCodec(const std::string & codecName);
 		VideoCodec(AVCodecID codecId);
 		virtual ~VideoCodec();
 

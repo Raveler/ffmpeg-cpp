@@ -15,30 +15,30 @@ using namespace std;
 namespace ffmpegcpp
 {
 
-	Demuxer::Demuxer(const char* fileName)
+	Demuxer::Demuxer(const std::string & fileName)
 		: Demuxer(fileName, nullptr, nullptr)
 	{
 	}
 
-	Demuxer::Demuxer(const char* fileName, AVInputFormat* inputFormat, AVDictionary *format_opts)
+	Demuxer::Demuxer(const std::string & fileName, AVInputFormat* inputFormat, AVDictionary *format_opts)
 	{
 		this->fileName = fileName;
 
 		// open input file, and allocate format context
 		int ret;
         auto container_ctx = containerContext.get();
-		if ((ret = avformat_open_input(&container_ctx, fileName, inputFormat, &format_opts)) < 0)
+		if ((ret = avformat_open_input(&container_ctx, fileName.c_str(), inputFormat, &format_opts)) < 0)
 		{
-			throw FFmpegException("Failed to open input container " + string(fileName), ret);
+			throw FFmpegException("Failed to open input container " + fileName, ret);
 		}
 
 		// retrieve stream information
 		if (ret = (avformat_find_stream_info(containerContext.get(), nullptr)) < 0)
 		{
-			throw FFmpegException("Failed to read streams from " + string(fileName), ret);
+			throw FFmpegException("Failed to read streams from " + fileName, ret);
 		}
 
-        for (int i = 0; i < containerContext->nb_streams; ++i)
+        for (unsigned int i = 0; i < containerContext->nb_streams; ++i)
         {
             inputStreams.emplace_back(nullptr);
         }

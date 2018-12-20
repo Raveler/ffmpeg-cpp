@@ -8,14 +8,14 @@ using namespace std;
 
 namespace ffmpegcpp
 {
-	RawAudioFileSource::RawAudioFileSource(const char* fileName, const char* inputFormat, int sampleRate, int channels, AudioFrameSink* frameSink)
+	RawAudioFileSource::RawAudioFileSource(const std::string & fileName, const std::string & inputFormat, int sampleRate, int channels, AudioFrameSink* frameSink)
 	{
 
 		// try to deduce the input format from the input format name
 		AVInputFormat *file_iformat;
-		if (!(file_iformat = av_find_input_format(inputFormat)))
+		if (!(file_iformat = av_find_input_format(inputFormat.c_str())))
 		{
-			throw FFmpegException("Unknown input format: " + string(inputFormat));
+			throw FFmpegException("Unknown input format: " + inputFormat);
 		}
 
 		AVDictionary* format_opts = nullptr;

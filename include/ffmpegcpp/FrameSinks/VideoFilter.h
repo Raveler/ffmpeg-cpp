@@ -3,6 +3,8 @@
 #include "FrameSinks/VideoFrameSink.h"
 #include "FFmpegResource.h"
 
+#include <string>
+
 struct AVFilterContext;
 struct AVFilterGraph;
 struct AVFrame;
@@ -16,7 +18,7 @@ namespace ffmpegcpp
 
 	public:
 
-		VideoFilter(const char* filterString, VideoFrameSink* target);
+		VideoFilter(const std::string & filterString, VideoFrameSink* target);
 
 		void WriteFrame(AVFrame* frame, AVRational* timeBase) override;
 		void Close() override;
@@ -30,7 +32,7 @@ namespace ffmpegcpp
 
 		VideoFrameSink* target;
 
-		const char* filterString;
+		std::string filterString;
 		AVPixelFormat outputFormat;
 
 		FFmpegResource<AVFilterGraph> filter_graph;

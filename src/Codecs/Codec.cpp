@@ -27,7 +27,7 @@ namespace
 
 namespace ffmpegcpp
 {
-	Codec::Codec(const char* codecName)
+	Codec::Codec(const std::string & codecName)
 	{
 		
 		AVCodec* codec = CodecDeducer::DeduceEncoder(codecName);
@@ -41,19 +41,19 @@ namespace ffmpegcpp
 		codecContext = LoadContext(codec);
 	}
 
-	void Codec::SetOption(const char* name, const char* value)
+	void Codec::SetOption(const std::string & name, const std::string & value)
 	{
-		av_opt_set(codecContext->priv_data, name, value, 0);
+		av_opt_set(codecContext->priv_data, name.c_str(), value.c_str(), 0);
 	}
 
-	void Codec::SetOption(const char* name, int value)
+	void Codec::SetOption(const std::string & name, int value)
 	{
-		av_opt_set_int(codecContext->priv_data, name, value, 0);
+		av_opt_set_int(codecContext->priv_data, name.c_str(), value, 0);
 	}
 
-	void Codec::SetOption(const char* name, double value)
+	void Codec::SetOption(const std::string & name, double value)
 	{
-		av_opt_set_double(codecContext->priv_data, name, value, 0);
+		av_opt_set_double(codecContext->priv_data, name.c_str(), value, 0);
 	}
 
     std::unique_ptr<OpenCodec> Codec::Open()

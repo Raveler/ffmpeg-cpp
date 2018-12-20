@@ -3,6 +3,7 @@
 #include "Sources/InputSource.h"
 
 #include <memory>
+#include <string>
 
 namespace ffmpegcpp
 {
@@ -13,7 +14,7 @@ namespace ffmpegcpp
 	{
 	public:
 
-		RawVideoFileSource(const char* fileName, VideoFrameSink* frameSink);
+		RawVideoFileSource(const std::string & fileName, VideoFrameSink* frameSink);
 
 		// I couldn't get this to work. The thing is that it also crashes weirdly when I run ffmpeg directly,
 		// so I think it's more an issue of ffmpeg than one of my library.

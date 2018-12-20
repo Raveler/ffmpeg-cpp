@@ -2,6 +2,8 @@
 
 #include "Codecs/Codec.h"
 
+#include <string>
+
 enum AVCodecID;
 enum AVSampleFormat;
 
@@ -13,7 +15,7 @@ namespace ffmpegcpp
 	{
 	public:
 
-		AudioCodec(const char* codecName);
+		AudioCodec(const std::string & codecName);
 		AudioCodec(AVCodecID codecId);
 
         std::unique_ptr<OpenCodec> Open(int bitRate, AVSampleFormat format, int sampleRate);

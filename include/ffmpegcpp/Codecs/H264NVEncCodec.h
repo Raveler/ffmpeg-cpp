@@ -1,6 +1,8 @@
 #pragma once
 #include "VideoCodec.h"
 
+#include <string>
+
 namespace ffmpegcpp
 {
 
@@ -11,7 +13,7 @@ namespace ffmpegcpp
 
 		H264NVEncCodec();
 
-		void SetPreset(const char* preset);
+		void SetPreset(const std::string & preset);
 	};
 
 

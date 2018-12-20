@@ -17,16 +17,19 @@ void PlayDemo(int argc, char** argv)
 {
 
 	// These are example video and audio sources used below.
-	const char* rawVideoFile = "samples/carphone_qcif.y4m";
-	int rawVideoWidth = 176; int rawVideoHeight = 162;
-	const char* rawAudioFile = "samples/Vivaldi_s16le_2_channels_samplerate_11025.dat";
-	const char* rawAudioFormat = "s16le"; int rawAudioSampleRate = 11025; int rawAudioChannels = 2;
+	std::string rawVideoFile = "samples/carphone_qcif.y4m";
+	int rawVideoWidth = 176;
+	int rawVideoHeight = 162;
+	std::string rawAudioFile = "samples/Vivaldi_s16le_2_channels_samplerate_11025.dat";
+	std::string rawAudioFormat = "s16le";
+	int rawAudioSampleRate = 11025;
+	int rawAudioChannels = 2;
 
-	const char* encodedVideoFile = "samples/carphone.h264";
-	const char* encodedAudioFile = "samples/Vivaldi_Sonata_eminor_.mp3";
+	std::string encodedVideoFile = "samples/carphone.h264";
+	std::string encodedAudioFile = "samples/Vivaldi_Sonata_eminor_.mp3";
 
-	const char* containerWithVideoAndAudioFile = "samples/big_buck_bunny.mp4";
-	const char* containerWithAudioFile = "samples/DesiJourney.wav";
+	std::string containerWithVideoAndAudioFile = "samples/big_buck_bunny.mp4";
+	std::string containerWithAudioFile = "samples/DesiJourney.wav";
 
 	// hard-code the settings here, but let them be overridden by the arguments
 	std::string inputAudioSource = "CONTAINER"; // options are RAW, ENCODED, CONTAINER, GENERATED
@@ -71,13 +74,13 @@ void PlayDemo(int argc, char** argv)
 		std::unique_ptr<ffmpegcpp::AudioCodec> audioCodec;
 		if (outputAudioCodec == "MP2")
 		{
-			printf("Encoding audio as MP2...\n");
+			std::cout << "Encoding audio as MP2...\n";
 			audioCodec = std::make_unique<ffmpegcpp::AudioCodec>(AV_CODEC_ID_MP2);
 
 		}
 		else if (outputAudioCodec == "AAC")
 		{
-			printf("Encoding audio as AAC...\n");
+			std::cout << "Encoding audio as AAC...\n";
 			audioCodec = std::make_unique<ffmpegcpp::AudioCodec>(AV_CODEC_ID_AAC);
 
 		}
@@ -102,21 +105,21 @@ void PlayDemo(int argc, char** argv)
 		std::unique_ptr<ffmpegcpp::VideoCodec> videoCodec;
 		if (outputVideoCodec == "H264")
 		{
-			printf("Encoding video as H264 on Nvidia GPU...\n");
+			std::cout << "Encoding video as H264 on Nvidia GPU...\n";
 			auto h264Codec = std::make_unique<ffmpegcpp::H264NVEncCodec>();
 			h264Codec->SetPreset("hq");
 			videoCodec = std::move(h264Codec);
 		}
 		else if (outputVideoCodec == "H265")
 		{
-			printf("Encoding video as H265 on Nvidia GPU...\n");
+			std::cout << "Encoding video as H265 on Nvidia GPU...\n";
 			auto h265Codec = std::make_unique<ffmpegcpp::H265NVEncCodec>();
 			h265Codec->SetPreset("hq");
 			videoCodec = std::move(h265Codec);
 		}
 		else if (outputVideoCodec == "VP9")
 		{
-			printf("Encoding video as VP9...\n");
+			std::cout << "Encoding video as VP9...\n";
 			auto vp9Codec = std::make_unique<ffmpegcpp::VP9Codec>();
 			vp9Codec->SetLossless(true);
 			videoCodec = std::move(vp9Codec);
@@ -144,25 +147,25 @@ void PlayDemo(int argc, char** argv)
 		{
 			if (inputAudioSource == "RAW")
 			{
-				printf("Pulling audio from %s...\n", rawAudioFile);
+				std::cout << "Pulling audio from " << rawAudioFile << "...\n";
 				audioInputSource = std::make_unique<ffmpegcpp::RawAudioFileSource>(rawAudioFile, rawAudioFormat, rawAudioSampleRate, rawAudioChannels, audioEncoder.get());
 			}
 			else if (inputAudioSource == "ENCODED")
 			{
-				printf("Pulling audio from %s...\n", encodedAudioFile);
+				std::cout << "Pulling audio from " << encodedAudioFile << "...\n";
 				audioInputSource = std::make_unique<ffmpegcpp::EncodedFileSource>(encodedAudioFile, AV_CODEC_ID_MP3, audioEncoder.get());
 			}
 			else if (inputAudioSource == "CONTAINER")
 			{
 				// if the input comes from a container, we use the demuxer class - it is just an input source like any other
-				printf("Pulling audio from %s...\n", containerWithAudioFile);
+				std::cout << "Pulling audio from " << containerWithAudioFile << "...\n";
 				auto demuxer = std::make_unique<ffmpegcpp::Demuxer>(containerWithAudioFile);
 				demuxer->DecodeBestAudioStream(audioEncoder.get());
 				audioInputSource = std::move(demuxer);
 			}
 			else if (inputAudioSource == "GENERATED")
 			{
-				printf("Generating 440Hz audio tone...\n");
+				std::cout << "Generating 440Hz audio tone...\n";
 				audioInputSource = std::make_unique<GeneratedAudioSource>(audioEncoder.get());
 			}
 		}
@@ -177,7 +180,7 @@ void PlayDemo(int argc, char** argv)
 		std::unique_ptr<ffmpegcpp::VideoFilter> videoFilter;
 		if (videoFilterConfig != nullptr && videoEncoder != nullptr)
 		{
-			printf("Applying filter %s to video...\n", videoFilterConfig);
+			std::cout << "Applying filter " << videoFilterConfig << " to video...\n";
 			videoFilter = std::make_unique<ffmpegcpp::VideoFilter>(videoFilterConfig, videoEncoder.get());
 		}
 
@@ -191,24 +194,24 @@ void PlayDemo(int argc, char** argv)
 		{
 			if (inputVideoSource == "RAW")
 			{
-				printf("Pulling video from %s...\n", rawVideoFile);
+				std::cout << "Pulling video from " << rawVideoFile << "...\n";
 				videoInputSource = std::make_unique<ffmpegcpp::RawVideoFileSource>(rawVideoFile, videoFilter.get());
 			}
 			else if (inputVideoSource == "ENCODED")
 			{
-				printf("Pulling video from %s...\n", encodedVideoFile);
+				std::cout << "Pulling video from " << encodedVideoFile << "...\n";
 				videoInputSource = std::make_unique<ffmpegcpp::RawVideoFileSource>(encodedVideoFile, videoFilter.get());
 			}
 			else if (inputVideoSource == "CONTAINER")
 			{
-				printf("Pulling video from %s...\n", containerWithVideoAndAudioFile);
+				std::cout << "Pulling video from " << containerWithVideoAndAudioFile << "...\n";
 				auto demuxer = std::make_unique<ffmpegcpp::Demuxer>(containerWithVideoAndAudioFile);
 				demuxer->DecodeBestVideoStream(videoFilter.get());
 				videoInputSource = std::move(demuxer);
 			}
 			else if (inputVideoSource == "GENERATED")
 			{
-				printf("Generating checkerboard video pattern...\n");
+				std::cout << "Generating checkerboard video pattern...\n";
 				videoInputSource = std::make_unique<GeneratedVideoSource>(640, 480, videoFilter.get());
 			}
 		}

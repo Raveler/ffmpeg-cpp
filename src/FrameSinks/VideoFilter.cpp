@@ -6,7 +6,7 @@
 namespace ffmpegcpp
 {
 
-	VideoFilter::VideoFilter(const char* filterString, VideoFrameSink* target)
+	VideoFilter::VideoFilter(const std::string & filterString, VideoFrameSink* target)
 	{
 		this->target = target;
 		this->filterString = filterString;
@@ -106,7 +106,7 @@ namespace ffmpegcpp
 			inputs->pad_idx = 0;
 			inputs->next = nullptr;
 
-			if ((ret = avfilter_graph_parse_ptr(filter_graph.get(), filterString,
+			if ((ret = avfilter_graph_parse_ptr(filter_graph.get(), filterString.c_str(),
 				&inputs, &outputs, nullptr)) < 0)
 			{
 				throw FFmpegException("Failed to parse and generate filters", ret);

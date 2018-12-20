@@ -9,7 +9,7 @@ namespace ffmpegcpp
 
 	}
 
-	void VP9Codec::SetDeadline(const char* deadline)
+	void VP9Codec::SetDeadline(const std::string & deadline)
 	{
 		SetOption("deadline", deadline);
 	}

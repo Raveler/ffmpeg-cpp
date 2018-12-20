@@ -3,6 +3,7 @@
 #include "FFmpegResource.h"
 
 #include <memory>
+#include <string>
 
 enum AVCodecID;
 struct AVCodecContext;
@@ -15,12 +16,12 @@ namespace ffmpegcpp
 	{
 	public:
 
-		Codec(const char* codecName);
+		Codec(const std::string & codecName);
 		Codec(AVCodecID codecId);
 
-		void SetOption(const char* name, const char* value);
-		void SetOption(const char* name, int value);
-		void SetOption(const char* name, double value);
+		void SetOption(const std::string & name, const std::string & value);
+		void SetOption(const std::string & name, int value);
+		void SetOption(const std::string & name, double value);
 
 		void SetGlobalContainerHeader(); // used by the Muxer for configuration purposes
 

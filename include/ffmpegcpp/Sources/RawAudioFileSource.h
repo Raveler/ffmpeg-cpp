@@ -3,6 +3,7 @@
 #include "Sources/InputSource.h"
 
 #include <memory>
+#include <string>
 
 namespace ffmpegcpp
 {
@@ -13,7 +14,7 @@ namespace ffmpegcpp
 	{
 	public:
 
-		RawAudioFileSource(const char* fileName, const char* inputFormat, int sampleRate, int channels, AudioFrameSink* frameSink);
+		RawAudioFileSource(const std::string & fileName, const std::string & inputFormat, int sampleRate, int channels, AudioFrameSink* frameSink);
 
 		void PreparePipeline() override;
 		bool IsDone() const override;
