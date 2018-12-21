@@ -9,9 +9,8 @@ namespace ffmpegcpp
 	public:
 
 		OpenCodec(AVCodecContext* openCodecContext);
-		~OpenCodec();
 
-		AVCodecContext* GetContext() const;
+        AVCodecContext* GetContext() const;
 
 	private:
 

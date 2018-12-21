@@ -17,11 +17,6 @@ namespace ffmpegcpp
 		this->context = context;
 	}
 
-	OpenCodec::~OpenCodec()
-	{
-		avcodec_free_context(&context);
-	}
-
 	AVCodecContext* OpenCodec::GetContext() const
 	{
 		return context;
