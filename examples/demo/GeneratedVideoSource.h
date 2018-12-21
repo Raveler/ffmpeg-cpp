@@ -9,7 +9,7 @@ class GeneratedVideoSource : public ffmpegcpp::InputSource
 public:
 
 	GeneratedVideoSource(int width, int height, ffmpegcpp::VideoFrameSink* frameSink);
-	~GeneratedVideoSource() override;
+	~GeneratedVideoSource();
 
 	void PreparePipeline() override;
 	bool IsDone() const override;

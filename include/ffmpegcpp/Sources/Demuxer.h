@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Demuxing/InputStream.h"
 #include "Sources/InputSource.h"
 #include "FFmpegResource.h"
 
@@ -17,7 +18,6 @@ struct AVStream;
 namespace ffmpegcpp
 {
 	class AudioFrameSink;
-	class InputStream;
 	class VideoFrameSink;
 
 	struct StreamInfo

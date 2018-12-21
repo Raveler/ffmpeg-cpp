@@ -9,7 +9,7 @@ class GeneratedAudioSource : public ffmpegcpp::InputSource
 public:
 
 	GeneratedAudioSource(ffmpegcpp::AudioFrameSink* frameSink);
-	~GeneratedAudioSource() override;
+	~GeneratedAudioSource();
 
 	void PreparePipeline() override;
 	bool IsDone() const override;
