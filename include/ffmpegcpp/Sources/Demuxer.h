@@ -22,7 +22,7 @@ namespace ffmpegcpp
 
 	struct StreamInfo
 	{
-		int streamId;
+        unsigned int streamId;
 		AVCodec* codec;
 		AVStream* stream;
 	};
@@ -31,8 +31,7 @@ namespace ffmpegcpp
 	{
 	public:
 
-		Demuxer(const std::string & fileName);
-		Demuxer(const std::string & fileName, AVInputFormat* inputFormat, AVDictionary *inputFormatOptions);
+		Demuxer(const std::string & fileName, AVInputFormat* inputFormat = nullptr, AVDictionary *inputFormatOptions = nullptr);
 
 		void DecodeBestAudioStream(AudioFrameSink* frameSink);
 		void DecodeBestVideoStream(VideoFrameSink* frameSink);
@@ -49,18 +48,18 @@ namespace ffmpegcpp
 
 	private:
 
+		std::vector<StreamInfo> GetStreamInfo(AVMediaType mediaType) const;
+
+		void DecodePacket();
+
 		bool done = false;
 
 		std::string fileName;
-
-		std::vector<StreamInfo> GetStreamInfo(AVMediaType mediaType) const;
-		StreamInfo CreateInfo(int streamIndex, AVStream* stream, AVCodec* codec) const;
 
 		std::vector<std::unique_ptr<InputStream>> inputStreams;
 
 		FFmpegResource<AVFormatContext> containerContext;
 		FFmpegResource<AVPacket> pkt;
 
-		void DecodePacket();
 	};
 }

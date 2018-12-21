@@ -4,17 +4,14 @@
 #include "FFmpegException.h"
 #include "Sources/Demuxer.h"
 
-using namespace std;
-
 namespace ffmpegcpp
 {
 	RawVideoFileSource::RawVideoFileSource(const std::string & fileName, VideoFrameSink* frameSink)
 	{
-
 		// create the demuxer - it can handle figuring out the video type on its own apparently
 		try
 		{
-			demuxer = std::make_unique<Demuxer>(fileName, nullptr, nullptr);
+			demuxer = std::make_unique<Demuxer>(fileName);
 			demuxer->DecodeBestVideoStream(frameSink);
 		}
 		catch (FFmpegException e)

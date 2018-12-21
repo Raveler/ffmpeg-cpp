@@ -10,30 +10,21 @@
 #include <algorithm>
 #include <string>
 
-using namespace std;
-
 namespace ffmpegcpp
 {
-
-	Demuxer::Demuxer(const std::string & fileName)
-		: Demuxer(fileName, nullptr, nullptr)
-	{
-	}
-
 	Demuxer::Demuxer(const std::string & fileName, AVInputFormat* inputFormat, AVDictionary *format_opts)
 	{
 		this->fileName = fileName;
 
 		// open input file, and allocate format context
-		int ret;
         auto container_ctx = containerContext.get();
-		if ((ret = avformat_open_input(&container_ctx, fileName.c_str(), inputFormat, &format_opts)) < 0)
+		if (int ret = avformat_open_input(&container_ctx, fileName.c_str(), inputFormat, &format_opts); ret < 0)
 		{
 			throw FFmpegException("Failed to open input container " + fileName, ret);
 		}
 
 		// retrieve stream information
-		if (ret = (avformat_find_stream_info(containerContext.get(), nullptr)) < 0)
+		if (int ret = avformat_find_stream_info(containerContext.get(), nullptr); ret < 0)
 		{
 			throw FFmpegException("Failed to read streams from " + fileName, ret);
 		}
@@ -44,7 +35,7 @@ namespace ffmpegcpp
         }
 
 		// initialize packet, set data to NULL, let the demuxer fill it
-		pkt = MakeFFmpegResource<AVPacket>(av_packet_alloc());
+		pkt = av_packet_alloc();
 		if (!pkt)
 		{
 			throw FFmpegException("Failed to create packet for input stream");
@@ -54,19 +45,19 @@ namespace ffmpegcpp
 		pkt->size = 0;
 	}
 
-	vector<StreamInfo> Demuxer::GetAudioStreamInfo() const
+	std::vector<StreamInfo> Demuxer::GetAudioStreamInfo() const
 	{
 		return GetStreamInfo(AVMEDIA_TYPE_AUDIO);
 	}
 
-	vector<StreamInfo> Demuxer::GetVideoStreamInfo() const
+    std::vector<StreamInfo> Demuxer::GetVideoStreamInfo() const
 	{
 		return GetStreamInfo(AVMEDIA_TYPE_VIDEO);
 	}
 
-	vector<StreamInfo> Demuxer::GetStreamInfo(AVMediaType mediaType) const
+    std::vector<StreamInfo> Demuxer::GetStreamInfo(AVMediaType mediaType) const
 	{
-		vector<StreamInfo> streamInfo;
+        std::vector<StreamInfo> streamInfo;
 		for (unsigned int i = 0; i < containerContext->nb_streams; ++i)
 		{
 			AVStream* stream = containerContext->streams[i];
@@ -75,45 +66,34 @@ namespace ffmpegcpp
 			AVCodec* codec = CodecDeducer::DeduceDecoder(stream->codecpar->codec_id);
 			if (!codec)
 			{
-				throw FFmpegException(string("Failed to deduce codec for stream ") + std::to_string(i) + " in container");
+				throw FFmpegException("Failed to deduce codec for stream " + std::to_string(i) + " in container");
 			}
 
 			if (codec->type == mediaType)
 			{
-				streamInfo.push_back(CreateInfo(i, stream, codec));
+                streamInfo.push_back({ i, codec, stream });
 			}
 		}
 		return streamInfo;
 	}
 
-	StreamInfo Demuxer::CreateInfo(int streamIndex, AVStream* stream, AVCodec* codec) const
-	{
-		StreamInfo info;
-		info.streamId = streamIndex;
-		info.stream = stream;
-		info.codec = codec;
-		return info;
-	}
-
 	void Demuxer::DecodeBestAudioStream(AudioFrameSink* frameSink)
 	{
-		int ret = av_find_best_stream(containerContext.get(), AVMEDIA_TYPE_AUDIO, -1, -1, nullptr, 0);
-		if (ret < 0)
+		int streamIndex = av_find_best_stream(containerContext.get(), AVMEDIA_TYPE_AUDIO, -1, -1, nullptr, 0);
+		if (streamIndex < 0)
 		{
-			throw FFmpegException("Could not find " + string(av_get_media_type_string(AVMEDIA_TYPE_AUDIO)) + " stream in input file " + fileName, ret);
+			throw FFmpegException("Could not find " + std::string(av_get_media_type_string(AVMEDIA_TYPE_AUDIO)) + " stream in input file " + fileName, streamIndex);
 		}
-		int streamIndex = ret;
 		return DecodeAudioStream(streamIndex, frameSink);
 	}
 
 	void Demuxer::DecodeBestVideoStream(VideoFrameSink* frameSink)
 	{
-		int ret = av_find_best_stream(containerContext.get(), AVMEDIA_TYPE_VIDEO, -1, -1, nullptr, 0);
-		if (ret < 0)
+		int streamIndex = av_find_best_stream(containerContext.get(), AVMEDIA_TYPE_VIDEO, -1, -1, nullptr, 0);
+		if (streamIndex < 0)
 		{
-			throw FFmpegException("Could not find " + string(av_get_media_type_string(AVMEDIA_TYPE_VIDEO)) + " stream in input file " + fileName, ret);
+			throw FFmpegException("Could not find " + std::string(av_get_media_type_string(AVMEDIA_TYPE_VIDEO)) + " stream in input file " + fileName, streamIndex);
 		}
-		int streamIndex = ret;
 		return DecodeVideoStream(streamIndex, frameSink);
 	}
 
@@ -126,11 +106,8 @@ namespace ffmpegcpp
 		}
 
 		// create the stream
-		AVStream* stream = containerContext->streams[streamIndex];
-		auto inputStream = std::make_unique<AudioInputStream>(frameSink, stream);
+		auto inputStream = std::make_unique<AudioInputStream>(frameSink, containerContext->streams[streamIndex]);
 		inputStream->Open();
-
-		// remember and return
 		inputStreams[streamIndex] = std::move(inputStream);
 	}
 
@@ -143,11 +120,8 @@ namespace ffmpegcpp
 		}
 
 		// create the stream
-		AVStream* stream = containerContext->streams[streamIndex];
-		auto inputStream = std::make_unique<VideoInputStream>(frameSink, stream);
+		auto inputStream = std::make_unique<VideoInputStream>(frameSink, containerContext->streams[streamIndex]);
 		inputStream->Open();
-
-		// remember and return
 		inputStreams[streamIndex] = std::move(inputStream);
 	}
 
