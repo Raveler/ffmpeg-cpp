@@ -17,11 +17,12 @@ namespace ffmpegcpp
 		this->fileName = fileName;
 
 		// open input file, and allocate format context
-        auto container_ctx = containerContext.get();
+        AVFormatContext * container_ctx = nullptr;
 		if (int ret = avformat_open_input(&container_ctx, fileName.c_str(), inputFormat, &format_opts); ret < 0)
 		{
 			throw FFmpegException("Failed to open input container " + fileName, ret);
 		}
+        containerContext = container_ctx;
 
 		// retrieve stream information
 		if (int ret = avformat_find_stream_info(containerContext.get(), nullptr); ret < 0)
@@ -134,7 +135,7 @@ namespace ffmpegcpp
 
 			// see if all input streams are primed
 			allPrimed = std::all_of(cbegin(inputStreams), cend(inputStreams), [](const auto & stream){
-				return stream->IsPrimed();
+				return stream && stream->IsPrimed();
 			});
 
 		} while (!allPrimed && !IsDone());
