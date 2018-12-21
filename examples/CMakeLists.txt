@@ -1,0 +1,7 @@
+add_subdirectory(decode_audio)
+add_subdirectory(decode_video)
+add_subdirectory(demo)
+add_subdirectory(encode_audio)
+add_subdirectory(encode_video)
+add_subdirectory(filtering_video)
+add_subdirectory(remuxing)
