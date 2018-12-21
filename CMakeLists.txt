@@ -13,7 +13,6 @@ add_library(ffmpegcpp STATIC ${ffmpegcpp_files})
 
 set_target_properties(ffmpegcpp PROPERTIES 
     VERSION ${PROJECT_VERSION}
-    PUBLIC_HEADER ${header_files}
     CXX_STANDARD 17
 )
 
