@@ -177,12 +177,16 @@ void PlayDemo(int argc, char** argv)
 		// If a video filter was specified, we inject it into the pipeline here.
 		// Instead of feeding the video source directly to the encoder, we feed it to
 		// the video filter instead, which will pass it on to the encoder.
-		std::unique_ptr<ffmpegcpp::VideoFilter> videoFilter;
+        std::unique_ptr<ffmpegcpp::VideoFrameSink> videoFrameSink;
 		if (videoFilterConfig != nullptr && videoEncoder != nullptr)
 		{
 			std::cout << "Applying filter " << videoFilterConfig << " to video...\n";
-			videoFilter = std::make_unique<ffmpegcpp::VideoFilter>(videoFilterConfig, videoEncoder.get());
+            videoFrameSink = std::make_unique<ffmpegcpp::VideoFilter>(videoFilterConfig, videoEncoder.get());
 		}
+        else
+        {
+            videoFrameSink = std::move(videoEncoder);
+        }
 
 		/**
 			* CONFIGURE VIDEO INPUT
@@ -190,29 +194,29 @@ void PlayDemo(int argc, char** argv)
 
 		// only do this when there is video output
 		std::unique_ptr<ffmpegcpp::InputSource> videoInputSource;
-		if (videoEncoder != nullptr)
+		if (videoFrameSink != nullptr)
 		{
 			if (inputVideoSource == "RAW")
 			{
 				std::cout << "Pulling video from " << rawVideoFile << "...\n";
-				videoInputSource = std::make_unique<ffmpegcpp::RawVideoFileSource>(rawVideoFile, videoFilter.get());
+				videoInputSource = std::make_unique<ffmpegcpp::RawVideoFileSource>(rawVideoFile, videoFrameSink.get());
 			}
 			else if (inputVideoSource == "ENCODED")
 			{
 				std::cout << "Pulling video from " << encodedVideoFile << "...\n";
-				videoInputSource = std::make_unique<ffmpegcpp::RawVideoFileSource>(encodedVideoFile, videoFilter.get());
+				videoInputSource = std::make_unique<ffmpegcpp::RawVideoFileSource>(encodedVideoFile, videoFrameSink.get());
 			}
 			else if (inputVideoSource == "CONTAINER")
 			{
 				std::cout << "Pulling video from " << containerWithVideoAndAudioFile << "...\n";
 				auto demuxer = std::make_unique<ffmpegcpp::Demuxer>(containerWithVideoAndAudioFile);
-				demuxer->DecodeBestVideoStream(videoFilter.get());
+				demuxer->DecodeBestVideoStream(videoFrameSink.get());
 				videoInputSource = std::move(demuxer);
 			}
 			else if (inputVideoSource == "GENERATED")
 			{
 				std::cout << "Generating checkerboard video pattern...\n";
-				videoInputSource = std::make_unique<GeneratedVideoSource>(640, 480, videoFilter.get());
+				videoInputSource = std::make_unique<GeneratedVideoSource>(640, 480, videoFrameSink.get());
 			}
 		}
 
