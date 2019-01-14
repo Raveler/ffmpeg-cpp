@@ -71,11 +71,18 @@ namespace ffmpegcpp
 		// configure the parameters for the codec based on the frame and our preferences
 		int width = frame->width;
 		int height = frame->height;
+
+		// the format is either the provided format, or the default format if it is not supported
 		AVPixelFormat format = finalPixelFormat;
+		if (!closedCodec->IsPixelFormatSupported(format)) format = closedCodec->GetDefaultPixelFormat();
 		if (format == AV_PIX_FMT_NONE) format = closedCodec->GetDefaultPixelFormat();
+
+		// the frame rate is either the input frame rate, OR the default frame rate if the input frame rate
+		// is not supported, OR the explicitly chosen framerate.
 		AVRational frameRate;
 		frameRate.num = timeBase->den;
 		frameRate.den = timeBase->num;
+		if (!closedCodec->IsFrameRateSupported(&frameRate)) frameRate = closedCodec->GetClosestSupportedFrameRate(frameRate);
 		if (finalFrameRateSet) frameRate = finalFrameRate;
 
 		// open the codec

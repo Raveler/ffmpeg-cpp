@@ -19,6 +19,13 @@ namespace ffmpegcpp
 	{
 	}
 
+	void VideoCodec::SetQualityScale(int qscale)
+	{
+
+		codecContext->flags |= AV_CODEC_FLAG_QSCALE;
+		codecContext->global_quality = FF_QP2LAMBDA * 0;
+	}
+
 	bool VideoCodec::IsPixelFormatSupported(AVPixelFormat format)
 	{
 		if (format == AV_PIX_FMT_NONE) return true; // let the codec deal with this
@@ -76,5 +83,38 @@ namespace ffmpegcpp
 		const enum AVPixelFormat *p = codecContext->codec->pix_fmts;
 		if (*p == AV_PIX_FMT_NONE) throw FFmpegException("Codec " + string(codecContext->codec->name) + " does not have a default pixel format, you have to specify one");
 		return *p;
+	}
+
+	AVRational VideoCodec::GetClosestSupportedFrameRate(AVRational originalFrameRate)
+	{
+		if (!codecContext->codec->supported_framerates)
+		{
+			// make up a frame rate - there is no supported frame rate
+			return originalFrameRate;
+		};
+
+		const AVRational *p = codecContext->codec->supported_framerates;
+		AVRational bestFrameRate;
+		bestFrameRate.num = 0;
+		bestFrameRate.den = 1;
+		double bestDiff = std::numeric_limits<double>::max();
+		double fVal = av_q2d(originalFrameRate);
+		while (p->num)
+		{
+			double pVal = av_q2d(*p);
+			double diff = abs(pVal - fVal);
+			if (diff < bestDiff)
+			{
+				bestDiff = diff;
+				bestFrameRate.num = p->num;
+				bestFrameRate.den = p->den;
+			}
+			p++;
+		}
+
+		// There were no valid frame rates in the list... this should never happen unless ffmpeg screws up.
+		if (bestFrameRate.num == 0) return originalFrameRate;
+
+		return bestFrameRate;
 	}
 }

@@ -3,6 +3,7 @@ In this folder, you need to put your ffmpeg binaries, library files and includes
 The structure should be as follows:
 /include contains all header files for the ffmpeg project
 /lib contains all .lib files
+/bin contains all .dll files
 
 For Windows, you can get the necessary files from:
 https://www.ffmpeg.org/download.html

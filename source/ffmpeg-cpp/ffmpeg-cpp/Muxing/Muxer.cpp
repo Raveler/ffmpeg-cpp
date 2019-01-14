@@ -17,8 +17,8 @@ namespace ffmpegcpp
 		avformat_alloc_output_context2(&containerContext, NULL, NULL, fileName);
 		if (!containerContext)
 		{
-			printf("WARNING: Could not deduce output format from file extension: using MPEG. as default\n");
-			avformat_alloc_output_context2(&containerContext, NULL, "mpeg", fileName);
+			printf("WARNING: Could not deduce output format from file extension: using MP4. as default\n");
+			avformat_alloc_output_context2(&containerContext, NULL, "mp4", fileName);
 		}
 		if (!containerContext)
 		{
@@ -38,6 +38,12 @@ namespace ffmpegcpp
 	{
 		if (containerContext != nullptr)
 		{
+			// if some of the output streams weren't primed, we cannot finish this process
+			if (!IsPrimed())
+			{
+				throw FFmpegException("You cannot close a muxer when one of the streams wasn't primed. You need to make sure all streams are primed before closing the muxer.");
+			}
+
 			/* Write the trailer, if any. The trailer must be written before you
 			* close the CodecContexts open when you wrote the header; otherwise
 			* av_write_trailer() may try to use memory that was freed on
