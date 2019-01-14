@@ -52,6 +52,10 @@ namespace ffmpegcpp
 
 			avformat_free_context(containerContext);
 			containerContext = nullptr;
+
+			// when the container is closed, the related output streams are closed as well,
+			// so we clean those up.
+			outputStreams.clear();
 		}
 
 		// clean up the queue
@@ -60,6 +64,7 @@ namespace ffmpegcpp
 			AVPacket* tmp_pkt = packetQueue[i];
 			av_packet_free(&tmp_pkt);
 		}
+		packetQueue.clear();
 	}
 
 	void Muxer::AddOutputStream(OutputStream* outputStream)
