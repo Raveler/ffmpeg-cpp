@@ -15,6 +15,9 @@ namespace ffmpegcpp
 		// create an output stream
 		output = new AudioOutputStream(muxer, codec);
 		muxer->AddOutputStream(output);
+
+		// this one is used to make sure we only allow one frame sink stream to be generated
+		oneInputFrameSink = new OneInputFrameSink(this);
 	}
 
 	AudioEncoder::AudioEncoder(AudioCodec* codec, Muxer* muxer, int bitRate)
@@ -77,9 +80,19 @@ namespace ffmpegcpp
 			delete output;
 			output = nullptr;
 		}
+		if (oneInputFrameSink != nullptr)
+		{
+			delete oneInputFrameSink;
+			oneInputFrameSink = nullptr;
+		}
 	}
 
-	void AudioEncoder::WriteFrame(AVFrame* frame, AVRational* timeBase)
+	FrameSinkStream* AudioEncoder::CreateStream()
+	{
+		return oneInputFrameSink->CreateStream();
+	}
+
+	void AudioEncoder::WriteFrame(int streamIndex, AVFrame* frame, AVRational* timeBase)
 	{
 		// if we haven't opened the codec yet, we do it now!
 		if (codec == nullptr)
@@ -111,7 +124,7 @@ namespace ffmpegcpp
 		PollCodecForPackets();
 	}
 
-	void AudioEncoder::Close()
+	void AudioEncoder::Close(int streamIndex)
 	{
 		if (codec == nullptr) return; // can't close if we were never opened
 

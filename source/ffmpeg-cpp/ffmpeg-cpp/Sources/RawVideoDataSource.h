@@ -32,7 +32,7 @@ namespace ffmpegcpp
 		AVPixelFormat sourcePixelFormat;
 		AVRational timeBase;
 
-		VideoFrameSink* output;
+		FrameSinkStream* output;
 
 		AVFrame* frame = nullptr;
 		struct SwsContext* swsContext = nullptr;

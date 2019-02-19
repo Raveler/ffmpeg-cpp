@@ -6,7 +6,7 @@
 using namespace std;
 using namespace ffmpegcpp;
 
-class PGMFileSink : public VideoFrameSink
+class PGMFileSink : public VideoFrameSink, public FrameWriter
 {
 public:
 
@@ -14,7 +14,13 @@ public:
 	{
 	}
 
-	virtual void WriteFrame(AVFrame* frame, AVRational* timeBase)
+	FrameSinkStream* CreateStream()
+	{
+		stream = new FrameSinkStream(this, 0);
+		return stream;
+	}
+
+	virtual void WriteFrame(int streamIndex, AVFrame* frame, AVRational* timeBase)
 	{
 		++frameNumber;
 		printf("saving frame %3d\n", frameNumber);
@@ -41,9 +47,9 @@ public:
 		fclose(f);
 	}
 
-	virtual void Close()
+	virtual void Close(int streamIndex)
 	{
-		// nothing to do here.
+		delete stream;
 	}
 
 	virtual bool IsPrimed()
@@ -58,6 +64,7 @@ public:
 private:
 	char fileNameBuffer[1024];
 	int frameNumber = 0;
+	FrameSinkStream* stream;
 
 };
 

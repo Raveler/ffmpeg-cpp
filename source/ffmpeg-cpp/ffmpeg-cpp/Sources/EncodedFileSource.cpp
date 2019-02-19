@@ -72,7 +72,7 @@ namespace ffmpegcpp
 
 	void EncodedFileSource::Init(const char* inFileName, AVCodec* codec, FrameSink* output)
 	{
-		this->output = output;
+		this->output = output->CreateStream();
 		this->codec = codec;
 
 		parser = av_parser_init(codec->id);

@@ -17,7 +17,7 @@ namespace ffmpegcpp
 
 	void RawVideoDataSource::Init(int width, int height, AVPixelFormat sourcePixelFormat, AVPixelFormat targetPixelFormat, int framesPerSecond, VideoFrameSink* output)
 	{
-		this->output = output;
+		this->output = output->CreateStream();
 		this->sourcePixelFormat = sourcePixelFormat;
 
 		// set up the time base

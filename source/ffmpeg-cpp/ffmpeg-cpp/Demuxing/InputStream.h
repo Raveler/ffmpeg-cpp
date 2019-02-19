@@ -35,7 +35,7 @@ namespace ffmpegcpp
 
 		AVStream* stream;
 
-		FrameSink* output;
+		FrameSinkStream* output;
 
 		AVFrame* frame;
 		

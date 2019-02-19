@@ -15,6 +15,9 @@ namespace ffmpegcpp
 		// create an output stream
 		this->output = new VideoOutputStream(muxer, codec);
 		muxer->AddOutputStream(output);
+
+		// this one is used to make sure we only allow one frame sink stream to be generated
+		oneInputFrameSink = new OneInputFrameSink(this);
 	}
 
 	VideoEncoder::VideoEncoder(VideoCodec* codec, Muxer* muxer, AVPixelFormat format)
@@ -64,6 +67,11 @@ namespace ffmpegcpp
 			delete output;
 			output = nullptr;
 		}
+		if (oneInputFrameSink != nullptr)
+		{
+			delete oneInputFrameSink;
+			oneInputFrameSink = nullptr;
+		}
 	}
 
 	void VideoEncoder::OpenLazily(AVFrame* frame, AVRational* timeBase)
@@ -72,10 +80,14 @@ namespace ffmpegcpp
 		int width = frame->width;
 		int height = frame->height;
 
+		// the format is derived in this order:
+		// 1. The provided format if it was specified and supported by the codec
+		// 2. Otherwise, the format of the input frame if it is supported by the codec
+		// 3. Otherwise, the default format of the codec
 		// the format is either the provided format, or the default format if it is not supported
 		AVPixelFormat format = finalPixelFormat;
+		if (format == AV_PIX_FMT_NONE) format = (AVPixelFormat)frame->format;
 		if (!closedCodec->IsPixelFormatSupported(format)) format = closedCodec->GetDefaultPixelFormat();
-		if (format == AV_PIX_FMT_NONE) format = closedCodec->GetDefaultPixelFormat();
 
 		// the frame rate is either the input frame rate, OR the default frame rate if the input frame rate
 		// is not supported, OR the explicitly chosen framerate.
@@ -108,7 +120,12 @@ namespace ffmpegcpp
 		}
 	}
 
-	void VideoEncoder::WriteFrame(AVFrame* frame, AVRational* timeBase)
+	FrameSinkStream* VideoEncoder::CreateStream()
+	{
+		return oneInputFrameSink->CreateStream();
+	}
+
+	void VideoEncoder::WriteFrame(int streamIndex, AVFrame* frame, AVRational* timeBase)
 	{
 		// if we haven't opened the codec yet, we do it now!
 		if (codec == nullptr)
@@ -136,7 +153,7 @@ namespace ffmpegcpp
 		PollCodecForPackets();
 	}
 
-	void VideoEncoder::Close()
+	void VideoEncoder::Close(int streamIndex)
 	{
 		if (codec == nullptr) return; // can't close if we were never opened
 

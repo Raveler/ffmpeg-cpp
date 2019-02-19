@@ -89,7 +89,7 @@ namespace ffmpegcpp
 
 	void InputStream::SetFrameSink(FrameSink* frameSink)
 	{
-		output = frameSink;
+		output = frameSink->CreateStream();
 	}
 
 	int inputSampleCount = 0;

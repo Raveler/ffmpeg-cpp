@@ -11,7 +11,7 @@ namespace ffmpegcpp
 
 	RawAudioDataSource::RawAudioDataSource(AVSampleFormat sampleFormat, int sampleRate, int channels, int64_t channelLayout, AudioFrameSink* output)
 	{
-		this->output = output;
+		this->output = output->CreateStream();
 
 		// create the frame
 		int ret;

@@ -33,7 +33,7 @@ void PlayDemo(int argc, char** argv)
 	// hard-code the settings here, but let them be overridden by the arguments
 	string inputAudioSource = "CONTAINER"; // options are RAW, ENCODED, CONTAINER, GENERATED
 	string inputVideoSource = "ENCODED"; // options are RAW, ENCODED, CONTAINER, GENERATED
-	string outputAudioCodec = "AAC"; // options are MP2, AAC, NONE
+	string outputAudioCodec = "NONE"; // options are MP2, AAC, NONE
 	string outputVideoCodec = "H264"; // options are H264, H265, VP9, NONE (H264 and H265 only work on Nvidia hardware)
 	string outputContainerName = "out.mp4"; // container format is deduced from extension so use a known one
 
@@ -41,7 +41,8 @@ void PlayDemo(int argc, char** argv)
 	// set the filter to NULL to disable filtering.
 	// See https://trac.ffmpeg.org/wiki/FilteringGuide for more info
 	// This example rotates the entire video and then puts a vignette on top of it.
-	const char* videoFilterConfig = NULL;//"transpose=cclock[middle];[middle]vignette"
+	const char* videoFilterConfig = "transpose=cclock[middle];[middle]vignette";
+	//const char* videoFilterConfig = NULL;
 
 	// if command line is specified, we overwrite our hard-coded settings
 	if (argc >= 6)

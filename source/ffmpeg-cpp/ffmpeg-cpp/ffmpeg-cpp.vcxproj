@@ -192,6 +192,10 @@
   <ItemGroup>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Frame Sinks\FrameSinkStream.h" />
+    <ClInclude Include="Frame Sinks\FrameWriter.h" />
+    <ClInclude Include="Frame Sinks\OneInputFrameSink.h" />
+    <ClInclude Include="FrameContainer.h" />
     <ClInclude Include="Sources\EncodedFileSource.h" />
     <ClInclude Include="Sources\RawVideoFileSource.h" />
     <ClInclude Include="Sources\RawAudioFileSource.h" />
@@ -227,12 +231,16 @@
     <ClInclude Include="Demuxing\VideoInputStream.h" />
     <ClInclude Include="AudioFormatConverter.h" />
     <ClInclude Include="ConvertedAudioProcessor.h" />
+    <ClInclude Include="Frame Sinks\VideoFilterInput.h" />
     <ClInclude Include="VideoFormatConverter.h" />
     <ClInclude Include="Muxing\VideoOutputStream.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Demuxing\InputStream.cpp" />
     <ClCompile Include="Demuxing\AudioInputStream.cpp" />
+    <ClCompile Include="FrameContainer.cpp" />
+    <ClCompile Include="Frame Sinks\FrameSinkStream.cpp" />
+    <ClCompile Include="Frame Sinks\OneInputFrameSink.cpp" />
     <ClCompile Include="Sources\EncodedFileSource.cpp" />
     <ClCompile Include="Sources\RawVideoFileSource.cpp" />
     <ClCompile Include="Sources\RawAudioFileSource.cpp" />
@@ -258,6 +266,7 @@
     <ClCompile Include="Codecs\VP9Codec.cpp" />
     <ClCompile Include="Demuxing\VideoInputStream.cpp" />
     <ClCompile Include="AudioFormatConverter.cpp" />
+    <ClCompile Include="Frame Sinks\VideoFilterInput.cpp" />
     <ClCompile Include="VideoFormatConverter.cpp" />
     <ClCompile Include="Muxing\VideoOutputStream.cpp" />
   </ItemGroup>

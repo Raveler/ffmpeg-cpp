@@ -6,10 +6,11 @@
 #include "Codecs/VideoCodec.h"
 #include "VideoFormatConverter.h"
 #include "Muxing/Muxer.h"
+#include "OneInputFrameSink.h"
 
 namespace ffmpegcpp
 {
-	class VideoEncoder : public VideoFrameSink
+	class VideoEncoder : public VideoFrameSink, public FrameWriter
 	{
 	public:
 		VideoEncoder(VideoCodec* codec, Muxer* muxer);
@@ -18,8 +19,10 @@ namespace ffmpegcpp
 		VideoEncoder(VideoCodec* codec, Muxer* muxer, AVRational frameRate, AVPixelFormat format);
 		virtual ~VideoEncoder();
 
-		void WriteFrame(AVFrame* frame, AVRational* timeBase);
-		void Close();
+		FrameSinkStream* CreateStream();
+
+		void WriteFrame(int streamIndex, AVFrame* frame, AVRational* timeBase);
+		void Close(int streamIndex);
 
 		bool IsPrimed();
 
@@ -34,6 +37,8 @@ namespace ffmpegcpp
 		VideoFormatConverter* formatConverter = nullptr;
 		OpenCodec* codec = nullptr;
 		AVPacket* pkt = nullptr;
+
+		OneInputFrameSink* oneInputFrameSink = nullptr;
 
 		int frameNumber = 0;
 

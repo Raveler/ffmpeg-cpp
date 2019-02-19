@@ -6,7 +6,7 @@
 using namespace std;
 using namespace ffmpegcpp;
 
-class RawAudioFileSink : public AudioFrameSink
+class RawAudioFileSink : public AudioFrameSink, public FrameWriter
 {
 public:
 
@@ -15,7 +15,13 @@ public:
 		file = fopen(fileName, "wb");
 	}
 
-	virtual void WriteFrame(AVFrame* frame, AVRational* timeBase)
+	FrameSinkStream* CreateStream()
+	{
+		stream = new FrameSinkStream(this, 0);
+		return stream;
+	}
+
+	virtual void WriteFrame(int streamIndex, AVFrame* frame, AVRational* timeBase)
 	{
 		// Just write out the samples channel by channel to a file.
 		int data_size = av_get_bytes_per_sample((AVSampleFormat)frame->format);
@@ -28,9 +34,10 @@ public:
 		}
 	}
 
-	virtual void Close()
+	virtual void Close(int streamIndex)
 	{
 		fclose(file);
+		delete stream;
 	}
 
 	virtual bool IsPrimed()
@@ -42,7 +49,9 @@ public:
 		return true;
 	}
 
+private:
 	FILE* file;
+	FrameSinkStream* stream;
 
 };
 

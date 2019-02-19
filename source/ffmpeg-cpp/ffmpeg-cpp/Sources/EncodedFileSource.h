@@ -26,7 +26,7 @@ namespace ffmpegcpp
 
 		bool done = false;
 
-		FrameSink* output;
+		FrameSinkStream* output;
 		
 		AVCodecParserContext* parser = nullptr;
 

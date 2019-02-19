@@ -9,18 +9,20 @@
 #include "AudioFormatConverter.h"
 #include "Muxing/Muxer.h"
 #include "Muxing/OutputStream.h"
+#include "OneInputFrameSink.h"
 
 namespace ffmpegcpp
 {
-	class AudioEncoder : public AudioFrameSink, public ConvertedAudioProcessor
+	class AudioEncoder : public AudioFrameSink, public ConvertedAudioProcessor, public FrameWriter
 	{
 	public:
 		AudioEncoder(AudioCodec* codec, Muxer* muxer);
 		AudioEncoder(AudioCodec* codec, Muxer* muxer, int bitRate);
 		virtual ~AudioEncoder();
 
-		void WriteFrame(AVFrame* frame, AVRational* timeBase);
-		void Close();
+		FrameSinkStream* CreateStream();
+		void WriteFrame(int streamIndex, AVFrame* frame, AVRational* timeBase);
+		void Close(int streamIndex);
 
 		virtual void WriteConvertedFrame(AVFrame* frame);
 
@@ -41,6 +43,8 @@ namespace ffmpegcpp
 		AudioFormatConverter *formatConverter = nullptr;
 		OpenCodec* codec = nullptr;
 		AVPacket* pkt = nullptr;
+
+		OneInputFrameSink* oneInputFrameSink = nullptr;
 
 		int frameNumber = 0;
 
