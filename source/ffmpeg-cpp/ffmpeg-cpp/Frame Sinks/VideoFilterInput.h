@@ -15,8 +15,11 @@ namespace ffmpegcpp
 		void WriteFrame(AVFrame* frame, AVRational* timeBase);
 
 		bool HasFrame();
+		bool IsClosed();
 		bool FetchFrame(AVFrame** frame, AVRational** timeBase);
 		bool PeekFrame(AVFrame** frame, AVRational** timeBase);
+
+		void Close();
 
 
 	private:
@@ -25,6 +28,7 @@ namespace ffmpegcpp
 		AVRational* timeBase;
 
 		bool frameReceived = false;
+		bool closed = false;
 	};
 
 

@@ -78,13 +78,16 @@ namespace ffmpegcpp
 					this->timeBase = timeBase;
 				}
 
+				AVRational* frameRate = timeBase;
+
 				/* buffer video source: the decoded frames from the decoder will be inserted here. */
 				AVPixelFormat pixelFormat = (AVPixelFormat)frame->format;
 				snprintf(args, sizeof(args),
-					"video_size=%dx%d:pix_fmt=%d:time_base=%d/%d:pixel_aspect=%d/%d",
+					"video_size=%dx%d:pix_fmt=%d:time_base=%d/%d:pixel_aspect=%d/%d:frame_rate=%d/%d",
 					frame->width, frame->height, frame->format,
 					timeBase->num, timeBase->den,
-					frame->sample_aspect_ratio.num, frame->sample_aspect_ratio.den);
+					frame->sample_aspect_ratio.num, frame->sample_aspect_ratio.den,
+					frameRate->den, frameRate->num);
 
 				char bufferString[1000];
 				snprintf(bufferString, sizeof(bufferString), "buffer=%s [in_%d]; ", args, i+1);
@@ -211,9 +214,19 @@ namespace ffmpegcpp
 		int ret = av_buffersrc_add_frame_flags(bufferSources[streamIndex], NULL, AV_BUFFERSRC_FLAG_KEEP_REF);
 		PollFilterGraphForFrames();
 
-		// close our target as well
-		target->Close();
+		// close this input
+		inputs[streamIndex]->Close();
 
+		// close our target only if all inputs are closed
+		bool allClosed = true;
+		for (int i = 0; i < inputs.size(); ++i)
+		{
+			if (!inputs[i]->IsClosed()) allClosed = false;
+		}
+		if (allClosed)
+		{
+			target->Close();
+		}
 	}
 
 	void VideoFilter::PollFilterGraphForFrames()

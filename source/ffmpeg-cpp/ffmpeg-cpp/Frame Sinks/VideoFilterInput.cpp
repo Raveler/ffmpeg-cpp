@@ -75,4 +75,14 @@ namespace ffmpegcpp
 
 		return true;
 	}
+
+	void VideoFilterInput::Close()
+	{
+		closed = true;
+	}
+
+	bool VideoFilterInput::IsClosed()
+	{
+		return closed;
+	}
 }
