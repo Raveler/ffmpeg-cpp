@@ -126,12 +126,7 @@ namespace ffmpegcpp
 				if (ctx->nb_outputs == 0)
 				{
 					buffersink_ctx = ctx;
-
-					enum AVPixelFormat out_pix_fmts[] = { outputFormat, AV_PIX_FMT_NONE };
-					av_opt_set_int_list(buffersink_ctx, "pix_fmts", out_pix_fmts,
-						AV_PIX_FMT_NONE, AV_OPT_SEARCH_CHILDREN);
 				}
-				int x = 5;
 			}
 
 			// Finally configure (initialize) the graph.
