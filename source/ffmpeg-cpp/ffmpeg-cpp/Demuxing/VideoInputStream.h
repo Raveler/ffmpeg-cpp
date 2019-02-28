@@ -11,7 +11,7 @@ namespace ffmpegcpp
 
 	public:
 
-		VideoInputStream(VideoFrameSink* frameSink, AVStream* stream);
+		VideoInputStream(VideoFrameSink* frameSink, AVFormatContext* format, AVStream* stream);
 		~VideoInputStream();
 
 	protected:

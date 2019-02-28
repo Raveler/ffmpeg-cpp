@@ -15,11 +15,8 @@ namespace ffmpegcpp
 		av_fifo_freep(&frame_queue);
 	}
 
-	void VideoFilterInput::WriteFrame(AVFrame* frame, AVRational* timeBase)
+	void VideoFilterInput::WriteFrame(AVFrame* frame)
 	{
-		// remember the timebase
-		this->timeBase = timeBase;
-
 		AVFrame *tmp = av_frame_clone(frame);
 		if (!tmp) throw new FFmpegException("Failed to clone frame");
 		av_frame_unref(frame);
@@ -44,7 +41,7 @@ namespace ffmpegcpp
 		return frameReceived;
 	}
 
-	bool VideoFilterInput::FetchFrame(AVFrame** frame, AVRational** timeBase)
+	bool VideoFilterInput::FetchFrame(AVFrame** frame)
 	{
 		// see if there's anything in the queue
 		int framesInQueue = av_fifo_size(frame_queue);
@@ -55,12 +52,11 @@ namespace ffmpegcpp
 		av_fifo_generic_read(frame_queue, &tmp, sizeof(tmp), NULL);
 
 		*frame = tmp;
-		*timeBase = this->timeBase;
 
 		return true;
 	}
 
-	bool VideoFilterInput::PeekFrame(AVFrame** frame, AVRational** timeBase)
+	bool VideoFilterInput::PeekFrame(AVFrame** frame)
 	{
 		// see if there's anything in the queue
 		int framesInQueue = av_fifo_size(frame_queue);
@@ -71,9 +67,18 @@ namespace ffmpegcpp
 		av_fifo_generic_peek(frame_queue, &tmp, sizeof(tmp), NULL);
 
 		*frame = tmp;
-		*timeBase = this->timeBase;
 
 		return true;
+	}
+
+	void VideoFilterInput::SetMetaData(StreamData* metaData)
+	{
+		this->metaData = metaData;
+	}
+
+	StreamData* VideoFilterInput::GetMetaData()
+	{
+		return metaData;
 	}
 
 	void VideoFilterInput::Close()

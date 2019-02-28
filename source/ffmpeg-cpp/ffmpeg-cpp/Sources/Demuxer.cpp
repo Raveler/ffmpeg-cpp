@@ -155,7 +155,7 @@ namespace ffmpegcpp
 
 		// create the stream
 		AVStream* stream = containerContext->streams[streamIndex];
-		AudioInputStream* inputStream = new AudioInputStream(frameSink, stream);
+		AudioInputStream* inputStream = new AudioInputStream(frameSink, containerContext, stream);
 		inputStream->Open();
 
 		// remember and return
@@ -172,7 +172,7 @@ namespace ffmpegcpp
 
 		// create the stream
 		AVStream* stream = containerContext->streams[streamIndex];
-		VideoInputStream* inputStream = new VideoInputStream(frameSink, stream);
+		VideoInputStream* inputStream = new VideoInputStream(frameSink, containerContext, stream);
 		inputStream->Open();
 
 		// remember and return

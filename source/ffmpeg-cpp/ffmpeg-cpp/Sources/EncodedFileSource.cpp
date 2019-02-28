@@ -66,6 +66,11 @@ namespace ffmpegcpp
 			av_parser_close(parser);
 			parser = nullptr;
 		}
+		if (metaData != nullptr)
+		{
+			delete metaData;
+			metaData = nullptr;
+		}
 
 		fclose(file);
 	}
@@ -215,16 +220,27 @@ namespace ffmpegcpp
 				throw FFmpegException("Error during decoding", ret);
 			}
 
-			// calculate the "correct" time_base
-			// TODO this is definitely an ugly hack but right now I have no idea on how to fix this properly.
-			timeBaseCorrectedByTicksPerFrame.num = codecContext->time_base.num;
-			timeBaseCorrectedByTicksPerFrame.den = codecContext->time_base.den;
-			timeBaseCorrectedByTicksPerFrame.num *= codecContext->ticks_per_frame;
+			if (metaData == nullptr)
+			{
+				// calculate the "correct" time_base
+				// TODO this is definitely an ugly hack but right now I have no idea on how to fix this properly.
+				timeBaseCorrectedByTicksPerFrame.num = codecContext->time_base.num;
+				timeBaseCorrectedByTicksPerFrame.den = codecContext->time_base.den;
+				timeBaseCorrectedByTicksPerFrame.num *= codecContext->ticks_per_frame;
+
+
+				metaData = new StreamData();
+				metaData->timeBase.num = timeBaseCorrectedByTicksPerFrame.num;
+				metaData->timeBase.den = timeBaseCorrectedByTicksPerFrame.den;
+				metaData->frameRate.den = timeBaseCorrectedByTicksPerFrame.num;
+				metaData->frameRate.num = timeBaseCorrectedByTicksPerFrame.den;
+			}
+
 
 			// push the frame to the next stage.
 			// The time_base is filled in in the codecContext after the first frame is decoded
 			// so we can fetch it from there.
-			output->WriteFrame(frame, &timeBaseCorrectedByTicksPerFrame);
+			output->WriteFrame(frame, metaData);
 		}
 	}
 }

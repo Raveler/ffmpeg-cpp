@@ -74,7 +74,7 @@ namespace ffmpegcpp
 		}
 	}
 
-	void VideoEncoder::OpenLazily(AVFrame* frame, AVRational* timeBase)
+	void VideoEncoder::OpenLazily(AVFrame* frame, StreamData* metaData)
 	{
 		// configure the parameters for the codec based on the frame and our preferences
 		int width = frame->width;
@@ -91,9 +91,7 @@ namespace ffmpegcpp
 
 		// the frame rate is either the input frame rate, OR the default frame rate if the input frame rate
 		// is not supported, OR the explicitly chosen framerate.
-		AVRational frameRate;
-		frameRate.num = timeBase->den;
-		frameRate.den = timeBase->num;
+		AVRational frameRate = metaData->frameRate;
 		if (!closedCodec->IsFrameRateSupported(&frameRate)) frameRate = closedCodec->GetClosestSupportedFrameRate(frameRate);
 		if (finalFrameRateSet) frameRate = finalFrameRate;
 
@@ -125,12 +123,12 @@ namespace ffmpegcpp
 		return oneInputFrameSink->CreateStream();
 	}
 
-	void VideoEncoder::WriteFrame(int streamIndex, AVFrame* frame, AVRational* timeBase)
+	void VideoEncoder::WriteFrame(int streamIndex, AVFrame* frame, StreamData* metaData)
 	{
 		// if we haven't opened the codec yet, we do it now!
 		if (codec == nullptr)
 		{
-			OpenLazily(frame, timeBase);
+			OpenLazily(frame, metaData);
 		}
 
 		// convert the frame to a converted_frame

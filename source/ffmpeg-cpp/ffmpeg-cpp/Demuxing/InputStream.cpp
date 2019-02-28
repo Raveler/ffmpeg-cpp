@@ -6,9 +6,10 @@ using namespace std;
 
 namespace ffmpegcpp
 {
-	InputStream::InputStream(AVStream* stream)
+	InputStream::InputStream(AVFormatContext* format, AVStream* stream)
 	{
 		this->stream = stream;
+		this->format = format;
 
 		// find decoder for the stream
 		AVCodec* codec = CodecDeducer::DeduceDecoder(stream->codecpar->codec_id);
@@ -85,6 +86,11 @@ namespace ffmpegcpp
 			av_frame_free(&frame);
 			frame = nullptr;
 		}
+		if (metaData != nullptr)
+		{
+			delete metaData;
+			metaData = nullptr;
+		}
 	}
 
 	void InputStream::SetFrameSink(FrameSink* frameSink)
@@ -92,7 +98,31 @@ namespace ffmpegcpp
 		output = frameSink->CreateStream();
 	}
 
-	int inputSampleCount = 0;
+	StreamData* InputStream::DiscoverMetaData()
+	{
+		/*metaData = new StreamData();
+
+		AVRational* time_base = &timeBaseCorrectedByTicksPerFrame;
+		if (!timeBaseCorrectedByTicksPerFrame.num)
+		{
+			time_base = &stream->time_base;
+		}
+
+		metaData->timeBase.num = time_base->num;
+		metaData->timeBase.den = time_base->den;*/
+
+		AVRational overrideFrameRate;
+		overrideFrameRate.num = 0;
+
+		AVRational tb = overrideFrameRate.num ? av_inv_q(overrideFrameRate) : stream->time_base;
+		AVRational fr = overrideFrameRate;
+		if (!fr.num) fr = av_guess_frame_rate(format, stream, NULL);
+
+		StreamData* metaData = new StreamData();
+		metaData->timeBase = tb;
+		metaData->frameRate = fr;
+		return metaData;
+	}
 
 	void InputStream::DecodePacket(AVPacket *pkt)
 	{
@@ -122,16 +152,16 @@ namespace ffmpegcpp
 				frame->sample_aspect_ratio = stream->sample_aspect_ratio;
 			}
 
-			AVRational* time_base = &timeBaseCorrectedByTicksPerFrame;
-			if (!timeBaseCorrectedByTicksPerFrame.num)
+			// the meta data does not exist yet - we figure it out!
+			if (metaData == nullptr)
 			{
-				time_base = &stream->time_base;
+				metaData = DiscoverMetaData();
 			}
 
 			// push the frame to the next stage.
 			// The time_base is filled in in the codecContext after the first frame is decoded
 			// so we can fetch it from there.
-			output->WriteFrame(frame, time_base);
+			output->WriteFrame(frame, metaData);
 		}
 	}
 

@@ -2,6 +2,7 @@
 
 #include "ffmpeg.h"
 #include "FrameWriter.h"
+#include "Demuxing/Streamdata.h"
 
 namespace ffmpegcpp
 {
@@ -11,7 +12,7 @@ namespace ffmpegcpp
 
 		FrameSinkStream(FrameWriter* frameSink, int streamIdx);
 
-		void WriteFrame(AVFrame* frame, AVRational* timeBase);
+		void WriteFrame(AVFrame* frame, StreamData* metaData);
 
 		void Close();
 

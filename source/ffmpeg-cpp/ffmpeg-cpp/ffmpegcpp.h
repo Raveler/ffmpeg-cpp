@@ -24,5 +24,4 @@
 #include "Codecs/JPGCodec.h"
 #include "Codecs/Codec.h"
 
-
 #include "FFmpegException.h"

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ffmpeg.h"
+#include "Demuxing/StreamData.h"
 
 namespace ffmpegcpp
 {
@@ -12,12 +13,15 @@ namespace ffmpegcpp
 		VideoFilterInput();
 		~VideoFilterInput();
 
-		void WriteFrame(AVFrame* frame, AVRational* timeBase);
+		void WriteFrame(AVFrame* frame);
 
 		bool HasFrame();
 		bool IsClosed();
-		bool FetchFrame(AVFrame** frame, AVRational** timeBase);
-		bool PeekFrame(AVFrame** frame, AVRational** timeBase);
+		bool FetchFrame(AVFrame** frame);
+		bool PeekFrame(AVFrame** frame);
+
+		void SetMetaData(StreamData* metaData);
+		StreamData* GetMetaData();
 
 		void Close();
 
@@ -25,7 +29,7 @@ namespace ffmpegcpp
 	private:
 
 		AVFifoBuffer *frame_queue;
-		AVRational* timeBase;
+		StreamData* metaData;
 
 		bool frameReceived = false;
 		bool closed = false;

@@ -21,14 +21,14 @@ namespace ffmpegcpp
 
 		FrameSinkStream* CreateStream();
 
-		void WriteFrame(int streamIndex, AVFrame* frame, AVRational* timeBase);
+		void WriteFrame(int streamIndex, AVFrame* frame, StreamData* metaData);
 		void Close(int streamIndex);
 
 		bool IsPrimed();
 
 	private:
 
-		void OpenLazily(AVFrame* frame, AVRational* timeBase);
+		void OpenLazily(AVFrame* frame, StreamData* metaData);
 		void PollCodecForPackets();
 
 		VideoCodec* closedCodec;

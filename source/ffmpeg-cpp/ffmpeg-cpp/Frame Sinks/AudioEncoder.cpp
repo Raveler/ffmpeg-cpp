@@ -26,7 +26,7 @@ namespace ffmpegcpp
 		finalBitRate = bitRate;
 	}
 
-	void AudioEncoder::OpenLazily(AVFrame* frame, AVRational* timeBase) 
+	void AudioEncoder::OpenLazily(AVFrame* frame, StreamData* metaData)
 	{
 		// configure the parameters for the codec based on the frame, our settings & defaults
 		int bitRate = finalBitRate;
@@ -92,12 +92,12 @@ namespace ffmpegcpp
 		return oneInputFrameSink->CreateStream();
 	}
 
-	void AudioEncoder::WriteFrame(int streamIndex, AVFrame* frame, AVRational* timeBase)
+	void AudioEncoder::WriteFrame(int streamIndex, AVFrame* frame, StreamData* metaData)
 	{
 		// if we haven't opened the codec yet, we do it now!
 		if (codec == nullptr)
 		{
-			OpenLazily(frame, timeBase);
+			OpenLazily(frame, metaData);
 		}
 
 		// set the PTS properly
