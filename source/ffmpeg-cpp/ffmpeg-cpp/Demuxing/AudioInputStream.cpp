@@ -2,8 +2,8 @@
 
 namespace ffmpegcpp
 {
-	AudioInputStream::AudioInputStream(AudioFrameSink* frameSink, AVStream* stream)
-		: InputStream(stream)
+	AudioInputStream::AudioInputStream(AudioFrameSink* frameSink, AVFormatContext* format, AVStream* stream)
+		: InputStream(format, stream)
 	{
 		SetFrameSink(frameSink);
 	}

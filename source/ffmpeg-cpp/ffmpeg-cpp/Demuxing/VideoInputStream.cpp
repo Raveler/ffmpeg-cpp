@@ -2,8 +2,8 @@
 
 namespace ffmpegcpp
 {
-	VideoInputStream::VideoInputStream(VideoFrameSink* frameSink, AVStream* stream)
-		: InputStream(stream)
+	VideoInputStream::VideoInputStream(VideoFrameSink* frameSink, AVFormatContext* format, AVStream* stream)
+		: InputStream(format, stream)
 	{
 		SetFrameSink(frameSink);
 	}

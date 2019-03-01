@@ -30,11 +30,6 @@ namespace ffmpegcpp
 
 	void VideoFilter::ConfigureFilterGraph()
 	{
-		if (outputFormat == AV_PIX_FMT_NONE)
-		{
-			throw FFmpegException("You must provide a frame sink with a specified pixel format, so that the VideoFilter can convert the frame to that format");
-		}
-
 		int ret;
 		char args[512];
 
@@ -61,30 +56,24 @@ namespace ffmpegcpp
 
 			// fetch one frame from each input and use it to construct the filter
 			AVFrame *frame;
-			AVRational* timeBase;
 			for (int i = inputs.size()-1; i >= 0; --i)
 			{
-				if (!inputs[i]->PeekFrame(&frame, &timeBase))
+				if (!inputs[i]->PeekFrame(&frame))
 				{
 					throw new FFmpegException(string("No frame found for input ") + to_string(i));
 				}
 
-				// the input format is taken from the first input stream
-				if (i == 0)
-				{
-					outputFormat = (AVPixelFormat)frame->format;
-
-					// the first frame of the first input defines our time base
-					this->timeBase = timeBase;
-				}
+				// get the meta data for this input stream
+				StreamData* metaData = inputs[i]->GetMetaData();
 
 				/* buffer video source: the decoded frames from the decoder will be inserted here. */
 				AVPixelFormat pixelFormat = (AVPixelFormat)frame->format;
 				snprintf(args, sizeof(args),
-					"video_size=%dx%d:pix_fmt=%d:time_base=%d/%d:pixel_aspect=%d/%d",
+					"video_size=%dx%d:pix_fmt=%d:time_base=%d/%d:pixel_aspect=%d/%d:frame_rate=%d/%d",
 					frame->width, frame->height, frame->format,
-					timeBase->num, timeBase->den,
-					frame->sample_aspect_ratio.num, frame->sample_aspect_ratio.den);
+					metaData->timeBase.num, metaData->timeBase.den,
+					frame->sample_aspect_ratio.num, frame->sample_aspect_ratio.den,
+					metaData->frameRate.num, metaData->frameRate.den);
 
 				char bufferString[1000];
 				snprintf(bufferString, sizeof(bufferString), "buffer=%s [in_%d]; ", args, i+1);
@@ -126,12 +115,7 @@ namespace ffmpegcpp
 				if (ctx->nb_outputs == 0)
 				{
 					buffersink_ctx = ctx;
-
-					enum AVPixelFormat out_pix_fmts[] = { outputFormat, AV_PIX_FMT_NONE };
-					av_opt_set_int_list(buffersink_ctx, "pix_fmts", out_pix_fmts,
-						AV_PIX_FMT_NONE, AV_OPT_SEARCH_CHILDREN);
 				}
-				int x = 5;
 			}
 
 			// Finally configure (initialize) the graph.
@@ -139,6 +123,10 @@ namespace ffmpegcpp
 			{
 				throw FFmpegException("Failed to configure filter graph", ret);
 			}
+
+			// we configure our output meta data based on the sink's data
+			outputMetaData.timeBase = buffersink_ctx->inputs[0]->time_base;
+			outputMetaData.frameRate = buffersink_ctx->inputs[0]->frame_rate;
 		}
 		catch (FFmpegException e)
 		{
@@ -152,7 +140,7 @@ namespace ffmpegcpp
 		AVRational* timeBase;
 		for (int i = 0; i < inputs.size(); ++i)
 		{
-			while (inputs[i]->FetchFrame(&frame, &timeBase))
+			while (inputs[i]->FetchFrame(&frame))
 			{
 				int ret = av_buffersrc_add_frame(bufferSources[i], frame);
 				av_frame_free(&frame);
@@ -170,13 +158,14 @@ namespace ffmpegcpp
 		return new FrameSinkStream(this, inputs.size() - 1);
 	}
 
-	void VideoFilter::WriteFrame(int streamIndex, AVFrame* frame, AVRational* timeBase)
+	void VideoFilter::WriteFrame(int streamIndex, AVFrame* frame, StreamData* metaData)
 	{
 		// lazily initialize because we need the data from the frame to configure our filter graph
 		if (!initialized)
 		{
 			// add to the proper input
-			inputs[streamIndex]->WriteFrame(frame, timeBase);
+			inputs[streamIndex]->SetMetaData(metaData);
+			inputs[streamIndex]->WriteFrame(frame);
 
 			// see if all inputs have received a frame - at this point, we can initialize!
 			bool allInputsHaveFrames = true;
@@ -216,9 +205,19 @@ namespace ffmpegcpp
 		int ret = av_buffersrc_add_frame_flags(bufferSources[streamIndex], NULL, AV_BUFFERSRC_FLAG_KEEP_REF);
 		PollFilterGraphForFrames();
 
-		// close our target as well
-		target->Close();
+		// close this input
+		inputs[streamIndex]->Close();
 
+		// close our target only if all inputs are closed
+		bool allClosed = true;
+		for (int i = 0; i < inputs.size(); ++i)
+		{
+			if (!inputs[i]->IsClosed()) allClosed = false;
+		}
+		if (allClosed)
+		{
+			target->Close();
+		}
 	}
 
 	void VideoFilter::PollFilterGraphForFrames()
@@ -236,7 +235,7 @@ namespace ffmpegcpp
 				throw FFmpegException("Erorr during filtering", ret);
 			}
 
-			target->WriteFrame(filt_frame, timeBase);
+			target->WriteFrame(filt_frame, &outputMetaData);
 
 			av_frame_unref(filt_frame);
 		}

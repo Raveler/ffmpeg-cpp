@@ -11,13 +11,6 @@
 
 namespace ffmpegcpp
 {
-	struct StreamInfo
-	{
-		int streamId;
-		AVCodec* codec;
-		AVStream* stream;
-	};
-
 	class Demuxer : public InputSource
 	{
 	public:
@@ -32,9 +25,6 @@ namespace ffmpegcpp
 		void DecodeAudioStream(int streamId, AudioFrameSink* frameSink);
 		void DecodeVideoStream(int streamId, VideoFrameSink* frameSink);
 
-		std::vector<StreamInfo> GetAudioStreamInfo();
-		std::vector<StreamInfo> GetVideoStreamInfo();
-
 		virtual void PreparePipeline();
 		virtual bool IsDone();
 		virtual void Step();
@@ -47,8 +37,8 @@ namespace ffmpegcpp
 
 		const char* fileName;
 
-		std::vector<StreamInfo> GetStreamInfo(AVMediaType mediaType);
-		StreamInfo CreateInfo(int streamIndex, AVStream* stream, AVCodec* codec);
+		//std::vector<StreamInfo> GetStreamInfo(AVMediaType mediaType);
+		//StreamInfo CreateInfo(int streamIndex, AVStream* stream, AVCodec* codec);
 
 		InputStream** inputStreams = nullptr;
 

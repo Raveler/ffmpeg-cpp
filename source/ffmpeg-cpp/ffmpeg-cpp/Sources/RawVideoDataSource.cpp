@@ -21,8 +21,10 @@ namespace ffmpegcpp
 		this->sourcePixelFormat = sourcePixelFormat;
 
 		// set up the time base
-		this->timeBase.num = 1;
-		this->timeBase.den = framesPerSecond;
+		metaData.timeBase.num = 1;
+		metaData.timeBase.den = framesPerSecond;
+		metaData.frameRate.num = framesPerSecond;
+		metaData.frameRate.den = 1;
 
 		// create the frame
 		int ret;
@@ -87,7 +89,7 @@ namespace ffmpegcpp
 			frame->height, frame->data, frame->linesize);
 
 		// send to the output
-		output->WriteFrame(frame, &this->timeBase);
+		output->WriteFrame(frame, &metaData);
 	}
 
 	void RawVideoDataSource::Close()

@@ -141,10 +141,7 @@
     <ClInclude Include="FrameContainer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Info\ContainerInfo.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Info\StreamInfo.h">
+    <ClInclude Include="Demuxing\StreamData.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -246,6 +243,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="FrameContainer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Demuxing\StreamData.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

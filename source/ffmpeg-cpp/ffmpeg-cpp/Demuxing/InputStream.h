@@ -12,7 +12,7 @@ namespace ffmpegcpp
 
 	public:
 
-		InputStream(AVStream* stream);
+		InputStream(AVFormatContext* format, AVStream* stream);
 		~InputStream();
 
 		void Open();
@@ -36,11 +36,16 @@ namespace ffmpegcpp
 
 		AVRational timeBaseCorrectedByTicksPerFrame;
 
+		AVFormatContext* format;
 		AVStream* stream;
 
 		FrameSinkStream* output;
 
 		AVFrame* frame;
+
+		StreamData* metaData = nullptr;
+
+		StreamData* DiscoverMetaData();
 		
 		void CleanUp();
 	};

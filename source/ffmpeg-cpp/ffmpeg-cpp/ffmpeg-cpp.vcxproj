@@ -234,6 +234,7 @@
     <ClInclude Include="AudioFormatConverter.h" />
     <ClInclude Include="ConvertedAudioProcessor.h" />
     <ClInclude Include="Frame Sinks\VideoFilterInput.h" />
+    <ClInclude Include="Demuxing\StreamData.h" />
     <ClInclude Include="VideoFormatConverter.h" />
     <ClInclude Include="Muxing\VideoOutputStream.h" />
   </ItemGroup>
@@ -269,6 +270,7 @@
     <ClCompile Include="Demuxing\VideoInputStream.cpp" />
     <ClCompile Include="AudioFormatConverter.cpp" />
     <ClCompile Include="Frame Sinks\VideoFilterInput.cpp" />
+    <ClCompile Include="Demuxing\StreamData.cpp" />
     <ClCompile Include="VideoFormatConverter.cpp" />
     <ClCompile Include="Muxing\VideoOutputStream.cpp" />
   </ItemGroup>

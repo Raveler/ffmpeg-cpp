@@ -11,7 +11,7 @@ namespace ffmpegcpp
 
 	public:
 
-		AudioInputStream(AudioFrameSink* frameSink, AVStream* stream);
+		AudioInputStream(AudioFrameSink* frameSink, AVFormatContext* format, AVStream* stream);
 		~AudioInputStream();
 
 	protected:

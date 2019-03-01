@@ -18,7 +18,7 @@ namespace ffmpegcpp
 
 		FrameSinkStream* CreateStream();
 
-		void WriteFrame(int streamIndex, AVFrame* frame, AVRational* timeBase);
+		void WriteFrame(int streamIndex, AVFrame* frame, StreamData* metaData);
 		void Close(int streamIndex);
 
 
@@ -36,7 +36,6 @@ namespace ffmpegcpp
 		FrameSinkStream* target;
 
 		const char* filterString;
-		AVPixelFormat outputFormat;
 
 		AVFilterGraph *filter_graph = nullptr;
 		AVFilterContext *buffersink_ctx = nullptr;
@@ -44,7 +43,7 @@ namespace ffmpegcpp
 
 		bool initialized = false;
 
-		AVRational* timeBase;
+		StreamData outputMetaData;
 
 		void CleanUp();
 	};

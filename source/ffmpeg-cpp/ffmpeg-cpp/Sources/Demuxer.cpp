@@ -82,7 +82,7 @@ namespace ffmpegcpp
 		}
 	}
 
-	vector<StreamInfo> Demuxer::GetAudioStreamInfo()
+	/*vector<StreamInfo> Demuxer::GetAudioStreamInfo()
 	{
 		return GetStreamInfo(AVMEDIA_TYPE_AUDIO);
 	}
@@ -99,7 +99,7 @@ namespace ffmpegcpp
 		{
 			AVStream* stream = containerContext->streams[i];
 
-			/* find decoder for the stream */
+			// find decoder for the stream
 			AVCodec* codec = CodecDeducer::DeduceDecoder(stream->codecpar->codec_id);
 			if (!codec)
 			{
@@ -121,7 +121,7 @@ namespace ffmpegcpp
 		info.stream = stream;
 		info.codec = codec;
 		return info;
-	}
+	}*/
 
 	void Demuxer::DecodeBestAudioStream(AudioFrameSink* frameSink)
 	{
@@ -155,7 +155,7 @@ namespace ffmpegcpp
 
 		// create the stream
 		AVStream* stream = containerContext->streams[streamIndex];
-		AudioInputStream* inputStream = new AudioInputStream(frameSink, stream);
+		AudioInputStream* inputStream = new AudioInputStream(frameSink, containerContext, stream);
 		inputStream->Open();
 
 		// remember and return
@@ -172,7 +172,7 @@ namespace ffmpegcpp
 
 		// create the stream
 		AVStream* stream = containerContext->streams[streamIndex];
-		VideoInputStream* inputStream = new VideoInputStream(frameSink, stream);
+		VideoInputStream* inputStream = new VideoInputStream(frameSink, containerContext, stream);
 		inputStream->Open();
 
 		// remember and return

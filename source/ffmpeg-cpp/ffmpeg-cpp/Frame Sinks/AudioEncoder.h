@@ -21,7 +21,7 @@ namespace ffmpegcpp
 		virtual ~AudioEncoder();
 
 		FrameSinkStream* CreateStream();
-		void WriteFrame(int streamIndex, AVFrame* frame, AVRational* timeBase);
+		void WriteFrame(int streamIndex, AVFrame* frame, StreamData* metaData);
 		void Close(int streamIndex);
 
 		virtual void WriteConvertedFrame(AVFrame* frame);
@@ -30,7 +30,7 @@ namespace ffmpegcpp
 
 	private:
 
-		void OpenLazily(AVFrame* frame, AVRational* timeBase);
+		void OpenLazily(AVFrame* frame, StreamData* metaData);
 
 		void CleanUp();
 

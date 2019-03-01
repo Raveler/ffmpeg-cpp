@@ -30,7 +30,7 @@ namespace ffmpegcpp
 		void CleanUp();
 
 		AVPixelFormat sourcePixelFormat;
-		AVRational timeBase;
+		StreamData metaData;
 
 		FrameSinkStream* output;
 
