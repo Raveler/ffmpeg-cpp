@@ -21,6 +21,7 @@ namespace ffmpegcpp
 		void Close();
 
 		bool IsPrimed();
+		int GetFramesProcessed();
 
 		virtual void AddStreamInfo(ContainerInfo* info) = 0;
 
@@ -41,14 +42,15 @@ namespace ffmpegcpp
 
 		AVRational timeBaseCorrectedByTicksPerFrame;
 
-
-		FrameSinkStream* output;
+		FrameSinkStream* output = nullptr;
 
 		AVFrame* frame;
 
 		StreamData* metaData = nullptr;
 
 		StreamData* DiscoverMetaData();
+
+		int nFramesProcessed = 0;
 		
 		void CleanUp();
 

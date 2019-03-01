@@ -30,6 +30,7 @@ namespace ffmpegcpp
 		virtual void Step();
 
 		ContainerInfo GetInfo();
+		int GetFrameCount(int streamId);
 
 	private:
 

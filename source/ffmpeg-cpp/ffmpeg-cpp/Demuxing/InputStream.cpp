@@ -28,23 +28,6 @@ namespace ffmpegcpp
 		}
 
 		codecContext->framerate = stream->avg_frame_rate;
-	}
-
-	InputStream::~InputStream()
-	{
-		CleanUp();
-	}
-
-	void InputStream::ConfigureCodecContext()
-	{
-		// does nothing by default
-	}
-
-	void InputStream::Open(FrameSink* frameSink)
-	{
-		output = frameSink->CreateStream();
-
-		const AVCodec* codec = codecContext->codec;
 
 		// Copy codec parameters from input stream to output codec context
 		int ret;
@@ -74,6 +57,21 @@ namespace ffmpegcpp
 		{
 			throw FFmpegException("Could not allocate frame");
 		}
+	}
+
+	InputStream::~InputStream()
+	{
+		CleanUp();
+	}
+
+	void InputStream::ConfigureCodecContext()
+	{
+		// does nothing by default
+	}
+
+	void InputStream::Open(FrameSink* frameSink)
+	{
+		output = frameSink->CreateStream();
 	}
 
 	void InputStream::CleanUp()
@@ -158,13 +156,26 @@ namespace ffmpegcpp
 			// push the frame to the next stage.
 			// The time_base is filled in in the codecContext after the first frame is decoded
 			// so we can fetch it from there.
-			output->WriteFrame(frame, metaData);
+			if (output == nullptr)
+			{
+				// No frame sink specified - just release the frame again.
+			}
+			else
+			{
+				output->WriteFrame(frame, metaData);
+			}
+			++nFramesProcessed;
 		}
+	}
+
+	int InputStream::GetFramesProcessed()
+	{
+		return nFramesProcessed;
 	}
 
 	void InputStream::Close()
 	{
-		output->Close();
+		if (output != nullptr) output->Close();
 	}
 
 	bool InputStream::IsPrimed()

@@ -22,6 +22,8 @@ namespace ffmpegcpp
 	{
 		VideoStreamInfo info;
 
+		info.id = stream->id - 1; // starts counting from 1!
+
 		AVRational overrideFrameRate;
 		overrideFrameRate.num = 0;
 

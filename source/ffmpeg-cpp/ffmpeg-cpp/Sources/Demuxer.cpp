@@ -182,6 +182,10 @@ namespace ffmpegcpp
 		// already exists
 		if (inputStreams[streamIndex] != nullptr) return inputStreams[streamIndex];
 
+		// The stream doesn't exist but we already processed all our frames, so it makes no sense
+		// to add it anymore.
+		if (IsDone()) throw new FFmpegException("Demuxer already fully processed... you cannot use it anymore.");
+
 		AVStream* stream = containerContext->streams[streamIndex];
 		AVCodec* codec = CodecDeducer::DeduceDecoder(stream->codecpar->codec_id);
 		if (codec == nullptr) return nullptr; // no codec found - we can't really do anything with this stream!
@@ -302,5 +306,23 @@ namespace ffmpegcpp
 		}
 
 		return info;
+	}
+
+	int Demuxer::GetFrameCount(int streamId)
+	{
+		// Make sure all streams exist, so we can query them later.
+		for (int i = 0; i < containerContext->nb_streams; ++i)
+		{
+			GetInputStream(i);
+		}
+
+		// Process the entire container so we can know how many frames are in each 
+		while (!IsDone())
+		{
+			Step();
+		}
+
+		// Return the right stream's frame count.
+		return GetInputStream(streamId)->GetFramesProcessed();
 	}
 }

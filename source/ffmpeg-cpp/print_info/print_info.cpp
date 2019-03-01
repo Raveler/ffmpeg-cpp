@@ -30,6 +30,7 @@ int main()
 				<< ", bit rate " << stream.bitRate << "kb/s"
 				<< ", fps " << ((float)stream.frameRate.num / (float)stream.frameRate.den)
 				<< ", time base " << stream.timeBase.num  << "/" << stream.timeBase.den
+				<< ", " << demuxer->GetFrameCount(stream.id) << " frames"
 				<< endl;
 		}
 
