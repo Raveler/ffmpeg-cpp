@@ -1,0 +1,26 @@
+﻿  Generating code
+  All 492 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+  difference.vcxproj -> D:\WonderMedia\ffmpeg\ffmpeg-cpp\source\ffmpeg-cpp\difference\..\..\..\bin\x64\Release\difference.exe
+  D:\WonderMedia\ffmpeg\ffmpeg-cpp\source\ffmpeg-cpp\difference\..\..\..\samples\big_buck_bunny.mp4
+  D:\WonderMedia\ffmpeg\ffmpeg-cpp\source\ffmpeg-cpp\difference\..\..\..\samples\bla.mp4
+  D:\WonderMedia\ffmpeg\ffmpeg-cpp\source\ffmpeg-cpp\difference\..\..\..\samples\bla.wav
+  D:\WonderMedia\ffmpeg\ffmpeg-cpp\source\ffmpeg-cpp\difference\..\..\..\samples\bla2.mp4
+  D:\WonderMedia\ffmpeg\ffmpeg-cpp\source\ffmpeg-cpp\difference\..\..\..\samples\carphone.h264
+  D:\WonderMedia\ffmpeg\ffmpeg-cpp\source\ffmpeg-cpp\difference\..\..\..\samples\carphone_qcif.y4m
+  D:\WonderMedia\ffmpeg\ffmpeg-cpp\source\ffmpeg-cpp\difference\..\..\..\samples\DesiJourney.wav
+  D:\WonderMedia\ffmpeg\ffmpeg-cpp\source\ffmpeg-cpp\difference\..\..\..\samples\Vivaldi_s16le_2_channels_samplerate_11025.dat
+  D:\WonderMedia\ffmpeg\ffmpeg-cpp\source\ffmpeg-cpp\difference\..\..\..\samples\Vivaldi_Sonata_eminor_.mp3
+  9 File(s) copied
+  D:\WonderMedia\ffmpeg\ffmpeg-cpp\source\ffmpeg-cpp\difference\..\..\..\ffmpeg\bin\avcodec-58.dll
+  D:\WonderMedia\ffmpeg\ffmpeg-cpp\source\ffmpeg-cpp\difference\..\..\..\ffmpeg\bin\avdevice-58.dll
+  D:\WonderMedia\ffmpeg\ffmpeg-cpp\source\ffmpeg-cpp\difference\..\..\..\ffmpeg\bin\avfilter-7.dll
+  D:\WonderMedia\ffmpeg\ffmpeg-cpp\source\ffmpeg-cpp\difference\..\..\..\ffmpeg\bin\avformat-58.dll
+  D:\WonderMedia\ffmpeg\ffmpeg-cpp\source\ffmpeg-cpp\difference\..\..\..\ffmpeg\bin\avutil-56.dll
+  D:\WonderMedia\ffmpeg\ffmpeg-cpp\source\ffmpeg-cpp\difference\..\..\..\ffmpeg\bin\ffmpeg.exe
+  D:\WonderMedia\ffmpeg\ffmpeg-cpp\source\ffmpeg-cpp\difference\..\..\..\ffmpeg\bin\ffplay.exe
+  D:\WonderMedia\ffmpeg\ffmpeg-cpp\source\ffmpeg-cpp\difference\..\..\..\ffmpeg\bin\ffprobe.exe
+  D:\WonderMedia\ffmpeg\ffmpeg-cpp\source\ffmpeg-cpp\difference\..\..\..\ffmpeg\bin\postproc-55.dll
+  D:\WonderMedia\ffmpeg\ffmpeg-cpp\source\ffmpeg-cpp\difference\..\..\..\ffmpeg\bin\swresample-3.dll
+  D:\WonderMedia\ffmpeg\ffmpeg-cpp\source\ffmpeg-cpp\difference\..\..\..\ffmpeg\bin\swscale-5.dll
+  11 File(s) copied

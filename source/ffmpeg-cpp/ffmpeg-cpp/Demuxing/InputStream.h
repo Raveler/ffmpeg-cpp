@@ -3,6 +3,7 @@
 #include "ffmpeg.h"
 #include "std.h"
 #include "Frame Sinks/FrameSink.h"
+#include "Info/StreamInfo.h"
 
 namespace ffmpegcpp
 {
@@ -20,6 +21,8 @@ namespace ffmpegcpp
 		void Close();
 
 		bool IsPrimed();
+
+		StreamInfo GetInfo();
 
 	protected:
 

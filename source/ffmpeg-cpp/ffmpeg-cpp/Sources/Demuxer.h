@@ -7,6 +7,7 @@
 #include "Demuxing/VideoInputStream.h"
 #include "Demuxing/InputStream.h"
 #include "Sources/InputSource.h"
+#include "Info/ContainerInfo.h"
 
 namespace ffmpegcpp
 {
@@ -37,6 +38,8 @@ namespace ffmpegcpp
 		virtual void PreparePipeline();
 		virtual bool IsDone();
 		virtual void Step();
+
+		ContainerInfo GetInfo();
 
 	private:
 

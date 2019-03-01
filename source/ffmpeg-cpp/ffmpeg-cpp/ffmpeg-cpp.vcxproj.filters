@@ -141,6 +141,12 @@
     <ClInclude Include="FrameContainer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Info\ContainerInfo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Info\StreamInfo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FFmpegException.cpp">

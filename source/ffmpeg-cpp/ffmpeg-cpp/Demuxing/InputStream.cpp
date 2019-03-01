@@ -144,5 +144,13 @@ namespace ffmpegcpp
 	{
 		return output->IsPrimed();
 	}
+
+	StreamInfo InputStream::GetInfo()
+	{
+		StreamInfo info;
+
+
+		return info;
+	}
 }
 
