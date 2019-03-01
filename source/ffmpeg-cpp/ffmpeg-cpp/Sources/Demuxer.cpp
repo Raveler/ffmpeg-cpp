@@ -154,9 +154,8 @@ namespace ffmpegcpp
 		}
 
 		// create the stream
-		AVStream* stream = containerContext->streams[streamIndex];
-		AudioInputStream* inputStream = new AudioInputStream(frameSink, containerContext, stream);
-		inputStream->Open();
+		InputStream* inputStream = GetInputStream(streamIndex);
+		inputStream->Open(frameSink);
 
 		// remember and return
 		inputStreams[streamIndex] = inputStream;
@@ -171,12 +170,33 @@ namespace ffmpegcpp
 		}
 
 		// create the stream
-		AVStream* stream = containerContext->streams[streamIndex];
-		VideoInputStream* inputStream = new VideoInputStream(frameSink, containerContext, stream);
-		inputStream->Open();
+		InputStream* inputStream = GetInputStream(streamIndex);
+		inputStream->Open(frameSink);
 
 		// remember and return
 		inputStreams[streamIndex] = inputStream;
+	}
+
+	InputStream* Demuxer::GetInputStream(int streamIndex)
+	{
+		// already exists
+		if (inputStreams[streamIndex] != nullptr) return inputStreams[streamIndex];
+
+		AVStream* stream = containerContext->streams[streamIndex];
+		AVCodec* codec = CodecDeducer::DeduceDecoder(stream->codecpar->codec_id);
+		if (codec == nullptr) return nullptr; // no codec found - we can't really do anything with this stream!
+		switch (codec->type)
+		{
+		case AVMEDIA_TYPE_VIDEO:
+			inputStreams[streamIndex] = new VideoInputStream(containerContext, stream);
+			break;
+		case AVMEDIA_TYPE_AUDIO:
+			inputStreams[streamIndex] = new AudioInputStream(containerContext, stream);
+			break;
+		}
+
+		// return the created stream
+		return inputStreams[streamIndex];
 	}
 
 	void Demuxer::PreparePipeline()
@@ -256,5 +276,31 @@ namespace ffmpegcpp
 		// We need to unref the packet here because packets might pass by here
 		// that don't have a stream attached to them. We want to dismiss them!
 		av_packet_unref(pkt);
+	}
+
+	ContainerInfo Demuxer::GetInfo()
+	{
+
+		ContainerInfo info;
+
+		// general data
+		// the duration is calculated like this... why?
+		int64_t duration = containerContext->duration + (containerContext->duration <= INT64_MAX - 5000 ? 5000 : 0);
+		info.durationInMicroSeconds = duration;
+		info.durationInSeconds = (float)info.durationInMicroSeconds / AV_TIME_BASE;
+		info.start = (float)containerContext->start_time / AV_TIME_BASE;
+		info.bitRate = containerContext->bit_rate;
+		info.format = containerContext->iformat;
+
+
+		// go over all streams and get their info
+		for (int i = 0; i < containerContext->nb_streams; ++i)
+		{
+			InputStream* stream = GetInputStream(i);
+			if (stream == nullptr) continue; // no valid stream
+			stream->AddStreamInfo(&info);
+		}
+
+		return info;
 	}
 }

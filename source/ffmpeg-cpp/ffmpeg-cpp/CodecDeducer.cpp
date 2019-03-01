@@ -37,6 +37,7 @@ namespace ffmpegcpp
 
 	AVCodec* CodecDeducer::DeduceDecoder(AVCodecID codecId)
 	{
+		if (codecId == AV_CODEC_ID_NONE) return nullptr;
 		AVCodec* codec = avcodec_find_decoder(codecId);
 		if (!codec)
 		{

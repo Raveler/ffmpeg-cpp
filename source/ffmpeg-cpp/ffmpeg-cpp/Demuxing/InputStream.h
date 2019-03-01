@@ -3,7 +3,7 @@
 #include "ffmpeg.h"
 #include "std.h"
 #include "Frame Sinks/FrameSink.h"
-#include "Info/StreamInfo.h"
+#include "Info/ContainerInfo.h"
 
 namespace ffmpegcpp
 {
@@ -15,29 +15,32 @@ namespace ffmpegcpp
 		InputStream(AVFormatContext* format, AVStream* stream);
 		~InputStream();
 
-		void Open();
+		void Open(FrameSink* frameSink);
 
 		virtual void DecodePacket(AVPacket* pkt);
 		void Close();
 
 		bool IsPrimed();
 
-		StreamInfo GetInfo();
+		virtual void AddStreamInfo(ContainerInfo* info) = 0;
+
 
 	protected:
 
 		AVCodecContext* codecContext = nullptr;
 
-		void SetFrameSink(FrameSink* frameSink);
 
 		virtual void ConfigureCodecContext();
+
+		AVFormatContext* format;
+		AVStream* stream;
+
+		float CalculateBitRate(AVCodecContext* ctx);
 
 	private:
 
 		AVRational timeBaseCorrectedByTicksPerFrame;
 
-		AVFormatContext* format;
-		AVStream* stream;
 
 		FrameSinkStream* output;
 
@@ -48,6 +51,7 @@ namespace ffmpegcpp
 		StreamData* DiscoverMetaData();
 		
 		void CleanUp();
+
 	};
 
 

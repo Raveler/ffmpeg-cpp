@@ -37,6 +37,8 @@ namespace ffmpegcpp
 
 		const char* fileName;
 
+		InputStream* GetInputStream(int streamId);
+
 		//std::vector<StreamInfo> GetStreamInfo(AVMediaType mediaType);
 		//StreamInfo CreateInfo(int streamIndex, AVStream* stream, AVCodec* codec);
 

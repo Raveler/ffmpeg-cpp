@@ -197,7 +197,7 @@
     <ClInclude Include="Frame Sinks\OneInputFrameSink.h" />
     <ClInclude Include="FrameContainer.h" />
     <ClInclude Include="Info\ContainerInfo.h" />
-    <ClInclude Include="Info\StreamInfo.h" />
+    <ClInclude Include="Info\VideoStreamInfo.h" />
     <ClInclude Include="Sources\EncodedFileSource.h" />
     <ClInclude Include="Sources\RawVideoFileSource.h" />
     <ClInclude Include="Sources\RawAudioFileSource.h" />

@@ -23,3 +23,5 @@
 
 /source/ffmpeg-cpp/remuxing/obj
 /source/ffmpeg-cpp/difference/obj/x64/Debug
+/source/ffmpeg-cpp/difference/obj
+/source/ffmpeg-cpp/print_info/obj/x64

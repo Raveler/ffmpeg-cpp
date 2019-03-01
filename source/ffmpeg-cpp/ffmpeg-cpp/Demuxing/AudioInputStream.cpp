@@ -2,10 +2,9 @@
 
 namespace ffmpegcpp
 {
-	AudioInputStream::AudioInputStream(AudioFrameSink* frameSink, AVFormatContext* format, AVStream* stream)
+	AudioInputStream::AudioInputStream(AVFormatContext* format, AVStream* stream)
 		: InputStream(format, stream)
 	{
-		SetFrameSink(frameSink);
 	}
 
 	void AudioInputStream::ConfigureCodecContext()
@@ -20,6 +19,11 @@ namespace ffmpegcpp
 
 	AudioInputStream::~AudioInputStream()
 	{
+	}
+
+	void AudioInputStream::AddStreamInfo(ContainerInfo* containerInfo)
+	{
+		// TODO
 	}
 }
 

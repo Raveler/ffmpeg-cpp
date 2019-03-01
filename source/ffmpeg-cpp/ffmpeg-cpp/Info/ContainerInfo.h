@@ -1,19 +1,21 @@
 #pragma once
 
 #include "ffmpeg.h"
-#include "StreamInfo.h"
+#include "VideoStreamInfo.h"
+#include "std.h"
 
 namespace ffmpegcpp
 {
 	struct ContainerInfo
 	{
-		float duration;
+		long durationInMicroSeconds;
+		float durationInSeconds;
 		float start;
 		float bitRate;
+		const AVInputFormat* format;
 
-		int nStreams;
-		StreamInfo* streams;
-
+		std::vector<VideoStreamInfo> videoStreams;
+		// TODO: audio streams!
 	};
 
 
