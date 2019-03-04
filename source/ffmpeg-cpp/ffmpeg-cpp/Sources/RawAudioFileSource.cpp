@@ -1,6 +1,7 @@
 #include "RawAudioFileSource.h"
 #include "FFmpegException.h"
 #include "std.h"
+#include "ffmpeg-source.h"
 
 using namespace std;
 

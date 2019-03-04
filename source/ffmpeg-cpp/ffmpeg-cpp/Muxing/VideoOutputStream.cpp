@@ -1,5 +1,6 @@
 #include "VideoOutputStream.h"
 #include "FFmpegException.h"
+#include "ffmpeg-source.h"
 
 using namespace std;
 

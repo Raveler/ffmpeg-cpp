@@ -1,6 +1,7 @@
 #include "InputStream.h"
 #include "CodecDeducer.h"
 #include "FFmpegException.h"
+#include "ffmpeg-source.h"
 
 using namespace std;
 

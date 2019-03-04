@@ -1,6 +1,5 @@
 #pragma once
 
-#include "ffmpeg.h"
 #include "FrameWriter.h"
 #include "Demuxing/Streamdata.h"
 

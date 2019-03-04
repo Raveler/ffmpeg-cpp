@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ffmpeg.h"
+#include <libavutil/rational.h>
 
 namespace ffmpegcpp
 {

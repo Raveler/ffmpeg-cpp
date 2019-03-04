@@ -1,5 +1,6 @@
 #include "VideoFormatConverter.h"
 #include "FFmpegException.h"
+#include "ffmpeg-source.h"
 
 namespace ffmpegcpp
 {

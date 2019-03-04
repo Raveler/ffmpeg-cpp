@@ -2,6 +2,7 @@
 
 #include "FFmpegException.h"
 #include "Muxing/VideoOutputStream.h"
+#include "ffmpeg-source.h"
 
 using namespace std;
 

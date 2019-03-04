@@ -1,7 +1,6 @@
 #pragma once
 
 #include "ffmpeg.h"
-
 #include "std.h"
 
 namespace ffmpegcpp

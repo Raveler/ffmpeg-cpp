@@ -1,6 +1,7 @@
 #include "Demuxer.h"
 #include "FFmpegException.h"
 #include "CodecDeducer.h"
+#include "ffmpeg-source.h"
 
 #include <string>
 

@@ -150,6 +150,9 @@
     <ClInclude Include="Info\VideoStreamInfo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ffmpeg-source.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FFmpegException.cpp">

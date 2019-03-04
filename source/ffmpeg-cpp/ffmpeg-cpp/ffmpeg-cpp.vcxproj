@@ -192,6 +192,7 @@
   <ItemGroup>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ffmpeg-source.h" />
     <ClInclude Include="Frame Sinks\FrameSinkStream.h" />
     <ClInclude Include="Frame Sinks\FrameWriter.h" />
     <ClInclude Include="Frame Sinks\OneInputFrameSink.h" />
