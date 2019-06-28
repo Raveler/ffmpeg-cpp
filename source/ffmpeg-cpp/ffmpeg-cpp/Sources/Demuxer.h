@@ -19,11 +19,11 @@ namespace ffmpegcpp
 		Demuxer(const char* fileName, AVInputFormat* inputFormat, AVDictionary *inputFormatOptions);
 		~Demuxer();
 
-		void DecodeBestAudioStream(AudioFrameSink* frameSink);
-		void DecodeBestVideoStream(VideoFrameSink* frameSink);
+		void DecodeBestAudioStream(FrameSink* frameSink);
+		void DecodeBestVideoStream(FrameSink* frameSink);
 
-		void DecodeAudioStream(int streamId, AudioFrameSink* frameSink);
-		void DecodeVideoStream(int streamId, VideoFrameSink* frameSink);
+		void DecodeAudioStream(int streamId, FrameSink* frameSink);
+		void DecodeVideoStream(int streamId, FrameSink* frameSink);
 
 		virtual void PreparePipeline();
 		virtual bool IsDone();

@@ -28,5 +28,7 @@ namespace ffmpegcpp
 		FrameSinkStream* output;
 
 		AVFrame* frame = nullptr;
+
+		StreamData* metaData = nullptr;
 	};
 }

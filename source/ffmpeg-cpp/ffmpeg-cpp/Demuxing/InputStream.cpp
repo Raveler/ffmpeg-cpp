@@ -116,6 +116,9 @@ namespace ffmpegcpp
 		StreamData* metaData = new StreamData();
 		metaData->timeBase = tb;
 		metaData->frameRate = fr;
+
+		metaData->type = codecContext->codec->type;
+
 		return metaData;
 	}
 

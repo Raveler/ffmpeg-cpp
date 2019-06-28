@@ -17,7 +17,7 @@ namespace ffmpegcpp
 		muxer->AddOutputStream(output);
 
 		// this one is used to make sure we only allow one frame sink stream to be generated
-		oneInputFrameSink = new OneInputFrameSink(this);
+		oneInputFrameSink = new OneInputFrameSink(this, AVMEDIA_TYPE_VIDEO);
 	}
 
 	VideoEncoder::VideoEncoder(VideoCodec* codec, Muxer* muxer, AVPixelFormat format)

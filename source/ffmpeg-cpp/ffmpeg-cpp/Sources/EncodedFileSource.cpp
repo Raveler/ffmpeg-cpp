@@ -234,6 +234,8 @@ namespace ffmpegcpp
 				metaData->timeBase.den = timeBaseCorrectedByTicksPerFrame.den;
 				metaData->frameRate.den = timeBaseCorrectedByTicksPerFrame.num;
 				metaData->frameRate.num = timeBaseCorrectedByTicksPerFrame.den;
+
+				metaData->type = codecContext->codec->type;
 			}
 
 

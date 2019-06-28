@@ -4,6 +4,7 @@
 #include "std.h"
 #include "Frame Sinks/FrameSink.h"
 #include "Info/ContainerInfo.h"
+#include "Demuxing/StreamData.h"
 
 namespace ffmpegcpp
 {
@@ -24,7 +25,6 @@ namespace ffmpegcpp
 		int GetFramesProcessed();
 
 		virtual void AddStreamInfo(ContainerInfo* info) = 0;
-
 
 	protected:
 

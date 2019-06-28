@@ -8,6 +8,11 @@ namespace ffmpegcpp
 	{
 	public:
 
+		virtual AVMediaType GetMediaType()
+		{
+			return AVMEDIA_TYPE_AUDIO;
+		}
+
 		virtual ~AudioFrameSink() {}
 	};
 }

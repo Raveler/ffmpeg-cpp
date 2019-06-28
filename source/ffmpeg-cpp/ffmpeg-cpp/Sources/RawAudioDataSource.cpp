@@ -51,6 +51,11 @@ namespace ffmpegcpp
 			av_frame_free(&frame);
 			frame = nullptr;
 		}
+		if (metaData != nullptr)
+		{
+			delete metaData;
+			metaData = nullptr;
+		}
 	}
 
 	void RawAudioDataSource::WriteData(void* data, int sampleCount)
@@ -68,9 +73,16 @@ namespace ffmpegcpp
 		int bytesPerSample = av_get_bytes_per_sample((AVSampleFormat)frame->format);
 		memcpy(*frame->data, data, frame->nb_samples * frame->channels * bytesPerSample);
 
+		// fill in the meta data
+		if (metaData == nullptr)
+		{
+			metaData = new StreamData();
+			metaData->type = AVMEDIA_TYPE_AUDIO;
+		}
+
 		// pass on to the sink
 		// we don't have a time_base so we pass NULL and hope that it gets handled later...
-		output->WriteFrame(frame, NULL);
+		output->WriteFrame(frame, metaData);
 	}
 
 	void RawAudioDataSource::Close()

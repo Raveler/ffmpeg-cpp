@@ -150,6 +150,12 @@
     <ClInclude Include="Info\VideoStreamInfo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Frame Sinks\Filter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Frame Sinks\AudioFilter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FFmpegException.cpp">
@@ -252,6 +258,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Demuxing\StreamData.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Frame Sinks\Filter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Frame Sinks\AudioFilter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

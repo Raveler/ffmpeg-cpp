@@ -14,6 +14,7 @@
 #include "Frame Sinks/VideoEncoder.h"
 #include "Frame Sinks/AudioEncoder.h"
 #include "Frame Sinks/VideoFilter.h"
+#include "Frame Sinks/Filter.h"
 
 #include "Codecs/AudioCodec.h"
 

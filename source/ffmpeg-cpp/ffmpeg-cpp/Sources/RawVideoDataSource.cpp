@@ -25,6 +25,7 @@ namespace ffmpegcpp
 		metaData.timeBase.den = framesPerSecond;
 		metaData.frameRate.num = framesPerSecond;
 		metaData.frameRate.den = 1;
+		metaData.type = AVMEDIA_TYPE_VIDEO;
 
 		// create the frame
 		int ret;

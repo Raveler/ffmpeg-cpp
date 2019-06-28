@@ -192,6 +192,8 @@
   <ItemGroup>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Frame Sinks\AudioFilter.h" />
+    <ClInclude Include="Frame Sinks\Filter.h" />
     <ClInclude Include="Frame Sinks\FrameSinkStream.h" />
     <ClInclude Include="Frame Sinks\FrameWriter.h" />
     <ClInclude Include="Frame Sinks\OneInputFrameSink.h" />
@@ -239,8 +241,10 @@
     <ClInclude Include="Muxing\VideoOutputStream.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Frame Sinks\AudioFilter.cpp" />
     <ClCompile Include="Demuxing\InputStream.cpp" />
     <ClCompile Include="Demuxing\AudioInputStream.cpp" />
+    <ClCompile Include="Frame Sinks\Filter.cpp" />
     <ClCompile Include="FrameContainer.cpp" />
     <ClCompile Include="Frame Sinks\FrameSinkStream.cpp" />
     <ClCompile Include="Frame Sinks\OneInputFrameSink.cpp" />

@@ -30,9 +30,10 @@ namespace ffmpegcpp
 		void CleanUp();
 
 		AVPixelFormat sourcePixelFormat;
-		StreamData metaData;
 
 		FrameSinkStream* output;
+
+		StreamData metaData;
 
 		AVFrame* frame = nullptr;
 		struct SwsContext* swsContext = nullptr;
