@@ -75,11 +75,6 @@ namespace ffmpegcpp
 			delete codec;
 			codec = nullptr;
 		}
-		if (output != nullptr)
-		{
-			delete output;
-			output = nullptr;
-		}
 		if (oneInputFrameSink != nullptr)
 		{
 			delete oneInputFrameSink;

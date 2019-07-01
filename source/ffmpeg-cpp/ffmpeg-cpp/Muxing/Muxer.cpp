@@ -36,18 +36,19 @@ namespace ffmpegcpp
 
 	void Muxer::CleanUp()
 	{
-		if (containerContext != nullptr)
-		{
-			// if some of the output streams weren't primed, we cannot finish this process
-			if (!IsPrimed())
-			{
-				throw FFmpegException("You cannot close a muxer when one of the streams wasn't primed. You need to make sure all streams are primed before closing the muxer.");
-			}
+		// see if we were primed - we will use this info below
+		bool wasPrimed = IsPrimed();
 
-			/* Write the trailer, if any. The trailer must be written before you
-			* close the CodecContexts open when you wrote the header; otherwise
-			* av_write_trailer() may try to use memory that was freed on
-			* av_codec_close(). */
+		// clean up all the output streams that were added to this muxer.
+		for (int i = 0; i < outputStreams.size(); ++i)
+		{
+			delete outputStreams[i];
+		}
+		outputStreams.clear();
+
+		// clean up the container context - this will also finalize the content of the container!
+		if (containerContext != nullptr && wasPrimed)
+		{
 			// If we don't ALWAYS do this, we leak memory!
 			av_write_trailer(containerContext);
 
@@ -58,10 +59,6 @@ namespace ffmpegcpp
 
 			avformat_free_context(containerContext);
 			containerContext = nullptr;
-
-			// when the container is closed, the related output streams are closed as well,
-			// so we clean those up.
-			outputStreams.clear();
 		}
 
 		// clean up the queue
@@ -206,6 +203,12 @@ namespace ffmpegcpp
 
 	void Muxer::Close()
 	{
+		// if some of the output streams weren't primed, we cannot finish this process
+		if (!IsPrimed())
+		{
+			throw FFmpegException("You cannot close a muxer when one of the streams wasn't primed. You need to make sure all streams are primed before closing the muxer.");
+		}
+
 		// Make sure we drain all the output streams before we write the first packet.
 		// We must be sure to do this because in an extreme case, one entire stream
 		// might be queueing all its packets before we are opened, so it might not
