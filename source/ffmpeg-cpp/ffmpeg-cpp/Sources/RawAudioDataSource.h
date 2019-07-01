@@ -12,8 +12,8 @@ namespace ffmpegcpp
 
 	public:
 
-		RawAudioDataSource(AVSampleFormat sampleFormat, int sampleRate, int channels, AudioFrameSink* output);
-		RawAudioDataSource(AVSampleFormat sampleFormat, int sampleRate, int channels, int64_t channelLayout, AudioFrameSink* output);
+		RawAudioDataSource(AVSampleFormat sampleFormat, int sampleRate, int channels, FrameSink* output);
+		RawAudioDataSource(AVSampleFormat sampleFormat, int sampleRate, int channels, int64_t channelLayout, FrameSink* output);
 		virtual ~RawAudioDataSource();
 
 		void WriteData(void* data, int sampleCount);

@@ -23,13 +23,13 @@ int main()
 		VideoEncoder* videoEncoder = new VideoEncoder(videoCodec, muxer);
 
 		// Create a video filter and do some funny stuff with the video data.
-		VideoFilter* filter = new VideoFilter("blend=all_mode=difference", videoEncoder);
+		Filter* filter = new Filter("blend=all_mode=difference", videoEncoder);
 		//VideoFilter* filter = new VideoFilter("overlay=0:0", videoEncoder);
 		//VideoFilter* filter = new VideoFilter("scale=100:800", videoEncoder);
 
 		// Create a video filter that will put a vignette on one of the video's,
 		// so that our difference filter van detect this.
-		VideoFilter* vignetteFilter = new VideoFilter("vignette", filter);
+		Filter* vignetteFilter = new Filter("vignette", filter);
 
 		// Load both video's
 		Demuxer* videoContainer1 = new Demuxer("samples/carphone.h264");

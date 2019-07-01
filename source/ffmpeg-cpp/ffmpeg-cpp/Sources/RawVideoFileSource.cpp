@@ -6,7 +6,7 @@ using namespace std;
 
 namespace ffmpegcpp
 {
-	RawVideoFileSource::RawVideoFileSource(const char* fileName, VideoFrameSink* frameSink)
+	RawVideoFileSource::RawVideoFileSource(const char* fileName, FrameSink* frameSink)
 	{
 
 		// create the demuxer - it can handle figuring out the video type on its own apparently

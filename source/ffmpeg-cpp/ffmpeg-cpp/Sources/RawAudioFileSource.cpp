@@ -6,7 +6,7 @@ using namespace std;
 
 namespace ffmpegcpp
 {
-	RawAudioFileSource::RawAudioFileSource(const char* fileName, const char* inputFormat, int sampleRate, int channels, AudioFrameSink* frameSink)
+	RawAudioFileSource::RawAudioFileSource(const char* fileName, const char* inputFormat, int sampleRate, int channels, FrameSink* frameSink)
 	{
 
 		// try to deduce the input format from the input format name

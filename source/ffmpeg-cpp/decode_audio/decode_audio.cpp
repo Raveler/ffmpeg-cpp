@@ -21,7 +21,7 @@ public:
 		return stream;
 	}
 
-	virtual void WriteFrame(int streamIndex, AVFrame* frame, AVRational* timeBase)
+	virtual void WriteFrame(int streamIndex, AVFrame* frame, StreamData* streamData)
 	{
 		// Just write out the samples channel by channel to a file.
 		int data_size = av_get_bytes_per_sample((AVSampleFormat)frame->format);

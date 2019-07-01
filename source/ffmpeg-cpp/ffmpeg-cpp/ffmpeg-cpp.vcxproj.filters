@@ -51,9 +51,6 @@
     <ClInclude Include="Codecs\Codec.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Frame Sinks\VideoFilter.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Codecs\PNGCodec.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -180,9 +177,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Codecs\Codec.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Frame Sinks\VideoFilter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Codecs\PNGCodec.cpp">

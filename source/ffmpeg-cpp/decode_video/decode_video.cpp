@@ -20,7 +20,7 @@ public:
 		return stream;
 	}
 
-	virtual void WriteFrame(int streamIndex, AVFrame* frame, AVRational* timeBase)
+	virtual void WriteFrame(int streamIndex, AVFrame* frame, StreamData* streamData)
 	{
 		++frameNumber;
 		printf("saving frame %3d\n", frameNumber);

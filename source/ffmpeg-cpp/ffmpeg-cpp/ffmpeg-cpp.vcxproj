@@ -213,7 +213,6 @@
     <ClInclude Include="Muxing\AudioOutputStream.h" />
     <ClInclude Include="Codecs\AudioCodec.h" />
     <ClInclude Include="ffmpegcpp.h" />
-    <ClInclude Include="Frame Sinks\VideoFilter.h" />
     <ClInclude Include="Codecs\JPGCodec.h" />
     <ClInclude Include="OpenCodec.h" />
     <ClInclude Include="Codecs\PNGCodec.h" />
@@ -256,7 +255,6 @@
     <ClCompile Include="Frame Sinks\AudioEncoder.cpp" />
     <ClCompile Include="Muxing\AudioOutputStream.cpp" />
     <ClCompile Include="Codecs\AudioCodec.cpp" />
-    <ClCompile Include="Frame Sinks\VideoFilter.cpp" />
     <ClCompile Include="Codecs\JPGCodec.cpp" />
     <ClCompile Include="OpenCodec.cpp" />
     <ClCompile Include="Codecs\PNGCodec.cpp" />

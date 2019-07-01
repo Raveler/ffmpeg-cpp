@@ -8,7 +8,7 @@ class GeneratedAudioSource : public InputSource
 {
 public:
 
-	GeneratedAudioSource(AudioFrameSink* frameSink);
+	GeneratedAudioSource(FrameSink* frameSink);
 	~GeneratedAudioSource();
 
 	virtual void PreparePipeline();

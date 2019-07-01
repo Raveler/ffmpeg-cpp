@@ -1,6 +1,6 @@
 #include "GeneratedVideoSource.h"
 
-GeneratedVideoSource::GeneratedVideoSource(int width, int height, VideoFrameSink* frameSink)
+GeneratedVideoSource::GeneratedVideoSource(int width, int height, FrameSink* frameSink)
 {
 	// generate a raw video source that will convert the raw format to any other format and pass it on to the encoder
 	// or any other sink (might be a filter as well).

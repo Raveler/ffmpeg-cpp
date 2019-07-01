@@ -8,7 +8,7 @@ class GeneratedVideoSource : public InputSource
 {
 public:
 
-	GeneratedVideoSource(int width, int height, VideoFrameSink* frameSink);
+	GeneratedVideoSource(int width, int height, FrameSink* frameSink);
 	~GeneratedVideoSource();
 
 	virtual void PreparePipeline();

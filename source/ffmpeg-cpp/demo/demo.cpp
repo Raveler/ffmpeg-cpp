@@ -174,16 +174,16 @@ void PlayDemo(int argc, char** argv)
 			* CONFIGURE VIDEO FILTER IF IT IS USED
 		*/
 
-		VideoFrameSink* videoFrameSink = videoEncoder;
+		FrameSink* videoFrameSink = videoEncoder;
 
 		// If a video filter was specified, we inject it into the pipeline here.
 		// Instead of feeding the video source directly to the encoder, we feed it to
 		// the video filter instead, which will pass it on to the encoder.
-		VideoFilter* videoFilter = nullptr;
+		Filter* videoFilter = nullptr;
 		if (videoFilterConfig != NULL && videoEncoder != nullptr)
 		{
 			printf("Applying filter %s to video...\n", videoFilterConfig);
-			videoFilter = new VideoFilter(videoFilterConfig, videoEncoder);
+			videoFilter = new Filter(videoFilterConfig, videoEncoder);
 			videoFrameSink = videoFilter; // used to feed the source below
 		}
 

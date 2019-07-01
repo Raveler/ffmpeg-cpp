@@ -1,6 +1,6 @@
 #include "GeneratedAudioSource.h"
 
-GeneratedAudioSource::GeneratedAudioSource(AudioFrameSink* frameSink)
+GeneratedAudioSource::GeneratedAudioSource(FrameSink* frameSink)
 {
 	this->sampleRate = 44100;
 	this->channels = 2;
