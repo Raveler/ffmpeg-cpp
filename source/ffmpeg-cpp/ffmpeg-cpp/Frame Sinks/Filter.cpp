@@ -147,10 +147,12 @@ namespace ffmpegcpp
 		// this is an audio input stream
 		else if (metaData->type == AVMEDIA_TYPE_AUDIO)
 		{
+			uint64_t channelLayout = frame->channel_layout;
+			if (channelLayout == 0) channelLayout = av_get_default_channel_layout(frame->channels);
 			snprintf(args, argsLength,
 				"time_base=%d/%d:sample_rate=%d:sample_fmt=%s:channel_layout=0x%d",
 				metaData->timeBase.num, metaData->timeBase.den, frame->sample_rate,
-				av_get_sample_fmt_name((AVSampleFormat)frame->format), frame->channel_layout);
+				av_get_sample_fmt_name((AVSampleFormat)frame->format), channelLayout);
 		}
 
 		// not supported
