@@ -34,7 +34,7 @@ VideoCodec* codec = new VideoCodec(AV_CODEC_ID_MPEG2VIDEO);
 VideoEncoder* encoder = new VideoEncoder(codec, muxer);
 
 // Create a video filter and do some funny stuff with the video data.
-VideoFilter* filter = new VideoFilter("scale=640:150,transpose=cclock,vignette", encoder);
+Filter* filter = new Filter("scale=640:150,transpose=cclock,vignette", encoder);
 
 // Load a container. Pick the best video stream container in the container
 // And send it to the filter.
