@@ -153,6 +153,9 @@
     <ClInclude Include="Frame Sinks\AudioFilter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Info\AudioStreamInfo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FFmpegException.cpp">

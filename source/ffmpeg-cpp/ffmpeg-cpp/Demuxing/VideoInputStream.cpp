@@ -22,7 +22,7 @@ namespace ffmpegcpp
 	{
 		VideoStreamInfo info;
 
-		info.id = stream->id - 1; // starts counting from 1!
+		info.id = stream->id; // the layout of the id's depends on the container format - it doesn't always start from 0 or 1!
 
 		AVRational overrideFrameRate;
 		overrideFrameRate.num = 0;

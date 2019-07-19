@@ -184,7 +184,7 @@ namespace ffmpegcpp
 
 		// The stream doesn't exist but we already processed all our frames, so it makes no sense
 		// to add it anymore.
-		if (IsDone()) throw new FFmpegException("Demuxer already fully processed... you cannot use it anymore.");
+		if (IsDone()) return nullptr;
 
 		AVStream* stream = containerContext->streams[streamIndex];
 		AVCodec* codec = CodecDeducer::DeduceDecoder(stream->codecpar->codec_id);
@@ -201,6 +201,19 @@ namespace ffmpegcpp
 
 		// return the created stream
 		return inputStreams[streamIndex];
+	}
+
+	InputStream* Demuxer::GetInputStreamById(int streamId)
+	{
+		// map the stream id to an index by going over all the streams and comparing the id
+		for (int i = 0; i < containerContext->nb_streams; ++i)
+		{
+			AVStream* stream = containerContext->streams[i];
+			if (stream->id == streamId) return GetInputStream(i);
+		}
+
+		// no match found
+		return nullptr;
 	}
 
 	void Demuxer::PreparePipeline()
@@ -323,6 +336,6 @@ namespace ffmpegcpp
 		}
 
 		// Return the right stream's frame count.
-		return GetInputStream(streamId)->GetFramesProcessed();
+		return GetInputStreamById(streamId)->GetFramesProcessed();
 	}
 }

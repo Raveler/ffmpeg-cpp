@@ -2,6 +2,7 @@
 
 #include "ffmpeg.h"
 #include "VideoStreamInfo.h"
+#include "AudioStreamInfo.h"
 #include "std.h"
 
 namespace ffmpegcpp
@@ -15,7 +16,7 @@ namespace ffmpegcpp
 		const AVInputFormat* format;
 
 		std::vector<VideoStreamInfo> videoStreams;
-		// TODO: audio streams!
+		std::vector<AudioStreamInfo> audioStreams;
 	};
 
 
