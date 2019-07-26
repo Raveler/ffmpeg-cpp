@@ -1,4 +1,4 @@
-#include "OneInputFrameSink.h"
+#include "Frame Sinks/OneInputFrameSink.h"
 #include "FFmpegException.h"
 
 using namespace std;

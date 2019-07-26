@@ -1,42 +1,41 @@
 
+
+# Get all header files 
 set(_include_dir "${PROJECT_SOURCE_DIR}/include/ffmpeg-cpp")
 file(GLOB_RECURSE _headers
 	"${_include_dir}/*.h"
 )
 
 # Get all of the sources from subdirectories
-file(GLOB _src_codecs
-	"${CMAKE_CURRENT_SOURCE_DIR}/Codecs/*.cpp"
-)
-file(GLOB _src_demux
-	"${CMAKE_CURRENT_SOURCE_DIR}/Demuxing/*.cpp"
-)
-file(GLOB _src_mux
-	"${CMAKE_CURRENT_SOURCE_DIR}/Muxing/*.cpp"
-)
-file(GLOB _src_framesinks
-	"${CMAKE_CURRENT_SOURCE_DIR}/Frame Sinks/*.cpp"
-)
-file(GLOB _src_source
-	"${CMAKE_CURRENT_SOURCE_DIR}/Sources/*.cpp"
-)
+set(_src "")
+include("${CMAKE_CURRENT_LIST_DIR}/sources.cmake")
 
-list(APPEND _sources ${_src_source} ${_src_gramesinks} ${_src_mux} ${_src_demux} ${_src_codecs})
+# Group every source file by folder structure
+foreach(_source IN ITEMS ${_src})
+    get_filename_component(_source_path "${_source}" PATH)
+	if(IS_ABSOLUTE ${_source})
+		file(RELATIVE_PATH _source_path "${CMAKE_CURRENT_SOURCE_DIR}" "${_source_path}")
+    endif()
+	string(REPLACE "/" "\\" _group_path "${_source_path}")
+    source_group("${_group_path}" FILES "${_source}")
+endforeach()
+
 
 add_library(ffmpeg-cpp STATIC
 	${_headers}
-	${_sources}
+	${_src}
 )
 
 target_include_directories(ffmpeg-cpp
 	PUBLIC
-	<BUILD_INTERFACE:${_include_dir}>
-	<INSTALL_INTERFACE:"include/ffmpeg-cpp">
-	${FFMPEG_INCLUDE_DIRS}
-	PRIVATE ${_include_dir}
+		$<BUILD_INTERFACE:${_include_dir}>
+		$<INSTALL_INTERFACE:"include/ffmpeg-cpp">
+		${FFMPEG_INCLUDE_DIRS}
+	PRIVATE
+		${_include_dir}
 )
 
 target_link_libraries(ffmpeg-cpp
 	PUBLIC
-	${FFMPEG_LIBRARIES}
+		${FFMPEG_LIBRARIES}
 )

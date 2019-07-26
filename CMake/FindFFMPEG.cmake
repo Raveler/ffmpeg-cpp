@@ -8,9 +8,10 @@ macro(_ffmpeg_find varname component header)
 			"${component}/${header}"
 			"lib${component}/${header}"
 		HINTS
-			"${FFMPEG_DIR}"
-			"$ENV{FFMPEG_DIR}"
-			"$ENV{ProgramFiles}"
+			"${FFMPEG_DIR}/include"
+			"$ENV{FFMPEG_DIR}/include"
+			"$ENV{ProgramFiles}/ffmpeg/include"
+			"$ENV{ProgramFiles}/FFmpeg/include"
 	)
 	
 	if("${${varname}_INCLUDE_DIR}" STREQUAL "${varname}_INCLUDE_DIR-NOTFOUND")
@@ -23,9 +24,10 @@ macro(_ffmpeg_find varname component header)
 			"${component}"
 			"lib${component}"
 		HINTS
-			"${FFMPEG_DIR}"
-			"$ENV{FFMPEG_DIR}"
-			"$ENV{ProgramFiles}"
+			"${FFMPEG_DIR}/lib"
+			"$ENV{FFMPEG_DIR}/lib"
+			"$ENV{ProgramFiles}/ffmpeg/lib"
+			"$ENV{ProgramFiles}/FFmpeg/lib"
 	)
 	set(${varname}_FOUND ON)
 	
@@ -33,9 +35,10 @@ macro(_ffmpeg_find varname component header)
 		message(WARNING "${component} not found!")
 		set(${varname}_FOUND OFF)
 		set(${varname}_LIBRARY "")
+	else()
+		message(STATUS "Found ${component} - ${${varname}_LIBRARY}")
 	endif()
 	
-	message(STATUS "${component} ${${varname}_LIBRARY}")
 	
 endmacro(_ffmpeg_find)
 

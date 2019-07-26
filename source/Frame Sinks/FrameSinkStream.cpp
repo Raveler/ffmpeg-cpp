@@ -1,4 +1,4 @@
-#include "FrameSinkStream.h"
+#include "Frame Sinks/FrameSinkStream.h"
 #include "FFmpegException.h"
 
 namespace ffmpegcpp

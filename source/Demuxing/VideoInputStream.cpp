@@ -1,4 +1,4 @@
-#include "VideoInputStream.h"
+#include "Demuxing/VideoInputStream.h"
 #include "FFmpegException.h"
 #include "CodecDeducer.h"
 

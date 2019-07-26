@@ -1,6 +1,6 @@
-#include "Muxer.h"
+#include "Muxing/Muxer.h"
 #include "FFmpegException.h"
-#include "OutputStream.h"
+#include "Muxing/OutputStream.h"
 
 #include <string>
 

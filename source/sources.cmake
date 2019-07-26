@@ -1,0 +1,42 @@
+set(_src 
+	"AudioFormatConverter.cpp"
+	"CodecDeducer.cpp"
+	"FFmpegException.cpp"
+	"FrameContainer.cpp"
+	"OpenCodec.cpp"
+	"VideoFormatConverter.cpp"
+
+	"Codecs/AudioCodec.cpp"
+	"Codecs/Codec.cpp"
+	"Codecs/H264NVEncCodec.cpp"
+	"Codecs/H265NVEncCodec.cpp"
+	"Codecs/JPGCodec.cpp"
+	"Codecs/PNGCodec.cpp"
+	"Codecs/VideoCodec.cpp"
+	"Codecs/VP9Codec.cpp"
+
+	"Demuxing/AudioInputStream.cpp"
+	"Demuxing/InputStream.cpp"
+	"Demuxing/StreamData.cpp"
+	"Demuxing/VideoInputStream.cpp"
+
+	"Muxing/AudioOutputStream.cpp"
+	"Muxing/Muxer.cpp"
+	"Muxing/OutputStream.cpp"
+	"Muxing/VideoOutputStream.cpp"
+
+	"Frame Sinks/AudioEncoder.cpp"
+	"Frame Sinks/AudioFilter.cpp"
+	"Frame Sinks/Filter.cpp"
+	"Frame Sinks/FrameSinkStream.cpp"
+	"Frame Sinks/OneInputFrameSink.cpp"
+	"Frame Sinks/VideoEncoder.cpp"
+	"Frame Sinks/VideoFilterInput.cpp"
+
+	"Sources/Demuxer.cpp"
+	"Sources/EncodedFileSource.cpp"
+	"Sources/RawAudioDataSource.cpp"
+	"Sources/RawAudioFileSource.cpp"
+	"Sources/RawVideoDataSource.cpp"
+	"Sources/RawVideoFileSource.cpp"
+)

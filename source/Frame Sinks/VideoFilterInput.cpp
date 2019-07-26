@@ -1,4 +1,4 @@
-#include "VideoFilterInput.h"
+#include "Frame Sinks/VideoFilterInput.h"
 #include "FFmpegException.h"
 
 namespace ffmpegcpp

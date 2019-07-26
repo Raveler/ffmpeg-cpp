@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.6)
+cmake_minimum_required(VERSION 3.8)
 
 # Don't configure in project root
 if("${CMAKE_CURRENT_SOURCE_DIR}" STREQUAL "${CMAKE_CURRENT_BINARY_DIR}")
@@ -17,8 +17,7 @@ endif()
 find_package(FFMPEG REQUIRED)
 
 # Orginize targets by folder structure
-set_property(GLOBAL USE_FOLDERS ON)
-
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 add_subdirectory("source")
 #add_subdirectory("examples")
