@@ -19,5 +19,8 @@ find_package(FFMPEG REQUIRED)
 # Orginize targets by folder structure
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
+# Set C++ standard
+set (CMAKE_CXX_STANDARD 11)
+
 add_subdirectory("source")
-#add_subdirectory("examples")
+add_subdirectory("examples")
