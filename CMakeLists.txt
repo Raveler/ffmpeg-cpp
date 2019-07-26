@@ -21,4 +21,4 @@ set_property(GLOBAL USE_FOLDERS ON)
 
 
 add_subdirectory("source")
-add_subdirectory("examples")
+#add_subdirectory("examples")

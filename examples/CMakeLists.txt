@@ -1,5 +1,5 @@
 # Viariable to set examples output directory
-set(BIN_DIR "${CMAKE_CURRENT_BINARY_DIR}")
+set(EXAMPLES_BIN_DIR "${CMAKE_CURRENT_BINARY_DIR}")
 
 
 add_subdirectory("decode_audio")

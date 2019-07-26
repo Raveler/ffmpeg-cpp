@@ -32,5 +32,11 @@ target_include_directories(ffmpeg-cpp
 	PUBLIC
 	<BUILD_INTERFACE:${_include_dir}>
 	<INSTALL_INTERFACE:"include/ffmpeg-cpp">
+	${FFMPEG_INCLUDE_DIRS}
 	PRIVATE ${_include_dir}
+)
+
+target_link_libraries(ffmpeg-cpp
+	PUBLIC
+	${FFMPEG_LIBRARIES}
 )
