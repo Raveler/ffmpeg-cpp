@@ -1,28 +1,8 @@
-﻿################################################################################
-# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
-################################################################################
+﻿
+/build
+!/build/.gitkeep
 
-/source/ffmpeg-cpp/.vs/ffmpeg-cpp/v15
-/source/ffmpeg-cpp/ffmpeg-cpp/obj
-/source/ffmpeg-cpp/demo/obj
-/source/ffmpeg-cpp/x64/Debug
-/source/ffmpeg-cpp/obj/Debug
-/source/ffmpeg-cpp/demo/samples/out.mp4
-/ffmpeg/include
-/ffmpeg/lib
-/ffmpeg/bin
-/bin
-/lib
-
-/source/ffmpeg-cpp/decode_audio/obj
-/source/ffmpeg-cpp/encode_audio/obj
-/source/ffmpeg-cpp/encode_video/obj
-/source/ffmpeg-cpp/decode_video/obj
-/source/ffmpeg-cpp/filtering_video/obj
-/include
-
-/source/ffmpeg-cpp/remuxing/obj
-/source/ffmpeg-cpp/difference/obj/x64/Debug
-/source/ffmpeg-cpp/difference/obj
-/source/ffmpeg-cpp/print_info/obj/x64
-/source/ffmpeg-cpp/filtering_audio/obj/x64
+/vendor
+!/vendor/ffmpeg/download.ps1
+!/vendor/ffmpeg/readme.*
+!/vendor/**/.gitkeep
