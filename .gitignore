@@ -1,8 +1,8 @@
 ﻿
-build/**/*.*
+build/**/*
 !build/.gitkeep
 
-vendor/**/*.*
+vendor/**/*
 !vendor/ffmpeg/download.ps1
 !vendor/ffmpeg/readme.*
 !vendor/**/.gitkeep
