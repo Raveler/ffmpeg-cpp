@@ -45,16 +45,20 @@ endmacro(_ffmpeg_find)
 
 _ffmpeg_find(FFMPEG_AVFORMAT avformat avformat.h)
 _ffmpeg_find(FFMPEG_AVDEVICE avdevice avdevice.h)
-_ffmpeg_find(FFMPEG_AVCODEC  avcodec  avcodec.h)
-_ffmpeg_find(FFMPEG_AVUTIL   avutil   avutil.h)
-_ffmpeg_find(FFMPEG_SWSCALE  swscale  swscale.h)
-_ffmpeg_find(FFMPEG_POSTPROC  postproc  postprocess.h)
+_ffmpeg_find(FFMPEG_AVCODEC  avcodec avcodec.h)
+_ffmpeg_find(FFMPEG_AVUTIL   avutil  avutil.h)
+_ffmpeg_find(FFMPEG_AVFILTER  avfilter avfilter.h)
+_ffmpeg_find(FFMPEG_SWRESAMPLE  swresample swresample.h)
+_ffmpeg_find(FFMPEG_SWSCALE  swscale swscale.h)
+_ffmpeg_find(FFMPEG_POSTPROC  postproc postprocess.h)
 
 list(APPEND FFMPEG_LIBRARIES
 	${FFMPEG_AVFORMAT_LIBRARY}
 	${FFMPEG_AVDEVICE_LIBRARY}
 	${FFMPEG_AVCODEC_LIBRARY}
 	${FFMPEG_AVUTIL_LIBRARY}
+	${FFMPEG_AVFILTER_LIBRARY}
+	${FFMPEG_SWRESAMPLE_LIBRARY}
 	${FFMPEG_SWSCALE_LIBRARY}
 	${FFMPEG_POSTPROC_LIBRARY}
 )
@@ -64,6 +68,8 @@ list(APPEND FFMPEG_INCLUDE_DIRS
 	${FFMPEG_AVDEVICE_INCLUDE_DIR}
 	${FFMPEG_AVCODEC_INCLUDE_DIR}
 	${FFMPEG_AVUTIL_INCLUDE_DIR}
+	${FFMPEG_AVFILTER_INCLUDE_DIR}
+	${FFMPEG_SWRESAMPLE_INCLUDE_DIR}
 	${FFMPEG_SWSCALE_INCLUDE_DIR}
 	${FFMPEG_POSTPROC_INCLUDE_DIR}
 )
