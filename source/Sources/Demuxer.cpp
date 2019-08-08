@@ -82,47 +82,6 @@ namespace ffmpegcpp
 		}
 	}
 
-	/*vector<StreamInfo> Demuxer::GetAudioStreamInfo()
-	{
-		return GetStreamInfo(AVMEDIA_TYPE_AUDIO);
-	}
-
-	vector<StreamInfo> Demuxer::GetVideoStreamInfo()
-	{
-		return GetStreamInfo(AVMEDIA_TYPE_VIDEO);
-	}
-
-	vector<StreamInfo> Demuxer::GetStreamInfo(AVMediaType mediaType)
-	{
-		vector<StreamInfo> streamInfo;
-		for (int i = 0; i < containerContext->nb_streams; ++i)
-		{
-			AVStream* stream = containerContext->streams[i];
-
-			// find decoder for the stream
-			AVCodec* codec = CodecDeducer::DeduceDecoder(stream->codecpar->codec_id);
-			if (!codec)
-			{
-				throw FFmpegException(string("Failed to deduce codec for stream ") + std::to_string(i) + " in container");
-			}
-
-			if (codec->type == mediaType)
-			{
-				streamInfo.push_back(CreateInfo(i, stream, codec));
-			}
-		}
-		return streamInfo;
-	}
-
-	StreamInfo Demuxer::CreateInfo(int streamIndex, AVStream* stream, AVCodec* codec)
-	{
-		StreamInfo info;
-		info.streamId = streamIndex;
-		info.stream = stream;
-		info.codec = codec;
-		return info;
-	}*/
-
 	void Demuxer::DecodeBestAudioStream(FrameSink* frameSink)
 	{
 		int ret = av_find_best_stream(containerContext, AVMEDIA_TYPE_AUDIO, -1, -1, NULL, 0);
@@ -337,5 +296,10 @@ namespace ffmpegcpp
 
 		// Return the right stream's frame count.
 		return GetInputStreamById(streamId)->GetFramesProcessed();
+	}
+
+	const char* Demuxer::GetFileName()
+	{
+		return fileName;
 	}
 }

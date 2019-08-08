@@ -23,6 +23,9 @@ namespace ffmpegcpp {
 		
 		bool IsPrimed();
 
+		AVCodec* GetDefaultVideoFormat();
+		AVCodec* GetDefaultAudioFormat();
+
 
 	private:
 
