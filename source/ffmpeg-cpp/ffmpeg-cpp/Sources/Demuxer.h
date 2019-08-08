@@ -32,6 +32,8 @@ namespace ffmpegcpp
 		ContainerInfo GetInfo();
 		int GetFrameCount(int streamId);
 
+		const char* GetFileName();
+
 	private:
 
 		bool done = false;

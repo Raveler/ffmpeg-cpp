@@ -1,6 +1,7 @@
 #include "Muxer.h"
 #include "FFmpegException.h"
 #include "OutputStream.h"
+#include "CodecDeducer.h"
 
 #include <string>
 
@@ -68,6 +69,16 @@ namespace ffmpegcpp
 			av_packet_free(&tmp_pkt);
 		}
 		packetQueue.clear();
+	}
+
+	AVCodec* Muxer::GetDefaultVideoFormat()
+	{
+		return CodecDeducer::DeduceEncoder(containerFormat->video_codec);
+	}
+
+	AVCodec* Muxer::GetDefaultAudioFormat()
+	{
+		return CodecDeducer::DeduceEncoder(containerFormat->audio_codec);
 	}
 
 	void Muxer::AddOutputStream(OutputStream* outputStream)
