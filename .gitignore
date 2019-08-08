@@ -26,3 +26,5 @@
 /source/ffmpeg-cpp/difference/obj
 /source/ffmpeg-cpp/print_info/obj/x64
 /source/ffmpeg-cpp/filtering_audio/obj/x64
+/source/ffmpeg-cpp/simple_interface/x64/Debug
+/source/ffmpeg-cpp/simple_interface_demo/obj/x64
