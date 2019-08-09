@@ -18,51 +18,59 @@ using namespace std;
 using namespace ffmpegcpp;
 
 
+template<class CodecType, class FrameSinkType>
+struct StreamContext
+{
+	CodecType* codec = nullptr;
+
+	string sourceFileName;
+	Demuxer* demuxer = nullptr;
+
+	bool hasFilter = false;
+	string filterString;
+	Filter* filter = nullptr;
+
+	FrameSinkType* encoder = nullptr;
+
+	void CleanUp()
+	{
+		if (encoder != nullptr) delete encoder;
+		if (filter != nullptr) delete filter;
+		if (codec != nullptr) delete codec;
+		// the demuxer can be shared amongst different contexts, so we don't delete them here
+	}
+};
+
 struct Context
 {
+	string outputFileName;
 	Muxer* muxer = nullptr;
 
-	VideoCodec* videoCodec = nullptr;
-	AudioCodec* audioCodec = nullptr;
-
-	Demuxer* videoDemuxer = nullptr;
-	Demuxer* audioDemuxer = nullptr;
-
-	const char* videoFilterString = nullptr;
-	const char* audioFilterString = nullptr;
-
-	Filter* videoFilter = nullptr;
-	Filter* audioFilter = nullptr;
-
-	VideoFrameSink* videoEncoder = nullptr;
-	AudioFrameSink* audioEncoder = nullptr;
-
-	RawVideoDataSource* source = nullptr;
+	StreamContext<VideoCodec, VideoFrameSink> videoContext;
+	StreamContext<AudioCodec, AudioFrameSink> audioContext;
 
 	vector<Demuxer*> uniqueDemuxers;
 
 	bool errored = false;
-	string error;
+	char* error;
 };
 
 void SetError(Context* ctx, string error)
 {
 	ctx->errored = true;
-	ctx->error = string(error);
+	string err = string(error);
+	ctx->error = new char[err.length() + 1];
+	strcpy(ctx->error, err.c_str());
 }
 
 void CleanUp(Context* ctx)
 {
 	if (ctx->muxer != nullptr) delete ctx->muxer;
 
-	if (ctx->videoEncoder != nullptr) delete ctx->videoEncoder;
-	if (ctx->audioEncoder != nullptr) delete ctx->audioEncoder;
+	ctx->videoContext.CleanUp();
+	ctx->audioContext.CleanUp();
 
-	if (ctx->videoFilter != nullptr) delete ctx->videoFilter;
-	if (ctx->audioFilter != nullptr) delete ctx->audioFilter;
-
-	if (ctx->videoCodec != nullptr) delete ctx->videoCodec;
-	if (ctx->audioCodec != nullptr) delete ctx->audioCodec;
+	if (ctx->error != nullptr) delete ctx->error;
 
 	for (int i = 0; i < ctx->uniqueDemuxers.size(); ++i)
 	{
@@ -74,8 +82,10 @@ void CleanUp(Context* ctx)
 
 Demuxer* GetExistingDemuxer(Context* ctx, const char* fileName)
 {
-	if (ctx->videoDemuxer != nullptr && string(ctx->videoDemuxer->GetFileName()) == string(fileName)) return ctx->videoDemuxer;
-	if (ctx->audioDemuxer != nullptr && string(ctx->audioDemuxer->GetFileName()) == string(fileName)) return ctx->audioDemuxer;
+	for (int i = 0; i < ctx->uniqueDemuxers.size(); ++i)
+	{
+		if (string(ctx->uniqueDemuxers[i]->GetFileName()) == string(fileName)) return ctx->uniqueDemuxers[i];
+	}
 	return nullptr;
 }
 
@@ -85,12 +95,13 @@ void* ffmpegCppCreate(const char* outputFileName)
 	try
 	{
 		// create the output muxer but don't add any streams yet
-		ctx->muxer = new Muxer(outputFileName);
+		ctx->outputFileName = string(outputFileName);
+		ctx->muxer = new Muxer(ctx->outputFileName.c_str());
 		return ctx;
 	}
 	catch (FFmpegException e)
 	{
-		SetError(ctx, string("Failed to create output file " + string(outputFileName) + ": " + string(e.what())));
+		SetError(ctx, string("Failed to create output file " + ctx->outputFileName + ": " + string(e.what())));
 		return nullptr;
 	}
 }
@@ -101,16 +112,17 @@ void ffmpegCppAddVideoStream(void* handle, const char* videoFileName)
 	try
 	{
 		// create the demuxer or re-use the previous one
-		ctx->videoDemuxer = GetExistingDemuxer(ctx, videoFileName);
-		if (ctx->videoDemuxer == nullptr)
+		ctx->videoContext.sourceFileName = videoFileName;
+		ctx->videoContext.demuxer = GetExistingDemuxer(ctx, videoFileName);
+		if (ctx->videoContext.demuxer == nullptr)
 		{
-			ctx->videoDemuxer = new Demuxer(videoFileName);
-			ctx->uniqueDemuxers.push_back(ctx->videoDemuxer);
+			ctx->videoContext.demuxer = new Demuxer(ctx->videoContext.sourceFileName.c_str());
+			ctx->uniqueDemuxers.push_back(ctx->videoContext.demuxer);
 		}
 
 		// create the encoder
-		ctx->videoCodec = new VideoCodec(ctx->muxer->GetDefaultVideoFormat()->id);
-		ctx->videoEncoder = new VideoEncoder(ctx->videoCodec, ctx->muxer);
+		ctx->videoContext.codec = new VideoCodec(ctx->muxer->GetDefaultVideoFormat()->id);
+		ctx->videoContext.encoder = new VideoEncoder(ctx->videoContext.codec, ctx->muxer);
 	}
 	catch (FFmpegException e)
 	{
@@ -124,16 +136,17 @@ void ffmpegCppAddAudioStream(void* handle, const char* audioFileName)
 	try
 	{
 		// create the demuxer or re-use the previous one
-		ctx->audioDemuxer = GetExistingDemuxer(ctx, audioFileName);
-		if (ctx->audioDemuxer == nullptr)
+		ctx->audioContext.sourceFileName = audioFileName;
+		ctx->audioContext.demuxer = GetExistingDemuxer(ctx, audioFileName);
+		if (ctx->audioContext.demuxer == nullptr)
 		{
-			ctx->audioDemuxer = new Demuxer(audioFileName);
-			ctx->uniqueDemuxers.push_back(ctx->audioDemuxer);
+			ctx->audioContext.demuxer = new Demuxer(ctx->audioContext.sourceFileName.c_str());
+			ctx->uniqueDemuxers.push_back(ctx->audioContext.demuxer);
 		}
 
 		// create the encoder
-		ctx->audioCodec = new AudioCodec(ctx->muxer->GetDefaultAudioFormat()->id);
-		ctx->audioEncoder = new AudioEncoder(ctx->audioCodec, ctx->muxer);
+		ctx->audioContext.codec = new AudioCodec(ctx->muxer->GetDefaultAudioFormat()->id);
+		ctx->audioContext.encoder = new AudioEncoder(ctx->audioContext.codec, ctx->muxer);
 	}
 	catch (FFmpegException e)
 	{
@@ -144,13 +157,15 @@ void ffmpegCppAddAudioStream(void* handle, const char* audioFileName)
 void ffmpegCppAddVideoFilter(void* handle, const char* filterString)
 {
 	Context* ctx = (Context*)handle;
-	ctx->videoFilterString = filterString;
+	ctx->videoContext.filterString = filterString;
+	ctx->videoContext.hasFilter = true;
 }
 
 void ffmpegCppAddAudioFilter(void* handle, const char* filterString)
 {
 	Context* ctx = (Context*)handle;
-	ctx->audioFilterString = filterString;
+	ctx->audioContext.filterString = filterString;
+	ctx->audioContext.hasFilter = true;
 }
 
 void ffmpegCppGenerate(void* handle)
@@ -159,27 +174,27 @@ void ffmpegCppGenerate(void* handle)
 	try
 	{
 		// create a filter if necessary
-		FrameSink* videoFrameSink = ctx->videoEncoder;
-		FrameSink* audioFrameSink = ctx->audioEncoder;
-		if (ctx->videoFilterString != nullptr)
+		FrameSink* videoFrameSink = ctx->videoContext.encoder;
+		FrameSink* audioFrameSink = ctx->audioContext.encoder;
+		if (ctx->videoContext.hasFilter)
 		{
-			ctx->videoFilter = new Filter(ctx->videoFilterString, ctx->videoEncoder);
-			videoFrameSink = ctx->videoFilter;
+			ctx->videoContext.filter = new Filter(ctx->videoContext.filterString.c_str(), videoFrameSink);
+			videoFrameSink = ctx->videoContext.filter;
 		}
-		if (ctx->audioFilterString != nullptr)
+		if (ctx->audioContext.hasFilter)
 		{
-			ctx->audioFilter = new Filter(ctx->audioFilterString, ctx->audioEncoder);
-			audioFrameSink = ctx->audioFilter;
+			ctx->audioContext.filter = new Filter(ctx->audioContext.filterString.c_str(), audioFrameSink);
+			audioFrameSink = ctx->audioContext.filter;
 		}
 
 		// connect the input and output streams
-		if (ctx->videoDemuxer != nullptr)
+		if (ctx->videoContext.demuxer != nullptr)
 		{
-			ctx->videoDemuxer->DecodeBestVideoStream(videoFrameSink);
+			ctx->videoContext.demuxer->DecodeBestVideoStream(videoFrameSink);
 		}
-		if (ctx->audioDemuxer != nullptr)
+		if (ctx->audioContext.demuxer != nullptr)
 		{
-			ctx->audioDemuxer->DecodeBestAudioStream(audioFrameSink);
+			ctx->audioContext.demuxer->DecodeBestAudioStream(audioFrameSink);
 		}
 
 		// now go over all the streams and process all frames
@@ -207,12 +222,6 @@ void ffmpegCppGenerate(void* handle)
 	}
 }
 
-void ffmpegCppAddFilter(void* handle, const char* filterString)
-{
-	// TODO
-}
-
-
 bool ffmpegCppIsError(void* handle)
 {
 	return ((Context*)handle)->errored;
@@ -220,7 +229,8 @@ bool ffmpegCppIsError(void* handle)
 
 const char* ffmpegCppGetError(void* handle)
 {
-	return ((Context*)handle)->error.c_str();
+	Context* ctx = (Context*)handle;
+	return ctx->error;
 }
 
 void ffmpegCppClose(void* handle)
