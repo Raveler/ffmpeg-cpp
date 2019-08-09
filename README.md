@@ -150,7 +150,6 @@ I developed this project to be able to to integrate FFmpeg into our program with
 # Roadmap
 
 - Add Linux/Mac build support
-- Audio filtering
 - Adding proper unit tests
 - Testing with more codecs, containers
 
