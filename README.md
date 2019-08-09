@@ -75,7 +75,7 @@ int main()
 }
 ```
 
-## C
+## C\#
 
 The simple-interface is made in such a way that it can easily be called using [DllImport] from any C# project:
 
