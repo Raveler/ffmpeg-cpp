@@ -57,7 +57,6 @@ while (!demuxer->IsDone())
 		
 // Save everything to disk by closing the muxer.
 muxer->Close();
-
 ```
 
 If you use the included simple-interface library, which only supports a subset of the full library, using ffmpeg-cpp becomes even easier:
@@ -74,9 +73,9 @@ int main()
 	ffmpegCppGenerate(handle);
 	ffmpegCppClose(handle);
 }
-´´´
+```
 
-## C\#
+## C
 
 The simple-interface is made in such a way that it can easily be called using [DllImport] from any C# project:
 
@@ -140,7 +139,7 @@ The simple-interface is made in such a way that it can easily be called using [D
 		[DllImport("simple_interface.dll", CallingConvention = CallingConvention.Cdecl)]
 		private static extern void ffmpegCppClose(IntPtr handle);
 	}
-´´´
+```
 
 If you want to use ffmpeg-cpp in a C# project, you can easily do so by making your own C-wrapper around the 
 
