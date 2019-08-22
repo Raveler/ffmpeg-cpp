@@ -1,5 +1,5 @@
 # ffmpeg-cpp
-A clean C++ wrapper around the ffmpeg libraries. Makes the most commonly used functionality of FFmpeg easily available for any C++ projects with an easy-to-use interface. The full power of FFmpeg compacted in 10 lines of C++ code: if this sounds useful to you, read on!
+A clean C++ wrapper around the ffmpeg libraries which can be used in any C++ project or C# project (with DllImport or CLR). Makes the most commonly used functionality of FFmpeg easily available for any C++ projects with an easy-to-use interface. The full power of FFmpeg compacted in 10 lines of C++ code: if this sounds useful to you, read on!
 
 # Installation
 
@@ -19,6 +19,10 @@ Currently, only a Windows environment with Visual Studio is supported. This is s
 # Usage
 
 There are multiple demo projects included in the solution. Check out the demo-project for a thorough exploration of the features (demuxing, decoding, filtering, encoding, muxing) or one of the other examples for a simpler example to follow.
+
+There is also a .NET Core compatible simplified interface included so that you can embed this project in your .NET Core projects.
+
+## C++
 
 To give you an idea, this code will load a video stream from a container, filter it, and write it back out to another container:
 
@@ -53,8 +57,91 @@ while (!demuxer->IsDone())
 		
 // Save everything to disk by closing the muxer.
 muxer->Close();
+```
+
+If you use the included simple-interface library, which only supports a subset of the full library, using ffmpeg-cpp becomes even easier:
 
 ```
+#include "SimpleInterface.h"
+
+int main()
+{
+	void* handle = ffmpegCppCreate("out.mp4");
+	ffmpegCppAddVideoStream(handle, "samples/big_buck_bunny.mp4");
+	ffmpegCppAddVideoFilter(handle, "transpose=cclock[middle];[middle]vignette");
+	ffmpegCppAddAudioStream(handle, "samples/big_buck_bunny.mp4");
+	ffmpegCppGenerate(handle);
+	ffmpegCppClose(handle);
+}
+```
+
+## C\#
+
+The simple-interface is made in such a way that it can easily be called using [DllImport] from any C# project:
+
+```
+	public class Example
+	{
+
+		public Example()
+		{
+			try
+			{
+				string inFileName = "in.mp4";
+				string outFileName = "out.mp4";
+				IntPtr handle = ffmpegCppCreate(outFileName); CheckError(handle);
+				ffmpegCppAddVideoStream(handle, inFileName); CheckError(handle);
+				ffmpegCppAddAudioStream(handle, inFileName); CheckError(handle);
+				ffmpegCppAddVideoFilter(handle, "crop=1080:1920:740:0[middle];[middle]transpose=3"); CheckError(handle);
+				ffmpegCppGenerate(handle); CheckError(handle);
+				ffmpegCppClose(handle);
+			}
+			catch (InvalidOperationException e)
+			{
+				Console.WriteLine("ERROR: " + e.Message);
+			}
+		}
+
+		private void CheckError(IntPtr handle)
+		{
+			if (ffmpegCppIsError(handle))
+			{
+				IntPtr errorPtr = ffmpegCppGetError(handle);
+				string error = Marshal.PtrToStringAnsi(errorPtr);
+				throw new InvalidOperationException(error);
+			}
+		}
+
+		[DllImport("simple_interface.dll", CallingConvention = CallingConvention.Cdecl)]
+		private static extern IntPtr ffmpegCppCreate(string outFileName);
+
+		[DllImport("simple_interface.dll", CallingConvention = CallingConvention.Cdecl)]
+		private static extern void ffmpegCppAddVideoStream(IntPtr handle, [MarshalAs(UnmanagedType.LPStr)] string inFileName);
+
+		[DllImport("simple_interface.dll", CallingConvention = CallingConvention.Cdecl)]
+		private static extern void ffmpegCppAddAudioStream(IntPtr handle, [MarshalAs(UnmanagedType.LPStr)] string inFileName);
+
+		[DllImport("simple_interface.dll", CallingConvention = CallingConvention.Cdecl)]
+		private static extern void ffmpegCppAddVideoFilter(IntPtr handle, [MarshalAs(UnmanagedType.LPStr)] string filterString);
+
+		[DllImport("simple_interface.dll", CallingConvention = CallingConvention.Cdecl)]
+		private static extern void ffmpegCppAddAudioFilter(IntPtr handle, [MarshalAs(UnmanagedType.LPStr)] string filterString);
+
+		[DllImport("simple_interface.dll", CallingConvention = CallingConvention.Cdecl)]
+		private static extern void ffmpegCppGenerate(IntPtr handle);
+
+		[DllImport("simple_interface.dll", CallingConvention = CallingConvention.Cdecl)]
+		private static extern bool ffmpegCppIsError(IntPtr handle);
+
+		[DllImport("simple_interface.dll", CallingConvention = CallingConvention.Cdecl)]
+		private static extern IntPtr ffmpegCppGetError(IntPtr handle);
+
+		[DllImport("simple_interface.dll", CallingConvention = CallingConvention.Cdecl)]
+		private static extern void ffmpegCppClose(IntPtr handle);
+	}
+```
+
+If you want to use ffmpeg-cpp in a C# project, you can easily do so by making your own C-wrapper around the 
 
 # Why?
 
@@ -63,7 +150,6 @@ I developed this project to be able to to integrate FFmpeg into our program with
 # Roadmap
 
 - Add Linux/Mac build support
-- Audio filtering
 - Adding proper unit tests
 - Testing with more codecs, containers
 
@@ -71,4 +157,4 @@ I developed this project to be able to to integrate FFmpeg into our program with
 
 This library is licensed under LGPL (https://en.wikipedia.org/wiki/GNU_Lesser_General_Public_License).
 
-Please note though that FFmpeg, which you will need to build this library, is not. Depending on how you build it, it is either LGPL or GPL. So once you use the LGPL-version of FFmpeg in your project, this library will be GPL too.
+Please note though that FFmpeg, which you will need to build this library, is not. Depending on how you build it, it is either LGPL or GPL. So if you use the GPL-version of FFmpeg in your project, this library will be GPL too.
