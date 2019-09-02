@@ -22,7 +22,7 @@ int main()
 		codec->SetQualityScale(0);
 
 		// Set the bit rate option -b:v 2M
-		codec->SetGlobalOption("b", "2M");
+		codec->SetGenericOption("b", "2M");
 
 		// Create an encoder that will encode the raw audio data as MP3.
 		// Tie it to the muxer so it will be written to the file.

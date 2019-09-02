@@ -20,7 +20,7 @@ namespace ffmpegcpp
 		void SetOption(const char* name, int value);
 		void SetOption(const char* name, double value);
 
-		void SetGlobalOption(const char* name, const char* value);
+		void SetGenericOption(const char* name, const char* value);
 
 		void SetGlobalContainerHeader(); // used by the Muxer for configuration purposes
 

@@ -35,7 +35,7 @@ namespace ffmpegcpp
 		av_opt_set_double(codecContext->priv_data, name, value, 0);
 	}
 
-	void Codec::SetGlobalOption(const char* name, const char* value)
+	void Codec::SetGenericOption(const char* name, const char* value)
 	{
 		av_opt_set(codecContext, name, value);
 	}
