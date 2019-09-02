@@ -35,6 +35,11 @@ namespace ffmpegcpp
 		av_opt_set_double(codecContext->priv_data, name, value, 0);
 	}
 
+	void Codec::SetGlobalOption(const char* name, const char* value)
+	{
+		av_opt_set(codecContext, name, value);
+	}
+
 	AVCodecContext* Codec::LoadContext(AVCodec* codec)
 	{
 		AVCodecContext* codecContext = avcodec_alloc_context3(codec);
