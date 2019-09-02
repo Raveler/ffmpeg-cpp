@@ -37,7 +37,7 @@ namespace ffmpegcpp
 
 	void Codec::SetGenericOption(const char* name, const char* value)
 	{
-		av_opt_set(codecContext, name, value);
+		av_opt_set(codecContext, name, value, 0);
 	}
 
 	AVCodecContext* Codec::LoadContext(AVCodec* codec)
