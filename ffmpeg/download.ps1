@@ -5,10 +5,10 @@ New-Item -ItemType Directory -Path $tempPath -Force | Out-Null
 $devZipPath = Join-Path -Path $tempPath -ChildPath "ffmpeg.dev.zip"
 $binZipPath = Join-Path -Path $tempPath -ChildPath "ffmpeg.bin.zip"
 
-(new-object System.Net.WebClient).DownloadFile('https://ffmpeg.zeranoe.com/builds/win64/dev/ffmpeg-20190320-0739d5c-win64-dev.zip', $devZipPath);
+(new-object System.Net.WebClient).DownloadFile('https://ffmpeg.zeranoe.com/builds/win64/dev/ffmpeg-20190716-806ac7d-win64-dev.zip', $devZipPath);
 Expand-Archive $devZipPath -DestinationPath $tempPath -Force
 
-(new-object System.Net.WebClient).DownloadFile('https://ffmpeg.zeranoe.com/builds/win64/shared/ffmpeg-20190320-0739d5c-win64-shared.zip', $binZipPath);
+(new-object System.Net.WebClient).DownloadFile('https://ffmpeg.zeranoe.com/builds/win64/shared/ffmpeg-20190716-806ac7d-win64-shared.zip', $binZipPath);
 Expand-Archive $binZipPath -DestinationPath $tempPath -Force
 
 Remove-Item -Path include -Force -Recurse -ErrorAction Ignore
