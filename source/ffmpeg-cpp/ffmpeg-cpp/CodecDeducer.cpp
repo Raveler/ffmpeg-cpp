@@ -1,5 +1,6 @@
 #include "CodecDeducer.h"
 #include "FFmpegException.h"
+#include <string>
 
 using namespace std;
 

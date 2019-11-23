@@ -1,3 +1,4 @@
+#include <limits>
 #include "VideoCodec.h"
 #include "FFmpegException.h"
 
@@ -102,7 +103,7 @@ namespace ffmpegcpp
 		while (p->num)
 		{
 			double pVal = av_q2d(*p);
-			double diff = abs(pVal - fVal);
+			double diff = fabs(pVal - fVal);
 			if (diff < bestDiff)
 			{
 				bestDiff = diff;
