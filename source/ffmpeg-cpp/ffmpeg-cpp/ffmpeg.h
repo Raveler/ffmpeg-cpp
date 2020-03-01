@@ -1,8 +1,12 @@
 #pragma once
 
-#define _CRTDBG_MAP_ALLOC  
-#include <stdlib.h>  
+#ifdef _WIN32
+#define _CRTDBG_MAP_ALLOC
 #include <crtdbg.h> 
+#endif
+
+#include <stdlib.h>  
+
 
 extern "C" {
 	#include <libavcodec/avcodec.h>
