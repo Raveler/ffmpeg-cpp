@@ -1,7 +1,7 @@
 #pragma once
 
-#include "ffmpeg.h"
-#include "Codecs/Codec.h"
+#include "ffmpeg-cpp/ffmpeg.h"
+#include "ffmpeg-cpp/Codecs/Codec.h"
 #include "Muxer.h"
 
 namespace ffmpegcpp

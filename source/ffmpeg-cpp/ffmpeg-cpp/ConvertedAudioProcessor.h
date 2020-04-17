@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ffmpeg.h"
+#include "ffmpeg-cpp/ffmpeg.h"
 
 namespace ffmpegcpp
 {

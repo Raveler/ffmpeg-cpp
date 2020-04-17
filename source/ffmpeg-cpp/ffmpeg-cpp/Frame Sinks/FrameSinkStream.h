@@ -1,8 +1,8 @@
 #pragma once
 
-#include "ffmpeg.h"
+#include "ffmpeg-cpp/ffmpeg.h"
 #include "FrameWriter.h"
-#include "Demuxing/Streamdata.h"
+#include "ffmpeg-cpp/Demuxing/StreamData.h"
 
 namespace ffmpegcpp
 {

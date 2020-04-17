@@ -1,5 +1,5 @@
 #pragma once
-#include "VideoCodec.h"
+#include "ffmpeg-cpp/Codecs/VideoCodec.h"
 
 namespace ffmpegcpp
 {

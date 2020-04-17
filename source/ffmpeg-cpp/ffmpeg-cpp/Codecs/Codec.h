@@ -1,9 +1,8 @@
 #pragma once
 
-#include "ffmpeg.h"
-#include "std.h"
+#include "ffmpeg-cpp/ffmpeg.h"
 
-#include "OpenCodec.h"
+#include "ffmpeg-cpp/OpenCodec.h"
 
 namespace ffmpegcpp
 {

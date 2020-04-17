@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ffmpeg.h"
+#include "ffmpeg-cpp/ffmpeg.h"
 #include "ConvertedAudioProcessor.h"
 
 namespace ffmpegcpp

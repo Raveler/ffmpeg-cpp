@@ -1,8 +1,8 @@
 #pragma once
 
-#include "ffmpeg.h"
+#include "ffmpeg-cpp/ffmpeg.h"
 
-#include "std.h"
+
 
 namespace ffmpegcpp
 {
@@ -15,10 +15,10 @@ namespace ffmpegcpp
 
 		FFmpegException(std::string error, int returnValue);
 
-		virtual char const* what() const
-		{
-			return std::exception::what();
-		}
+//		virtual const char* what() const
+//		{
+//			return std::exception::what();
+//		}
 
 
 	private:

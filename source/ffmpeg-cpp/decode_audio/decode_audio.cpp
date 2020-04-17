@@ -1,7 +1,7 @@
 
 #include <iostream>
 
-#include "ffmpegcpp.h"
+#include "ffmpeg-cpp/ffmpegcpp.h"
 
 using namespace std;
 using namespace ffmpegcpp;

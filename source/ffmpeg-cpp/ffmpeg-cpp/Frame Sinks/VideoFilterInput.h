@@ -1,7 +1,7 @@
 #pragma once
 
-#include "ffmpeg.h"
-#include "Demuxing/StreamData.h"
+#include "ffmpeg-cpp/ffmpeg.h"
+#include "ffmpeg-cpp/Demuxing/StreamData.h"
 
 namespace ffmpegcpp
 {

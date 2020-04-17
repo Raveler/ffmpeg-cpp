@@ -12,7 +12,7 @@
 #include <sstream>
 
 #include "ffmpegcpp.h"
-#include "ffmpeg.h"
+#include "ffmpeg-cpp/ffmpeg.h"
 
 using namespace std;
 using namespace ffmpegcpp;

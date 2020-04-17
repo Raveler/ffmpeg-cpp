@@ -1,11 +1,11 @@
 #pragma once
 
-#include "ffmpeg.h"
+#include "ffmpeg-cpp/ffmpeg.h"
 
-#include "Frame Sinks/VideoFrameSink.h"
-#include "Codecs/VideoCodec.h"
-#include "VideoFormatConverter.h"
-#include "Muxing/Muxer.h"
+#include "ffmpeg-cpp/Frame Sinks/VideoFrameSink.h"
+#include "ffmpeg-cpp/Codecs/VideoCodec.h"
+#include "ffmpeg-cpp/VideoFormatConverter.h"
+#include "ffmpeg-cpp/Muxing/Muxer.h"
 #include "OneInputFrameSink.h"
 
 namespace ffmpegcpp
