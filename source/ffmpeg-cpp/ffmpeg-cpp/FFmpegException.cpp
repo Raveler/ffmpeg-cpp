@@ -4,14 +4,14 @@ using namespace std;
 
 namespace ffmpegcpp
 {
-	FFmpegException::FFmpegException(string error) : exception(error.c_str())
+	FFmpegException::FFmpegException(const string &error) : exception(),errorMsg(error)
 	{
 	}
 
-	FFmpegException::FFmpegException(string error, int returnValue)
-		: exception(
-			(error + ": " + av_make_error_string(this->error, AV_ERROR_MAX_STRING_SIZE, returnValue)).c_str()
-		)
+	FFmpegException::FFmpegException(const string &errorStr, int returnValue)
+		:exception()
 	{
+		 char error[AV_ERROR_MAX_STRING_SIZE];
+		 errorMsg=errorStr + ": " + av_make_error_string(error, AV_ERROR_MAX_STRING_SIZE, returnValue);
 	}
 }

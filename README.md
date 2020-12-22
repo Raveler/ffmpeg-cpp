@@ -14,7 +14,14 @@ This will build a .lib file that you can use in your own C++ projects. It will a
 
 ## Linux
 
-Currently, only a Windows environment with Visual Studio is supported. This is simply because I do not have experience with cmake and Linux-projects, since the project itself is fully platform-independent. If anyone is willing to help me out with configuring cmake, please get in touch!
+install ffmpeg lib either from your distro or from ffmpeg.org (adapt CMakeList.txt if needed)
+ffmpeg-cpp/source/ffmpeg-cpp
+cmake -DCMAKE_BUILD_TYPE=Release .
+make
+
+to have an eclispe project
+cmake -G "Eclipse CDT4 - Unix Makefiles" .
+eclipse File/import/existing code from makefile project
 
 # Usage
 
