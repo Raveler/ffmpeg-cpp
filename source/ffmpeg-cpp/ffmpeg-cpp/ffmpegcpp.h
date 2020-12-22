@@ -17,8 +17,8 @@
 
 #include "Codecs/AudioCodec.h"
 
-#include "Codecs/H265NVEncCodec.h"
-#include "Codecs/H264NVEncCodec.h"
+#include "codecs/H265NVEncCodec.h"
+#include "codecs/H264NVEncCodec.h"
 #include "Codecs/VP9Codec.h"
 #include "Codecs/PNGCodec.h"
 #include "Codecs/JPGCodec.h"
