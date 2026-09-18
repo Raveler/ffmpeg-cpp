@@ -26,7 +26,7 @@ There is also a .NET Core compatible simplified interface included so that you c
 
 To give you an idea, this code will load a video stream from a container, filter it, and write it back out to another container:
 
-```C++
+```cpp
 // Create a muxer that will output the video as MP4.
 Muxer* muxer = new Muxer("filtered_video.mp4");
 
@@ -61,7 +61,7 @@ muxer->Close();
 
 If you use the included simple-interface library, which only supports a subset of the full library, using ffmpeg-cpp becomes even easier:
 
-```
+```cpp
 #include "SimpleInterface.h"
 
 int main()
@@ -79,7 +79,7 @@ int main()
 
 The simple-interface is made in such a way that it can easily be called using [DllImport] from any C# project:
 
-```
+```csharp
 	public class Example
 	{
 
