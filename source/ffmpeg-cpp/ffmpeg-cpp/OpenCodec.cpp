@@ -1,5 +1,3 @@
-#pragma once
-
 #include "OpenCodec.h"
 #include "FFmpegException.h"
 
