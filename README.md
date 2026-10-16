@@ -10,7 +10,7 @@ A clean C++ wrapper around the ffmpeg libraries which can be used in any C++ pro
 3. Open the Visual Studio solution in the source directory.
 4. Build everything.
 
-This will build a .lib file that you can use in your own C++ projects. It will also generate an include-folder in the repo root that you can add to your include filders in your own project.
+This will build a .lib file that you can use in your own C++ projects. It will also generate an include-folder in the repo root that you can add to your include folders in your own project.
 
 ## Linux
 
